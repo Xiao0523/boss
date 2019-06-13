@@ -1,0 +1,294 @@
+<template>
+  <div>
+    <commissionNav :param="searchParame" @searchFn="searchFn" @updateListFn="updateListFn"></commissionNav>
+    <el-row class="btn-box"></el-row>
+
+    <div style="overflow:hidden;">
+      <div style="float:left;width:50%">
+        <el-table
+          id="out-table"
+          class="table-box"
+          :data="listData"
+          empty-text="暂无数据"
+          style="width: 100%"
+          border
+          :header-cell-style="tabHeader"
+          @row-click="changepreview"
+        >
+          <el-table-column width="100" align="center" prop="source" label="用户昵称"></el-table-column>
+          <el-table-column align="center" prop="title" label="标题"></el-table-column>
+          <el-table-column width="100" align="center" prop="updateTime" label="提交日期"></el-table-column>
+          <el-table-column width="100" align="center" prop="convertScore" label="图片">
+            <template slot-scope="scope">
+              <img class="media-img" :src="scope.row.pics[0]" alt>
+            </template>
+          </el-table-column>
+          <el-table-column width="100" align="center" label="审核状态">
+            <template slot-scope="scope">
+              <div>{{scope.row.audit_stauts==0?'未审核':scope.row.audit_stauts==1?'审核通过':'审核失败'}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="操作" fixed="right">
+            <template slot-scope="scope">
+              <div class="operation-box">
+                <el-button
+                  size="mini"
+                  type="success"
+                  :disabled="examineDisabled"
+                  @click.stop="handleAudit(scope.row,1)"
+                >审核通过</el-button>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  :disabled="examineDisabled"
+                  @click.stop="handleAudit(scope.row,2)"
+                >审核失败</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="ql-editor" style="float:left;width:375px;height:667px;margin-left:100px;border:1px solid #ccc;" v-html="previewContent"></div>
+    </div>
+
+    <!--分页-->
+    <div class="pageNumBox">
+      <pageNum
+        :currentPage="searchParame.pageNum"
+        :pageSize="searchParame.pageSize"
+        :total="totalNum"
+        @sizeChange="sizeChangeFn"
+        @currentChange="currentChangeFn"
+      ></pageNum>
+    </div>
+    <!--回到顶部-->
+    <goTop></goTop>
+    <!--审核失败原因-->
+
+    <el-dialog title="审核失败原因" :visible.sync="dialogFormVisible">
+      <el-input type="textarea" rows="10" v-model="explain"></el-input>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="submitDel">取 消</el-button>
+        <el-button type="primary" @click="submitFail">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import commissionNav from "@/components/mediaManageFilter";
+import dateTimePicker from "@/components/common/dateTimePicker";
+import pageNum from "@/components/pageNum";
+import goTop from "@/components/common/goTop";
+import { exportExcel } from "@/utils/validate.js";
+import { checkMobile, trim } from "@/utils/validate.js";
+import { setSession, getSession, clearOneSession } from "@/utils/session";
+
+export default {
+  name: "commissionRebate",
+  components: {
+    dateTimePicker,
+    pageNum,
+    goTop,
+    commissionNav
+  },
+  computed: {
+    // 登录信息
+    userInfo() {
+      return this.$store.getters.userInfo;
+    },
+    audit_stauts() {
+      return this.searchParame.audit_stauts;
+    }
+  },
+  data() {
+    return {
+      searchParame: {},
+      examineDisabled: false,
+      /*      param: {
+                Alipayaccount: '',
+                phone: '',
+                state: '',
+                startDay: '',
+                endDay: '',
+                pageSize: 10,
+                pageNum: 1,
+              },*/
+      listData: [],
+      pageNo: null,
+      pageSize: null,
+      totalNum: null,
+      tabHeader: {
+        "background-color": "#F4F4F4",
+        color: "#666666",
+        "border-top": "1px solid #BBBBBB",
+        "border-bottom": "1px solid #BBBBBB",
+        "font-size": "16px",
+        "text-align": "center"
+      },
+      previewContent:'',
+      dialogFormVisible:false,
+      row:{
+
+      },
+      explain:''
+    };
+  },
+  methods: {
+    // 更新列表数据
+    updateListFn() {
+      this.ids = [];
+      this.initData();
+    },
+    // 搜索
+    searchFn(parame) {
+      this.searchParame = parame;
+      console.log("父组件接受的参数", this.searchParame);
+      this.initData();
+    },
+    /*   dateChangeBeginTime(start){
+        if(!start){return}
+        this.param.startDay =start
+        setSession('currentPage',1);
+      },
+      dateChangeEndTime(end){
+        if(!end){return}
+        this.param.endDay = end
+        setSession('currentPage',1);
+      },*/
+    sizeChangeFn(size) {
+      this.searchParame.pageSize = size;
+      let param = getSession("param");
+      if (param === "undefined" || param === undefined) {
+        param = {};
+        param.audit_stauts = 0;
+      }
+      param.pageSize = this.searchParame.pageSize;
+      param.pageNum = this.searchParame.pageNum;
+      setSession("param", param);
+      console.log("每页条数改变时触发：" + this.searchParame.pageSize);
+      this.initData();
+    },
+    currentChangeFn(page) {
+      console.log(this.searchParame);
+      this.searchParame.pageNum = page;
+      let param = getSession("param");
+      if (param === "undefined" || param === undefined) {
+        param = {};
+        param.audit_stauts = 0;
+      }
+      param.pageSize = this.searchParame.pageSize;
+      param.pageNum = this.searchParame.pageNum;
+
+      setSession("param", param);
+      console.log("页码改变触发" + this.searchParame.pageNo);
+      this.initData();
+    },
+
+    initData() {
+      // 分页查询
+      this.searchParame = getSession("param");
+      if (
+        this.searchParame === "undefined" ||
+        this.searchParame === undefined
+      ) {
+        this.searchParame = { pageNum: 1, pageSize: 10, audit_stauts: 0 };
+      }
+      this.$req
+        .post("TheBackgroundPage", {
+          page: this.searchParame.pageNum,
+          pagesize: this.searchParame.pageSize,
+          audit_stauts: this.searchParame.audit_stauts
+        })
+        .then(res => {
+          this.listData = res.data.data.rows;
+          this.totalNum = res.data.data.count;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 审核
+    handleAudit(row, status) {
+      this.row=row;
+      if(status==1){
+        row.audit_stauts = 1;
+        this.$req.post("ReviewTheInterface", row).then(res => {
+          if (res.data.code == 0) {
+            this.$success(res.data.message);
+          } else {
+            row.audit_stauts = 0;
+            console.log("提交失败");
+          }
+        });
+      }else if(status==2){
+        this.dialogFormVisible=true;
+      }
+
+    },
+    changepreview(row, event, column){
+        this.previewContent=row.content;
+    },
+    submitFail(){
+        this.dialogFormVisible=false;
+        this.row.explain=this.explain;
+        this.row.audit_stauts=2;
+        this.$req.post("ReviewTheInterface", this.row).then(res => {
+          if (res.data.code == 0) {
+            this.explain="";
+            this.$success(res.data.message);
+          } else {
+            this.explain
+            this.row.audit_stauts = 0;
+            console.log("提交失败");
+          }
+        });
+    },
+    submitDel(){
+      this.dialogFormVisible=false;
+      this.explain="";
+    }
+  },
+  watch: {
+    audit_stauts(val) {
+      if (val !== 0) {
+        this.examineDisabled = true;
+      } else {
+        this.examineDisabled = false;
+      }
+    }
+  },
+  created() {
+    this.initData();
+  },
+  // 离开列表页
+  beforeRouteLeave: function(to, from, next) {
+    if (to.name != "memberDetais") {
+      clearOneSession("param");
+      clearOneSession("currentPage");
+    }
+    next();
+  }
+};
+</script>
+
+<style type="text/scss" lang="scss" scoped>
+.input-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .text {
+    display: inline-block;
+    width: 80px;
+  }
+}
+.btn-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.media-img {
+  width: 51px;
+  height: 33px;
+  vertical-align: middle;
+}
+</style>
