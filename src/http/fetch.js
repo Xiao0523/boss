@@ -6,11 +6,11 @@ const server = axios.create({})
 server.defaults.withCredentials = true // 携带cookie
 
 if (process.env.NODE_ENV === 'development') {
-  server.defaults.baseURL = 'https://www.my51share.com/boss/'
+  server.defaults.baseURL = 'https://dev.my51share.com/boss/'
   // https://dev.my51share.com/boss/
   // https://www.my51share.com/boss/
 } else if (process.env.NODE_ENV === 'production') {
-  server.defaults.baseURL = 'https://www.my51share.com/boss/'
+  server.defaults.baseURL = 'https://dev.my51share.com/boss/'
 }
 // Add a request interceptor 添加请求拦截机
 server.interceptors.request.use(config => {
