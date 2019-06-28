@@ -35,7 +35,7 @@
                   size="mini"
                   type="success"
                   :disabled="examineDisabled"
-                  @click.stop="handleAudit(scope.row,1)"
+                  @click.stop="choseTag(scope.row)"
                 >审核通过</el-button>
                 <el-button
                   size="mini"
@@ -48,7 +48,11 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="ql-editor" style="float:left;width:375px;height:667px;margin-left:100px;border:1px solid #ccc;" v-html="previewContent"></div>
+      <div
+        class="ql-editor"
+        style="float:left;width:375px;height:667px;margin-left:100px;border:1px solid #ccc;"
+        v-html="previewContent"
+      ></div>
     </div>
 
     <!--分页-->
@@ -72,6 +76,14 @@
         <el-button type="primary" @click="submitFail">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 类目选择 -->
+    <tag-chose
+      :tagMenuShow="isEditTag"
+      :row="row"
+      :tags="tags"
+      @confirmMenuFn="handleAudit"
+      @cancelMenuFn="cancelMenuFn"
+    ></tag-chose>
   </div>
 </template>
 
@@ -83,14 +95,15 @@ import goTop from "@/components/common/goTop";
 import { exportExcel } from "@/utils/validate.js";
 import { checkMobile, trim } from "@/utils/validate.js";
 import { setSession, getSession, clearOneSession } from "@/utils/session";
-
+import tagChose from "./component/tagChose";
 export default {
   name: "commissionRebate",
   components: {
     dateTimePicker,
     pageNum,
     goTop,
-    commissionNav
+    commissionNav,
+    tagChose
   },
   computed: {
     // 登录信息
@@ -126,12 +139,12 @@ export default {
         "font-size": "16px",
         "text-align": "center"
       },
-      previewContent:'',
-      dialogFormVisible:false,
-      row:{
-
-      },
-      explain:''
+      previewContent: "",
+      dialogFormVisible: false,
+      row: {},
+      explain: "",
+      isEditTag: false,
+      tags:[]
     };
   },
   methods: {
@@ -170,7 +183,6 @@ export default {
       this.initData();
     },
     currentChangeFn(page) {
-      console.log(this.searchParame);
       this.searchParame.pageNum = page;
       let param = getSession("param");
       if (param === "undefined" || param === undefined) {
@@ -210,8 +222,9 @@ export default {
     },
     // 审核
     handleAudit(row, status) {
-      this.row=row;
-      if(status==1){
+      this.row = row;
+      if (status == 1) {
+        this.isEditTag = false;
         row.audit_stauts = 1;
         this.$req.post("ReviewTheInterface", row).then(res => {
           if (res.data.code == 0) {
@@ -221,45 +234,59 @@ export default {
             console.log("提交失败");
           }
         });
-      }else if(status==2){
-        this.dialogFormVisible=true;
+      } else if (status == 2) {
+        this.dialogFormVisible = true;
       }
-
     },
-    changepreview(row, event, column){
-        this.previewContent=row.content;
+    //选择标签
+    choseTag(row) {
+      this.isEditTag = true;
+      this.row = row;
     },
-    submitFail(){
-        this.dialogFormVisible=false;
-        this.row.explain=this.explain;
-        this.row.audit_stauts=2;
-        this.$req.post("ReviewTheInterface", this.row).then(res => {
-          if (res.data.code == 0) {
-            this.explain="";
-            this.$success(res.data.message);
-          } else {
-            this.explain
-            this.row.audit_stauts = 0;
-            console.log("提交失败");
-          }
-        });
+    cancelMenuFn() {
+      this.isEditTag = false;
     },
-    submitDel(){
-      this.dialogFormVisible=false;
-      this.explain="";
+    changepreview(row, event, column) {
+      this.previewContent = row.content;
+    },
+    submitFail() {
+      this.dialogFormVisible = false;
+      this.row.explain = this.explain;
+      this.row.audit_stauts = 2;
+      this.$req.post("ReviewTheInterface", this.row).then(res => {
+        if (res.data.code == 0) {
+          this.explain = "";
+          this.$success(res.data.message);
+        } else {
+          this.explain;
+          this.row.audit_stauts = 0;
+          console.log("提交失败");
+        }
+      });
+    },
+    submitDel() {
+      this.dialogFormVisible = false;
+      this.explain = "";
+    },
+    getTags(){
+      this.$req.get(`v2/shareCategory/1/999`).then(res=>{
+          this.tags=res.data.data.records;
+      })
     }
   },
   watch: {
+    // 审核后文章也可重新改变审核状态
     audit_stauts(val) {
-      if (val !== 0) {
-        this.examineDisabled = true;
-      } else {
-        this.examineDisabled = false;
-      }
+      // if (val !== 0) {
+      //   this.examineDisabled = true;
+      // } else {
+      //   this.examineDisabled = false;
+      // }
     }
   },
   created() {
     this.initData();
+    this.getTags();
   },
   // 离开列表页
   beforeRouteLeave: function(to, from, next) {

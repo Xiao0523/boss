@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="菜单权限管理" :visible.sync="dialogMenuVisible" width="30%">
+    <el-dialog title="菜单权限管理" :visible.sync="isShow" width="30%" @close="close"> 
       <el-checkbox
         :indeterminate="isIndeterminate"
         v-model="checkAll"
@@ -34,10 +34,12 @@ export default {
           menuIds:[],
           checkAll:false,
           isIndeterminate: true,
+          isShow:false
       }
   },
   watch:{
     dialogMenuVisible(value){
+        this.isShow=value;
         if(value==true&&this.$route.query.userId){
             this.$req.get(`menu/${this.$route.query.userId}`).then(res=>{
               res.data.data.map((val,index)=>{
@@ -71,6 +73,9 @@ export default {
       });
       this.menuIds = val ? menuIds : [];
       this.isIndeterminate = false;      
+    },
+    close(){
+      this.$emit('cancelMenuFn');
     }
   },
   created(){
