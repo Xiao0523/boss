@@ -120,6 +120,7 @@ export default {
     cancelMenuFn() {
       this.$emit("cancelMenuFn");
       this.menuIds = [];
+      this.checkAll=false;
     },
     confirmMenuFn() {
       if (this.menuIds.length == 0) {
@@ -135,6 +136,7 @@ export default {
               if (res.data.code == 0) {
                 this.$emit("confirmMenuFn");
                 this.menuIds = [];
+                this.checkAll=false;
               } else {
                 this.$message({
                   type: "error",
@@ -155,6 +157,7 @@ export default {
               if (res.data.code == 0) {
                 this.$emit("confirmMenuFn");
                 this.menuIds = [];
+                this.checkAll=false;
               } else {
                 this.$message({
                   type: "error",
@@ -179,6 +182,7 @@ export default {
     close() {
       this.$emit("cancelMenuFn");
       this.menuIds = [];
+      this.checkAll=false;
     }
   },
   created() {
