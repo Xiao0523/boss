@@ -27,10 +27,21 @@ export default {
       'sidebar'
     ]),
     routes() {
+      // let routes=[]
+      // for(let i=0;i<this.menu.length;i++){
+      //   for(let j=0;j<this.$router.options.routes.length;j++){
+      //     if(this.menu[i]==this.$router.options.routes[j].path||this.menu[i]==this.$router.options.routes[j].redirect){
+      //       routes.push(this.$router.options.routes[j]);
+      //       break;
+      //     }
+      //   }
+      // }
+      // console.log(routes);
       return this.$router.options.routes
     },
     isCollapse() {
-      return !this.sidebar.opened
+      return false
+      // return !this.sidebar.opened
     }
   },
   data(){

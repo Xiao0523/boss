@@ -134,19 +134,19 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/categoryManager/categoryList',
     name: 'categoryManager',
-    meta: { title: '类目管理', icon: 'tag' },
+    meta: { title: '文章类目管理', icon: 'tag' },
     children: [
       {
         path: 'categoryList',
         name: 'categoryList',
         component: () => import('@/views/categoryManager/categoryList'),
-        meta: { title: '类目列表', icon: 'tag' }
+        meta: { title: '文章类目列表', icon: 'tag' }
       },
       {
         path: 'categoryDetails',
         name: 'categoryEdit',
         component: () => import('@/views/categoryManager/categoryEdit'),
-        meta: { title: '类目详情'},
+        meta: { title: '文章类目详情'},
         hidden: true
       },
       {
@@ -155,6 +155,28 @@ export const constantRouterMap = [
         component: () => import('@/views/categoryManager/categoryAdd'),
         meta: { title: '添加标签'},
         hidden: true
+      }
+      // {
+      //   path: 'ArticleCat',
+      //   name: 'ArticleCat',
+      //   component: () => import('@/views/ArticleManager/ArticleCat'),
+      //   meta: { title: '文章分类', icon: 'tree' },
+      //   hidden: true
+      // }
+    ]
+  },
+  {
+    path: '/videoCategoryManager',
+    component: Layout,
+    redirect: '/videoCategoryManager/categoryList',
+    name: 'videoCategoryManager',
+    meta: { title: '视频类目管理', icon: 'tag' },
+    children: [
+      {
+        path: 'categoryList',
+        name: 'categoryList',
+        component: () => import('@/views/videoCategoryManager/categoryList'),
+        meta: { title: '视频类目列表', icon: 'tag' }
       }
       // {
       //   path: 'ArticleCat',
