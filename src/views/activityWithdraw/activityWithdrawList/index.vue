@@ -1,31 +1,51 @@
 <template>
   <div>
     <el-row>
-      <el-select v-model="statue" clearable placeholder="请选择提现状态">
-        <el-option
-          v-for="item in statusArr"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <el-select v-model="type" clearable placeholder="请选择提现类型">
-        <el-option
-          v-for="item in typeArr"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
+      <el-form :inline="true" :model="keyWord" :rules="rules" ref="searchForm">
+        <el-form-item>
+          <el-input v-model.trim="keyWord.nickName" placeholder="输入作者" clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="phone">
+          <el-input 
+            v-model.trim="keyWord.phone" 
+            placeholder="输入手机" 
+            clearable 
+            ></el-input>
+        </el-form-item>
 
-      <el-button @click="search">筛选</el-button>
+        <el-form-item>
+          <el-select v-model="keyWord.statue" clearable placeholder="请选择提现状态">
+          <el-option
+            v-for="item in statusArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-select v-model="keyWord.type" clearable placeholder="请选择提现类型">
+          <el-option
+            v-for="item in typeArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="search('searchForm')">筛选</el-button>
+        </el-form-item>
+      </el-form>
+
     </el-row>
     <el-table
       class="table-box"
       border
       :data="widthdrawArr"
       :header-cell-style="tabHeader">
-      <el-table-column align="center" prop="memberId" label="用户id"></el-table-column>
+      <el-table-column align="center" prop="nickName" label="用户名称"></el-table-column>
+      <el-table-column align="center" prop="phone" label="用户手机"></el-table-column>
       <el-table-column align="center" label="提现时间">
         <template slot-scope="scope">{{scope.row.createTime | formatDate}}</template>
       </el-table-column>
@@ -82,8 +102,16 @@ export default {
         {label: '审核通过并放款', value: 2}
       ],
       currentWithdraw: {},
-      statue: null,//用户的搜索的状态 0 系统审核中 1 驳回 2 已到账
-      type: null,//用户搜索的类型 1新手提现 2 普通用户提现
+      keyWord: {
+        nickName: '',//用户名称
+        phone: '',//手机号码
+        statue: null,//用户的搜索的状态 0 系统审核中 1 驳回 2 已到账
+        type: null,//用户搜索的类型 1新手提现 2 普通用户提现
+        
+      },
+      rules: {
+        phone: [{pattern: /^1[\d]{10}$/, message: '请输入11位手机号',trigger: 'blur'}]
+      },
       typeArr: [// 提现类型组
         {label: '新手提现', value: 1},
         {label: '普通用户提现', value: 2}
@@ -169,9 +197,12 @@ export default {
     },
 
     //筛选 列表置为第一页
-    search() {
-      this.pageNo = 1
-      this.init()
+    search(form) {
+      this.$refs[form].validate(valid => {
+        if (!valid) return
+        this.pageNo = 1
+        this.init()
+      })
     },
 
     /**
@@ -181,15 +212,24 @@ export default {
      */
     init() {
       let argsObj = {pageNum: this.pageNo, pageSize: this.pageSize}
+      let keyWord = this.keyWord
+
+      if (keyWord.nickName) {
+        argsObj.nickName = keyWord.nickName
+      }
+
+      if (keyWord.phone) {
+        argsObj.phone = keyWord.phone
+      }
 
       // 筛选中有提现状态
-      if(this.statue || Object.prototype.toString.call(this.statue) === '[object Number]') {
-        argsObj.statue = this.statue
+      if(keyWord.statue || Object.prototype.toString.call(keyWord.statue) === '[object Number]') {
+        argsObj.statue = keyWord.statue
       }
 
       // 筛选中有 提现 类型
-      if(this.type) {
-        argsObj.type = this.type
+      if(keyWord.type) {
+        argsObj.type = keyWord.type
       }
       getWithdraw(argsObj)
       .then(res => {
