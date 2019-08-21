@@ -44,16 +44,16 @@
             v-if="reward.type == 2" 
             label="奖励" 
             prop="unit" 
-            :rules="[{required: true, pattern: /^([1-9]\d+)$/, message: '请填写奖励，值应为大于0的整数！', trigger: 'blur'}]">
+            :rules="[{required: true, pattern: /^([1-9]\d*)$/, message: '请填写奖励，值应为大于0的整数！', trigger: 'blur'}]">
             <el-input v-model.number.trim="reward.unit">
               <template slot="append">张</template>
             </el-input>
           </el-form-item>
           <el-form-item 
-            v-else 
+            v-if="reward.type < 2" 
             label="奖励" 
             prop="unit" 
-            :rules="[{required: true, pattern: /^\d+(\.\d{1,2})$/, message: '请填写奖励！', trigger: 'blur'}]"> 
+            :rules="[{required: true, pattern: /^\d+(\.\d{1,2})?$/, message: '请填写奖励！', trigger: 'blur'}]"> 
             <el-input v-model.number.trim="reward.unit">
               <template slot="append">元</template>
             </el-input>
@@ -84,9 +84,12 @@ export default {
       }, {
         label: '随机红包',
         value: 1,
-      },{
+      }, {
         label: '卡片',
         value: 2,
+      }, {
+        label: '谢谢参与',
+        value: 3,
       }],
       isShow: false,//上传弹窗开关,
       rules: {
@@ -111,7 +114,8 @@ export default {
       let type = {
         0: '红包',
         1: '随机红包',
-        2: '卡片'
+        2: '卡片',
+        3: '谢谢参与'
       }
 
       return type[val] ? type[val] : '未知'
@@ -122,11 +126,17 @@ export default {
       let unitData = {
         0: '元',
         1: '元',
-        2: '张'
+        2: '张',
+        3: '谢谢参与'
       }
-
-      let unit = reward.unit ? reward.unit : 0;
-      return unit + unitData[reward.type]
+      
+      let unit = reward.unit ? reward.unit : 0
+      unit = unit + unitData[reward.type]
+      
+      if (reward.type == 3) {
+        unit = '谢谢参与'
+      }
+      return unit
     }
   },
   methods: {
@@ -185,6 +195,9 @@ export default {
 
     // 新增奖励
     createReward(reward) {
+      if(reward.type == 3) {
+        reward.unit = 0
+      }
       postTurnTableReward(reward)
       .then(res => {
         if (res.data.code) {

@@ -23,14 +23,18 @@
     <Dialog :title="'大转盘编辑'" :width="'50%'" :is-show="isShow" @cancelFn="close('turnTableForm')" @confirmFn="onSubmit('turnTableForm')">
       
       <el-form label-width="100px" :inline="true" v-for="(item, idx) in turnTableEditForm" :key="idx" :model="item" :rules="rules" ref="turnTableForm">
-        <!-- <div v-for="(item, idx) in turnTableEditForm" :key="idx"> -->
-          <el-form-item>索引{{item.index}} </el-form-item>
+          <el-form-item label="索引">{{item.index}} </el-form-item>
           <el-form-item label="中奖概率" prop="probability">
             <el-input v-model.number.trim="item.probability"></el-input>
           </el-form-item>
           <el-form-item label="奖品" prop="turntableRewardId" >
-            <el-select v-model="item.turntableRewardId">
-              <el-option v-for="item in rewardArr" :key="item.id" :value="item.id" :label="item | getRewardLabel"></el-option>
+            <el-select v-model="item.turntableRewardId" clearable @visible-change="toggle(item, $event)">
+              <el-option 
+                v-for="reward in rewardArr" 
+                :key="reward.id" 
+                :value="reward.id"
+                :disabled="reward.disabled"
+                :label="reward | getRewardLabel"></el-option>
             </el-select>
           </el-form-item>
           
@@ -89,7 +93,8 @@ export default {
       let type = {
         0: '红包',
         1: '随机红包',
-        2: '卡片'
+        2: '卡片',
+        3: '谢谢参与'
       }
 
       return type[val] ? type[val] : '未知'
@@ -101,19 +106,24 @@ export default {
       let typeData = {
         0: '红包',
         1: '随机红包',
-        2: '卡片'
+        2: '卡片',
+        3: '谢谢参与'
       }
 
       let unitData = {
         0: '元',
         1: '元',
-        2: '张'
+        2: '张',
+        3: '谢谢参与'
       }
 
       let label = typeData[reward.type] ? typeData[reward.type] : '未知'
       let unit = unitData[reward.type] ? unitData[reward.type] : ''
       let num = reward.unit ? reward.unit : 0 
       label += num + unit
+      if(reward.type == 3) {
+        label = '谢谢参与'
+      }
       return label
     },
   },
@@ -134,14 +144,12 @@ export default {
 
     //弹窗点击确定
     onSubmit(form) {
-      console.log(this.$refs[form])
       let formArr = this.$refs[form]
       let len = this.$refs[form].length
       let promisArr = [];
 
       for(let i = 0; i < len; i++) {
         let validPromise = new Promise((resolve, reject) => {
-          console.log(i)
           formArr[i].validate(valid => {
             if(!valid) {
               return reject(valid);
@@ -153,7 +161,6 @@ export default {
       }
       Promise.all(promisArr)
       .then(res => {
-        console.log(res)
         patchTurnTable(this.turnTableEditForm)
         .then(res => {
           if (res.data.code) {
@@ -175,6 +182,32 @@ export default {
     close(form) {
       this.isShow = false;
       this.$refs[form].forEach(item => item.resetFields());
+    },
+
+    // 下拉选择框 转盘项和 奖品是一一对应关系 已经被其他占用的 需要被禁止选取
+    // 找到 所有转盘项 的 选取的奖品 剔除 被点击项的 奖品
+    // 奖品列表 中把 已经被选中 的 设置为禁用
+    toggle(item, isVisible) {
+      console.log(item)
+      if(!isVisible) return
+      let turntableRewardIdArr = []
+      this.turnTableEditForm.forEach(tableItem => {
+        if (tableItem.id !== item.id) {
+          turntableRewardIdArr.push(tableItem.turntableRewardId)
+        }
+      })
+
+      if (!turntableRewardIdArr || !turntableRewardIdArr.length) return
+      let rewardArr0 = JSON.parse(JSON.stringify(this.rewardArr)) 
+      let rewardArr = rewardArr0.map(reward => {
+        if(turntableRewardIdArr.indexOf(reward.id) > -1) {
+          reward.disabled = true
+        } else {
+          reward.disabled = false
+        }
+        return reward
+      })
+      this.rewardArr = rewardArr
     },
 
     // 获取大转盘数据

@@ -647,8 +647,7 @@ export const constantRouterMap = [
   {
     path: '/dataAnalysis',
     component: Layout,
-    redirect: '/dataAnalysis/articleData',
-    name: 'dataAnalysis',
+     name: 'dataAnalysis',
     meta: { title: '数据分析', icon: '' },
     children: [
       {
