@@ -519,6 +519,131 @@ export const constantRouterMap = [
         meta: { title: '类目爬虫管理',icon:'管理'}
       }]
   },
+
+  {
+    path: '/configuration',
+    component: Layout,
+    name: 'configuration',
+    redirect: '/configuration/configurationList',
+    meta: {title: '常规配置', icon: 'operation'},
+    children: [
+      {
+        path: 'configurationList',
+        name: 'configurationList',
+        component: () => import('@/views/configuration/configurationList'),
+        meta: {title: '配置列表', icon: 'operation'}
+      }
+    ]
+  },
+
+  {
+    path: '/cardGroup',
+    component: Layout,
+    name: 'cardGroup',
+    redirect: '/cardGroup/cardGroupList',
+    meta: { title: '卡片组管理', icon: 'slideshow'},
+    children: [
+      {
+        path: 'cardGroupList',
+        name: 'cardGroupList',
+        component: () => import('@/views/cardGroup/cardGroupList'),
+        meta: { title: '卡片组列表', icon: 'slideshow'}
+      },
+
+      {
+        path: 'cardGroupAdd',
+        name: 'cardGroupAdd',
+        component: () => import('@/views/cardGroup/cardGroupAdd'),
+        meta: { title: '添加卡片组'},
+        hidden: true
+      },
+      {
+        path: 'card',
+        name: 'card',
+        component: () => import('@/views/cardGroup/card'),
+        meta: { title: '卡片管理'},
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/turnTable',
+    component: Layout,
+    name: 'turnTable',
+    redirect: '/turnTable/turnTableList',
+    meta: {title: '大转盘管理', icon: 'member'},
+    children: [
+      {
+        path: 'turnTableList',
+        name: 'turnTableList',
+        component: () => import('@/views/turnTable/turnTableList'),
+        meta: { title: '大转盘列表'}
+      },
+      
+    ]
+  },
+  {
+    path: '/turnTableReward',
+    component: Layout,
+    name: 'turnTableReward',
+    redirect: '/turnTableReward/turnTableRewardList',
+    meta: {title: '大转盘奖励管理', icon: 'commission'},
+    children: [
+      {
+        path: 'turnTableRewardList',
+        name: 'turnTableRewardList',
+        component: () => import('@/views/turnTableReward/turnTableRewardList'),
+        meta: { title: '大转盘奖励列表'}
+      }
+    ]
+  },
+
+  {
+    path: '/activityWithdraw',
+    component: Layout,
+    redirect: '/activityWithdraw/activityWithdrawList',
+    name: 'activityWithdraw',
+    meta: {title: '提现审核', icon: '提现'},
+    children: [
+      {
+        path: 'activityWithdrawList',
+        name: 'activityWithdrawList',
+        component: () => import('@/views/activityWithdraw/activityWithdrawList'),
+        meta: {title: '提现列表', icon: '提现'}
+      }
+    ]
+  },
+  {
+    path: '/weMedia',
+    component: Layout,
+    redirect: '/weMedia/weMediaList',
+    name: 'weMedia',
+    meta: {title: '自媒体管理', icon: 'article'},
+    children: [
+      {
+        path: 'weMediaList',
+        name: 'weMediaList',
+        component: () => import('@/views/weMedia/weMediaList'),
+        meta: {title: '自媒体文章列表'}
+      },
+    ]
+  },
+  {
+    path: '/mediaPublish',
+    component: Layout,
+    redirect: '/mediaPublish/mediaPublishList',
+    name: 'mediaPublish',
+    meta: {title: '媒体人管理', icon: 'article'},
+    children: [
+      {
+        path: 'mediaPublishList',
+        name: 'mediaPublishList',
+        component: () => import('@/views/mediaPublish/mediaPublishList'),
+        meta: {title: '媒体人文章列表'}
+      },
+    ]
+  },
+
   {
     path: '/dataAnalysis',
     component: Layout,

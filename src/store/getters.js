@@ -20,10 +20,10 @@ const getters = {
   tagIds:state=>state.tagIds,
   memberDetail:state=>state.memberDetail,
   userInfo: (state) => {
-    if (!state.userInfo) {
-      state.userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    if (!state.user.userInfo) {
+      return JSON.parse(localStorage.getItem('userInfo'))
     }
-    return state.userInfo
+    return state.user.userInfo
   }
   // userId: (state) => {
   //   if (!state.userId) {

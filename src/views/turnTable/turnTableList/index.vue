@@ -1,0 +1,217 @@
+<template>
+  <div>
+    <el-row>
+       <el-button type="primary" @click="edit">编辑</el-button>
+       <!-- <el-button type="primary" @click="onSubmit">提交</el-button> -->
+    </el-row>
+
+    <el-table
+      class="table-box"
+      border
+      :data="turnTableArr"
+      :header-cell-style="tabHeader">
+      <el-table-column align="center" label="索引" prop="index" ></el-table-column>
+      <el-table-column align="center" label="中奖概率" prop="probability"> </el-table-column>
+      <el-table-column align="center" label="奖品" prop="turntableRewardId">
+        <template slot-scope="scope">
+          {{getRewardNameById(scope.row.turntableRewardId) | getRewardLabel}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="备注" prop="remark"> </el-table-column>
+    </el-table>
+
+    <Dialog :title="'大转盘编辑'" :width="'50%'" :is-show="isShow" @cancelFn="close('turnTableForm')" @confirmFn="onSubmit('turnTableForm')">
+      
+      <el-form label-width="100px" :inline="true" v-for="(item, idx) in turnTableEditForm" :key="idx" :model="item" :rules="rules" ref="turnTableForm">
+        <!-- <div v-for="(item, idx) in turnTableEditForm" :key="idx"> -->
+          <el-form-item>索引{{item.index}} </el-form-item>
+          <el-form-item label="中奖概率" prop="probability">
+            <el-input v-model.number.trim="item.probability"></el-input>
+          </el-form-item>
+          <el-form-item label="奖品" prop="turntableRewardId" >
+            <el-select v-model="item.turntableRewardId">
+              <el-option v-for="item in rewardArr" :key="item.id" :value="item.id" :label="item | getRewardLabel"></el-option>
+            </el-select>
+          </el-form-item>
+          
+          <el-form-item label="备注" prop="remark">
+            <el-input v-model.trim="item.remark"></el-input>
+          </el-form-item>
+        <!-- </div> -->
+      </el-form>
+    </Dialog>
+  </div>
+</template>
+<script>
+import Dialog from "@/components/common/dialog"
+import {getTurnTable, patchTurnTable} from '@/api/turnTable'
+import { getTurnTableReward} from '@/api/turnTableReward'
+export default {
+  name: 'turnTableList',
+  components: {
+    Dialog
+  },
+  data() {
+    return {
+      turnTableArr: [0,1,2,3,4,5,6,7].map((item, i) =>{ return {index: i,id:'', img:'',turntableRewardId:'',remark:'',probability:''}}),//大转盘数据
+      rewardArr: [],//大转盘奖品数据列表
+      turnTableEditForm: [],//大转盘编辑列表
+      rules: {
+        turntableRewardId: [
+          {required: true, message: '请选择奖励！', trigger: 'blur'}
+        ],
+        probability: [
+          {required: true, type: 'number', message: '卡片概率为0~1之间！', trigger: 'blur'},
+          {
+            pattern: /^(1|0)$|(0\.\d+)$/,
+            message: '卡片概率为0~1之间！',
+            trigger: 'blur'
+          }
+        ],
+        remark: [
+          {required: true, type: 'string', message: '请填写卡片备注！', trigger: 'blur'}
+        ]
+      },
+      isShow: false,//弹窗显示标识
+      tabHeader: {
+        "background-color": "#F4F4F4",
+        'color': "#666666",
+        'border-top': "1px solid #BBBBBB",
+        'border-bottom': "1px solid #BBBBBB",
+        "font-size": "16px",
+        "text-align": "center"
+      },
+    }
+  },
+  filters: {
+    // 格式化奖励类型
+    formatType(val) {
+      let type = {
+        0: '红包',
+        1: '随机红包',
+        2: '卡片'
+      }
+
+      return type[val] ? type[val] : '未知'
+    },
+
+    // 格式化奖励项显示
+    getRewardLabel(reward) {
+      if(!reward) return
+      let typeData = {
+        0: '红包',
+        1: '随机红包',
+        2: '卡片'
+      }
+
+      let unitData = {
+        0: '元',
+        1: '元',
+        2: '张'
+      }
+
+      let label = typeData[reward.type] ? typeData[reward.type] : '未知'
+      let unit = unitData[reward.type] ? unitData[reward.type] : ''
+      let num = reward.unit ? reward.unit : 0 
+      label += num + unit
+      return label
+    },
+  },
+
+  
+  methods: {
+    getRewardNameById(turntableRewardId) {
+      if (!this.rewardArr || !this.rewardArr.length) return;
+      return this.rewardArr.find(item => item.id == turntableRewardId)
+    },
+
+    // 打开编辑
+    edit(index, row) {
+      
+      this.turnTableEditForm = JSON.parse(JSON.stringify(this.turnTableArr));
+      this.isShow = true;
+    },
+
+    //弹窗点击确定
+    onSubmit(form) {
+      console.log(this.$refs[form])
+      let formArr = this.$refs[form]
+      let len = this.$refs[form].length
+      let promisArr = [];
+
+      for(let i = 0; i < len; i++) {
+        let validPromise = new Promise((resolve, reject) => {
+          console.log(i)
+          formArr[i].validate(valid => {
+            if(!valid) {
+              return reject(valid);
+            }
+            resolve(valid);
+          })
+        })
+        promisArr.push(validPromise)
+      }
+      Promise.all(promisArr)
+      .then(res => {
+        console.log(res)
+        patchTurnTable(this.turnTableEditForm)
+        .then(res => {
+          if (res.data.code) {
+            return res.data.message && this.$wran(res.data.message)
+          }
+
+          this.close(form);
+          this.$success('操所成功！');
+          this.init()
+        })
+        .catch(err => {})
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    },
+
+    // 关闭时 回复原状
+    close(form) {
+      this.isShow = false;
+      this.$refs[form].forEach(item => item.resetFields());
+    },
+
+    // 获取大转盘数据
+    init() {
+      getTurnTable()
+      .then(res => {
+        if(res.data.code) {
+          return res.data.message && this.$wran(res.data.message)
+        }
+        if (!res.data.data || !res.data.data.length) return;
+        this.turnTableArr = res.data.data
+      })
+      .catch(err => {})
+    }
+  
+  },
+
+  created() {
+    this.init()
+
+    // 获取所有大转盘奖励
+    getTurnTableReward()
+    .then(res => {
+      if(res.data.code) {
+        return res.data.message && this.$wran(res.data.message)
+      }
+      if (!res.data.data || !res.data.data.length) return;
+      this.rewardArr = res.data.data
+    })
+  }
+}
+</script>
+<style lang="scss" scoped>
+.table-box{
+  margin-top: 20px;
+}
+
+</style>
+
+
