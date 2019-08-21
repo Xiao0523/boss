@@ -22,6 +22,24 @@
       <el-form-item label="最多分享文章数 maxShareArticle">
         <el-input v-model.trim="content.maxShareArticle"></el-input>
       </el-form-item>
+      <el-form-item label="下期中奖号码 rewardCode">
+        <el-input v-model.trim="content.rewardCode"></el-input>
+      </el-form-item>
+      <el-form-item label="是否公开 rewardStatus">
+        <el-input v-model.trim="content.rewardStatus"></el-input>
+      </el-form-item>
+      <el-form-item label="奖池累计 lottery">
+        <el-input v-model.trim="content.lottery"></el-input>
+      </el-form-item>
+      <el-form-item label="排行榜第一名卡片数 no1">
+        <el-input v-model.trim="content.no1"></el-input>
+      </el-form-item>
+      <el-form-item label="排行榜第二名卡片数 no2">
+        <el-input v-model.trim="content.no2"></el-input>
+      </el-form-item>
+      <el-form-item label="排行榜第三名卡片数 no3">
+        <el-input v-model.trim="content.no3"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存配置</el-button>
       </el-form-item>
@@ -44,6 +62,12 @@ export default {
         maxReadArticle: '',//最多阅读文章次数
         maxCommentArticle: '',//最多评论文章数
         maxShareArticle: '',//最多分享文章数
+        rewardCode: '',//下期中奖号码
+        rewardStatus: '',//是否公开
+        lottery: '',//奖池累计
+        no1: '',// 排行榜第一名卡片数 
+        no2: '',// 排行榜第二名卡片数 
+        no3: ''// 排行榜第三名卡片数
         
       },
     }

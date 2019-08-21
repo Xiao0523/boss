@@ -20,7 +20,7 @@
       <el-table-column align="center" label="备注" prop="remark"> </el-table-column>
     </el-table>
 
-    <Dialog :title="'大转盘编辑'" :width="'50%'" :is-show="isShow" @cancelFn="close('turnTableForm')" @confirmFn="onSubmit('turnTableForm')">
+    <Dialog :title="'大转盘编辑'" :width="'60%'" :is-show="isShow" @cancelFn="close('turnTableForm')" @confirmFn="onSubmit('turnTableForm')">
       
       <el-form label-width="100px" :inline="true" v-for="(item, idx) in turnTableEditForm" :key="idx" :model="item" :rules="rules" ref="turnTableForm">
           <el-form-item label="索引">{{item.index}} </el-form-item>
