@@ -645,6 +645,22 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/searchRoll',
+    component: Layout,
+    redirect: '/searchRoll/searchRollList',
+    name: 'searchRoll',
+    meta: {title: '搜索框管理', icon: 'article'},
+    children: [
+      {
+        path: 'searchRollList',
+        name: 'searchRollList',
+        component: () => import('@/views/searchRoll/searchRollList'),
+        meta: {title: '搜索框列表'}
+      },
+    ]
+  },
+
+  {
     path: '/dataAnalysis',
     component: Layout,
      name: 'dataAnalysis',
