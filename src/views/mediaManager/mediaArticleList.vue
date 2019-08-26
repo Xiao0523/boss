@@ -70,7 +70,15 @@
     <!--审核失败原因-->
 
     <el-dialog title="审核失败原因" :visible.sync="dialogFormVisible">
-      <el-input type="textarea" rows="10" v-model="explain"></el-input>
+      <!-- <el-input type="textarea" rows="10" v-model="explain"></el-input> -->
+      <el-radio-group v-model="explain">
+        <el-radio :label="'文章已有（重复）'">文章已有（重复）</el-radio>
+        <el-radio :label="'文章中有涉及广告、色情、不良信息等不符合内容要求的信息'">文章中有涉及广告、色情、不良信息等不符合内容要求的信息</el-radio>
+        <el-radio :label="'文章老旧'">文章老旧</el-radio>
+        <el-radio :label="'文章存在抄袭嫌疑'">文章存在抄袭嫌疑</el-radio>
+        <el-radio :label="'文章内容标题不符'">文章内容标题不符</el-radio>
+
+      </el-radio-group>
       <div slot="footer" class="dialog-footer">
         <el-button @click="submitDel">取 消</el-button>
         <el-button type="primary" @click="submitFail">确 定</el-button>
@@ -317,5 +325,12 @@ export default {
   width: 51px;
   height: 33px;
   vertical-align: middle;
+}
+.el-radio{
+  display: block;
+}
+.el-radio+.el-radio{
+  margin-left:0px;
+  margin-top:10px;
 }
 </style>
