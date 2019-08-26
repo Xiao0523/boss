@@ -167,16 +167,6 @@ export default {
       console.log("父组件接受的参数", this.searchParame);
       this.initData();
     },
-    /*   dateChangeBeginTime(start){
-        if(!start){return}
-        this.param.startDay =start
-        setSession('currentPage',1);
-      },
-      dateChangeEndTime(end){
-        if(!end){return}
-        this.param.endDay = end
-        setSession('currentPage',1);
-      },*/
     sizeChangeFn(size) {
       this.searchParame.pageSize = size;
       let param = getSession("param");
