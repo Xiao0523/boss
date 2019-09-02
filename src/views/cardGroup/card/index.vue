@@ -67,6 +67,7 @@
 <script>
 import Dialog from "@/components/common/dialog"
 import {getCard, postCard, patchCard, delCard} from '@/api/cardGroup'
+import {UploadUrl} from '@/http/url'
 export default {
   name: 'card',
   components: {
@@ -74,7 +75,7 @@ export default {
   },
   data() {
     return {
-      uploadPic: "https://www.my51share.com/boss/upload",//上传地址 需要建立全局公共配置
+      uploadPic: UploadUrl,//上传地址 需要建立全局公共配置
       isShow: false,//上传弹窗开关
       cardGroupId: null,//卡组id
       status: null,//卡组状态 0 下架 1 上架

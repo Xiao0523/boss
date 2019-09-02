@@ -92,6 +92,7 @@
 <script>
 import {getTags} from '@/api/tagManager'
 import {getImgs, postImg, delImgs} from '@/api/galleryManager'
+import {UploadUrl} from '@/http/url'
 import Dialog from "@/components/common/dialog"
 import pageNum from '@/components/pageNum'
 export default {
@@ -117,7 +118,7 @@ export default {
       },
       choosenImg: [],//被选中的 图片 id
       
-      uploadPic: "https://www.my51share.com/boss/upload",//上传地址 需要建立全局公共配置
+      uploadPic: UploadUrl,//上传地址 需要建立全局公共配置
       isImgShow: false, //弹窗 显示标识
       currentImg: {// 弹窗中显示 图片数据模型
         imageUrl: '',
@@ -236,9 +237,9 @@ export default {
     // 文件添加时 钩子
     onFileChange(file, fileList) {
       let sizeBase = 1024;
-      let isLarge = file.size / 1024 > 100
+      let isLarge = file.size / 1024 > 300
       if(isLarge) {
-        this.$wran('文件大于 100kb')
+        this.$wran('文件大于 300kb')
         this.$refs['uploader'].clearFiles()
       }
       return isLarge
