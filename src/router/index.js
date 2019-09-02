@@ -659,6 +659,40 @@ export const constantRouterMap = [
       },
     ]
   },
+  
+  {
+    path: '/tagManager',
+    component: Layout,
+    redirect: '/tagManager/tagList',
+    name: 'tagManager',
+    meta: {title: '标签管理', icon: 'tag'},
+    children: [
+      {
+        path: 'tagList',
+        name: 'tagList',
+        component: () => import('@/views/tagManager/tagList'),
+        meta: {title: '标签列表'}
+      },
+      
+    ]
+  },
+  
+  {
+    path: '/galleryManager',
+    component: Layout,
+    redirect: '/galleryManager/gallery',
+    name: 'galleryManager',
+    meta: {title: '图库管理', icon: 'slideshow'},
+    children: [
+      {
+        path: 'gallery',
+        name: 'gallery',
+         component: () => import('@/views/galleryManager/gallery'),
+        meta: {title: '图库列表'} 
+      },
+      
+    ]
+  },
 
   {
     path: '/dataAnalysis',
