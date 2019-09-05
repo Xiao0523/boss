@@ -44,8 +44,6 @@
         <el-input v-model.trim="content.no3"></el-input>
       </el-form-item>
       <el-form-item label="活动首页奖励图片 rewardPic">
-        <!-- <img class="reward_img" :src="content.rewardPic" alt=""> -->
-
         <el-upload
           class="img-uploader"
           ref="uploader"

@@ -300,7 +300,7 @@ export default {
   .avatar-uploader-icon {
     display: block;
     font-size: 28px;
-    width: 700px;
+    width: 300px;
     color: #8c939d;
     line-height: 300px;
     text-align: center;

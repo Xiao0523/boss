@@ -74,11 +74,11 @@
             <div class="tag_checkbox">
               <el-checkbox-group class="checkbox-group tag_checkbox_group" v-model="currentImg.tags">
                 <el-checkbox 
+                  class="tag_checkbox_item"
                   v-for="item in tagArr"
                   :key="item.id" 
                   :label="item.id" 
-                  @change="changeCheck(item,$event)"
-                  style="width:20%;">{{item.describe}}</el-checkbox>
+                  @change="changeCheck(item,$event)">{{item.describe}}</el-checkbox>
               </el-checkbox-group>
             </div>
             <a href="javascript:;" class="el-icon-arrow-right btn_arrow" v-if="!islastPageTag" @click="next"></a>
@@ -346,6 +346,18 @@ export default {
       })
     }
   },
+  beforeRouteUpdate(from, to, next) {
+    this.$nextTick(() => {
+      let query = this.$route.query
+      this.tagId = query.tagId ? query.tagId : ''
+  
+      this.initTags()
+  
+      this.initImgs()
+
+    })
+    next()
+  },
 
   // 初始化 获取 地址上的标签id 若地址上有标签id 参数 说明时 标签页 进入 页面上 不可新增 编辑 只可删除
   created() {
@@ -378,7 +390,7 @@ export default {
   .avatar-uploader-icon {
     display: block;
     font-size: 28px;
-    width: 700px;
+    width: 300px;
     color: #8c939d;
     line-height: 300px;
     text-align: center;
@@ -414,6 +426,15 @@ export default {
 .tag_checkbox{
   flex: 1;
   margin: 0 40px
+}
+.tag_checkbox_item{
+  width:20%; 
+}
+.tag_checkbox_item /deep/ .el-checkbox__label{
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 }
 
 .btn_arrow {
