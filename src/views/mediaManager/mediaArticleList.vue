@@ -226,6 +226,7 @@ export default {
         row.audit_stauts = 1;
         this.$req.post("ReviewTheInterface", row).then(res => {
           if (res.data.code == 0) {
+            this.initData();
             this.$success(res.data.message);
           } else {
             row.audit_stauts = 0;
@@ -255,6 +256,7 @@ export default {
         if (res.data.code == 0) {
           this.explain = "";
           this.$success(res.data.message);
+          this.initData();
         } else {
           this.explain;
           this.row.audit_stauts = 0;

@@ -35,7 +35,7 @@ server.interceptors.response.use(res => { // 响应成功关闭loading
   const loadingInstance = Loading.service()
   setTimeout(() => {
     loadingInstance.close()
-  }, 1000)
+  }, 0)
   return res
 }, error => {
   const loadingInstance = Loading.service()
