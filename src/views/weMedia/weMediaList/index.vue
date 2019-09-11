@@ -177,7 +177,7 @@ export default {
     fetchArticles() {
       getArticles({
         keyWord: this.keyWord,
-        pageNo: this.pageNo,
+        pageNum: this.pageNo,
         pageSize: this.pageSize || 10,
       }).then(res => {
         if(res.data.code) {

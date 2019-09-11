@@ -99,7 +99,7 @@ export default {
     // 获取文章列表
     fetchArticles() {
       let argsObj = { 
-        pageNo: this.pageNo,
+        pageNum: this.pageNo,
         pageSize: this.pageSize || 10,
       }
       
