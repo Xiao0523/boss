@@ -29,7 +29,7 @@
       <el-table-column align="center" prop="title" label="文章标题"></el-table-column>
       <el-table-column align="center" prop="href" label="文章链接"></el-table-column>
       <el-table-column align="center" prop="nickName" label="文章作者"></el-table-column>
-      <el-table-column align="center" prop="nickName" label="手机号"></el-table-column>
+      <el-table-column align="center" prop="phone" label="手机号"></el-table-column>
       <el-table-column align="center" label="发布时间">
          <template slot-scope="scope">{{scope.row.createTime | formatDate}}</template>
       </el-table-column>

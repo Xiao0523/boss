@@ -693,6 +693,29 @@ export const constantRouterMap = [
       
     ]
   },
+  
+  {
+    path: '/happyRead',
+    component: Layout,
+    redirect: '/happyRead/happyReadList',
+    name: 'happyRead',
+    meta: {title: '小说管理', icon: 'article'},
+    children: [
+      {
+        path: 'happyReadList',
+        name: 'happyReadList',
+        component: () => import('@/views/happyRead/happReadList'),
+        meta: {title: '小说列表'} 
+      },
+      {
+        path: 'happyReadAdd',
+        name: 'happyReadAdd',
+        component: () => import('@/views/happyRead/happyReadAdd'),
+        meta: {title: '小说添加'},
+        hidden: true
+      }
+    ]
+  },
 
   {
     path: '/dataAnalysis',
