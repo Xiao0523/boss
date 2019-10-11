@@ -32,7 +32,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="author" label="小说作者"></el-table-column>
-      <el-table-column align="center" prop="introdution" label="小说简介"></el-table-column>
+      <el-table-column align="center" prop="introduction" label="小说简介"></el-table-column>
       <el-table-column align="center" label="类目">
          <template slot-scope="scope">{{scope.row.categoryInfo | formatCategoryInfo}}</template>
       </el-table-column>
