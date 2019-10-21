@@ -49,7 +49,9 @@
       <el-table-column align="center" label="提现时间">
         <template slot-scope="scope">{{scope.row.createTime | formatDate}}</template>
       </el-table-column>
-      <el-table-column align="center" prop="money" label="提现金额（元）"></el-table-column>
+      <el-table-column align="center" prop="money" label="提现金额（元）">
+        <template slot-scope="scope">{{scope.row.money | formatMoney}}</template>
+      </el-table-column>
       <el-table-column align="center" label="提现状态">
         <template slot-scope="scope">{{scope.row.status | formatStatus}}</template>
       </el-table-column>
@@ -151,6 +153,9 @@ export default {
       }
 
       return type[val] ? type[val] : '未知'
+    },
+    formatMoney(val) {
+      return val ? Math.abs(val) : 0
     }
   },
   methods: {

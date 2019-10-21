@@ -716,6 +716,21 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/happyReadWithdraw',
+    component: Layout,
+    redirect: '/happyReadWithdraw/happyReadWithdrawList',
+    name: 'happyReadWithdraw',
+    meta: {title: '小说提现管理', icon: 'article'},
+    children: [
+      {
+        path: 'happyReadWithdrawList',
+        name: 'happyReadWithdrawList',
+        component: () => import('@/views/happyReadWithdraw/happyReadWithdrawList'),
+        meta: {title: '小说提现列表'} 
+      }
+    ]
+  },
 
   {
     path: '/dataAnalysis',
