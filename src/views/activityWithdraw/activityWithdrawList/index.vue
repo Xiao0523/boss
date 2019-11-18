@@ -1,37 +1,35 @@
 <template>
   <div>
     <el-row>
-      <el-form :inline="true" :model="keyWord" :rules="rules" ref="searchForm">
+      <el-form :inline="true" :model="keyWord" ref="searchForm" :rules="rules">
         <el-form-item>
-          <el-input v-model.trim="keyWord.nickName" placeholder="输入作者" clearable></el-input>
+          <el-input v-model.trim="keyWord.nickName" placeholder="输入作者" clearable/>
         </el-form-item>
         <el-form-item prop="phone">
-          <el-input 
-            v-model.trim="keyWord.phone" 
-            placeholder="输入手机" 
-            clearable 
-            ></el-input>
+          <el-input
+            v-model.trim="keyWord.phone"
+            placeholder="输入手机"
+            clearable
+          />
         </el-form-item>
 
         <el-form-item>
-          <el-select v-model="keyWord.statue" clearable placeholder="请选择提现状态">
-          <el-option
-            v-for="item in statusArr"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+          <el-select v-model="keyWord.status" clearable placeholder="请选择提现状态">
+            <el-option
+              v-for="item in statusArr"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-select v-model="keyWord.type" clearable placeholder="请选择提现类型">
-          <el-option
-            v-for="item in typeArr"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+            <el-option
+              v-for="item in typeArr"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"/>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="search('searchForm')">筛选</el-button>
@@ -41,24 +39,24 @@
     </el-row>
     <el-table
       class="table-box"
-      border
       :data="widthdrawArr"
+      border
       :header-cell-style="tabHeader">
-      <el-table-column align="center" prop="nickName" label="用户名称"></el-table-column>
-      <el-table-column align="center" prop="phone" label="用户手机"></el-table-column>
+      <el-table-column align="center" prop="nickName" label="用户名称"/>
+      <el-table-column align="center" prop="phone" label="用户手机"/>
       <el-table-column align="center" label="提现时间">
-        <template slot-scope="scope">{{scope.row.createTime | formatDate}}</template>
+        <template slot-scope="scope">{{ scope.row.createTime | formatDate }}</template>
       </el-table-column>
       <el-table-column align="center" prop="money" label="提现金额（元）">
-        <template slot-scope="scope">{{scope.row.money | formatMoney}}</template>
+        <template slot-scope="scope">{{ scope.row.money | formatMoney }}</template>
       </el-table-column>
       <el-table-column align="center" label="提现状态">
-        <template slot-scope="scope">{{scope.row.status | formatStatus}}</template>
+        <template slot-scope="scope">{{ scope.row.status | formatStatus }}</template>
       </el-table-column>
       <el-table-column align="center" label="提现类型">
-        <template slot-scope="scope">{{scope.row.type | formatType}}</template>
+        <template slot-scope="scope">{{ scope.row.type | formatType }}</template>
       </el-table-column>
-      <el-table-column align="center" prop="source" label="提现来源"></el-table-column>
+      <el-table-column align="center" prop="source" label="提现来源"/>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button type="danger" size="mini" @click="audit(scope.$index, scope.row)">审核</el-button>
@@ -68,32 +66,55 @@
 
     <!--分页-->
     <div class="pageNumBox">
-      <pageNum :currentPage="pageNo"
-               :pageSize="pageSize"
+      <pageNum 
+:current-page="pageNo"
+               :page-size="pageSize"
                :total="totalNum"
                @sizeChange="sizeChangeFn"
                @currentChange="currentPageChange"
-      ></pageNum>
+      />
     </div>
 
     <Dialog :title="'审核'" :width="'40%'" :is-show="isShow" @cancelFn="close" @confirmFn="onSubmit">
       <el-radio-group v-model="radioStatus">
-        <el-radio v-for="item in radioStatusArr" :key="item.value" :label="item.value">{{item.label}}</el-radio>
+        <el-radio v-for="item in radioStatusArr" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
       </el-radio-group>
     </Dialog>
   </div>
 </template>
 
 <script>
-import {getWithdraw, patchWithdraw} from '@/api/activityWithdraw'
-import Dialog from "@/components/common/dialog"
+import { getWithdraw, patchWithdraw } from '@/api/activityWithdraw'
+import Dialog from '@/components/common/dialog'
 import pageNum from '@/components/pageNum'
 export default {
-  name: 'activityWithdrawList',
-   components: {
-      pageNum,
-      Dialog
+  name: 'ActivityWithdrawList',
+  components: {
+    pageNum,
+    Dialog
+  },
+  filters: {
+    formatStatus(val) {
+      let status = {
+        0: '审核中',
+        1: '驳回',
+        2: '已到账'
+      }
+
+      return status[val] ? status[val] : '未知'
     },
+    formatType(val) {
+      let type = {
+        1: '新手提现',
+        2: '普通用户提现'
+      }
+
+      return type[val] ? type[val] : '未知'
+    },
+    formatMoney(val) {
+      return val ? Math.abs(val) : 0
+    }
+  },
   data() {
     return {
       widthdrawArr: [],//提现列表数据
@@ -107,7 +128,7 @@ export default {
       keyWord: {
         nickName: '',//用户名称
         phone: '',//手机号码
-        statue: null,//用户的搜索的状态 0 系统审核中 1 驳回 2 已到账
+        status: null,//用户的搜索的状态 0 系统审核中 1 驳回 2 已到账
         type: null,//用户搜索的类型 1新手提现 2 普通用户提现
         
       },
@@ -136,27 +157,8 @@ export default {
       }
     }
   },
-  filters: {
-    formatStatus(val) {
-      let status = {
-        0: '审核中',
-        1: '驳回',
-        2: '已到账'
-      }
-
-      return status[val] ? status[val] : '未知'
-    },
-    formatType(val) {
-      let type = {
-        1: '新手提现',
-        2: '普通用户提现'
-      }
-
-      return type[val] ? type[val] : '未知'
-    },
-    formatMoney(val) {
-      return val ? Math.abs(val) : 0
-    }
+  created() {
+    this.init()
   },
   methods: {
     // 审核
@@ -228,8 +230,8 @@ export default {
       }
 
       // 筛选中有提现状态
-      if(keyWord.statue || Object.prototype.toString.call(keyWord.statue) === '[object Number]') {
-        argsObj.statue = keyWord.statue
+      if(keyWord.status || Object.prototype.toString.call(keyWord.status) === '[object Number]') {
+        argsObj.status = keyWord.status
       }
 
       // 筛选中有 提现 类型
@@ -248,9 +250,6 @@ export default {
       })
     }
   },
-  created() {
-    this.init()
-  }
 }
 </script>
 <style lang="scss" scoped>
@@ -258,5 +257,4 @@ export default {
   margin-top: 20px;
 }
 </style>
-
 
