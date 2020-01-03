@@ -1,29 +1,29 @@
 <template>
   <div>
     <el-row>
-      <el-button type="primary" v-if="!tagId" @click="addImg">新增图片</el-button>
+      <el-button v-if="!tagId" type="primary" @click="addImg">新增图片</el-button>
       <el-button type="danger" @click="batchDel">批量删除</el-button>
-      
+
     </el-row>
     <el-table
-      class="table-box"
-      border
       :data="imgArr"
+      class="table-box"
       :header-cell-style="tabHeader"
+      border
       @select="selectHandle"
       @select-all="selectAll">
-      <el-table-column align="center" type="selection" width="55"></el-table-column>
+      <el-table-column align="center" type="selection" width="55"/>
       <el-table-column align="center" prop="describe" label="图片">
         <template slot-scope="scope">
-          <img class="gallery-img" :src="scope.row.imageUrl" alt="">
+          <img :src="scope.row.imageUrl" class="gallery-img" alt="">
         </template>
       </el-table-column>
-      <el-table-column align="center" label="图片标签" v-if="!tagId">
-        <template slot-scope="scope">{{scope.row.shareImageTags | formatTag}}</template>
+      <el-table-column v-if="!tagId" align="center" label="图片标签">
+        <template slot-scope="scope">{{ scope.row.shareImageTags | formatTag }}</template>
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" v-if="!tagId" @click="edit(scope.$index, scope.row)">编辑</el-button>
+          <el-button v-if="!tagId" type="primary" size="mini" @click="edit(scope.$index, scope.row)">编辑</el-button>
           <el-button type="danger" size="mini" @click="del(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -31,107 +31,77 @@
 
     <!--分页-->
     <div class="pageNumBox">
-      <pageNum :currentPage="pageNo"
-               :pageSize="pageSize"
-               :total="totalNum"
-               @sizeChange="sizeChangeFn"
-               @currentChange="currentPageChange"
-      ></pageNum>
+      <pageNum
+        :current-page="pageNo"
+        :page-size="pageSize"
+        :total="totalNum"
+        @sizeChange="sizeChangeFn"
+        @currentChange="currentPageChange"
+      />
     </div>
 
     <Dialog :title="'编辑图片'" :width="'40%'" :is-show="isImgShow" @cancelFn="close('imgForm')" @confirmFn="onImgSubmit('imgForm')">
       <div slot="upload">
         <div class="picBox">
           <el-upload
-            class="avatar-uploader"
             ref="uploader"
             :action="uploadPic"
-            name="multipartFile"
+            class="avatar-uploader"
             :show-file-list="false"
             :on-change="onFileChange"
+            name="multipartFile"
             :on-success="uploadSuccess">
 
-            <img class="avatar" v-if="currentImg.imageUrl" :src="currentImg.imageUrl" >
-            
-            <i class="el-icon-plus avatar-uploader-icon" v-else></i>
+            <img v-if="currentImg.imageUrl" :src="currentImg.imageUrl" class="avatar" >
+
+            <i v-else class="el-icon-plus avatar-uploader-icon"/>
           </el-upload>
         </div>
-        <el-form label-position="left" label-width="120px" ref="imgForm" :model="currentImg">
-          <el-form-item label="图片地址" prop="imageUrl" :rules="[{required: true, message: '请上传图片！', trigger: 'blur'}]">
-            <el-input v-model="currentImg.imageUrl" :disabled="true"></el-input>
+        <el-form ref="imgForm" label-position="left" :model="currentImg" label-width="120px">
+          <el-form-item :rules="[{required: true, message: '请上传图片！', trigger: 'blur'}]" label="图片地址" prop="imageUrl">
+            <el-input v-model="currentImg.imageUrl" :disabled="true"/>
           </el-form-item>
 
-          <el-form-item label="已选标签" prop="tags" :rules="[{required: true, message: '请选择标签！', trigger: 'blur'}]">
-            <el-tag 
-              v-for="item in currentImg.shareImageTags" 
-              :key="item.id" closable 
-              @close="closeTag(item)"
-              style="margin-left: 20px">{{item.describe}}</el-tag>
+          <el-form-item :rules="[{required: true, message: '请选择标签！', trigger: 'blur'}]" label="已选标签" prop="tags">
+            <el-tag
+              v-for="item in currentImg.shareImageTags"
+              :key="item.id"
+              closable
+              style="margin-left: 20px"
+              @close="closeTag(item)">{{ item.describe }}</el-tag>
           </el-form-item>
 
           <div class="tag_checkbox_wraper">
-            <a href="javascript:;" class="el-icon-arrow-left btn_arrow" @click="prev"></a>
+            <a href="javascript:;" class="el-icon-arrow-left btn_arrow" @click="prev"/>
             <div class="tag_checkbox">
-              <el-checkbox-group class="checkbox-group tag_checkbox_group" v-model="currentImg.tags">
-                <el-checkbox 
-                  class="tag_checkbox_item"
+              <el-checkbox-group v-model="currentImg.tags" class="checkbox-group tag_checkbox_group">
+                <el-checkbox
                   v-for="item in tagArr"
-                  :key="item.id" 
-                  :label="item.id" 
-                  @change="changeCheck(item,$event)">{{item.describe}}</el-checkbox>
+                  :key="item.id"
+                  class="tag_checkbox_item"
+                  :label="item.id"
+                  @change="changeCheck(item,$event)">{{ item.describe }}</el-checkbox>
               </el-checkbox-group>
             </div>
-            <a href="javascript:;" class="el-icon-arrow-right btn_arrow" v-if="!islastPageTag" @click="next"></a>
+            <a v-if="!islastPageTag" href="javascript:;" class="el-icon-arrow-right btn_arrow" @click="next"/>
           </div>
-          
+
         </el-form>
       </div>
     </Dialog>
   </div>
 </template>
 <script>
-import {getTags} from '@/api/tagManager'
-import {getImgs, postImg, delImgs} from '@/api/galleryManager'
-import {UploadUrl} from '@/http/url'
-import Dialog from "@/components/common/dialog"
+import { getTags } from '@/api/tagManager'
+import { getImgs, postImg, delImgs } from '@/api/galleryManager'
+import { UploadUrl } from '@/http/url'
+import Dialog from '@/components/common/dialog'
 import pageNum from '@/components/pageNum'
 export default {
-  name: 'gallery',
+  name: 'Gallery',
   components: {
     pageNum,
     Dialog
-  },
-  data() {
-    return {
-      tagId: '',// 来自地址上的标签id
-      imgArr: [],//图片列表数据
-      totalNum: null, // 数据总条数
-      pageNo: 1, //当前页
-      pageSize: 10,// 每页的条数
-      tabHeader: {
-        "background-color": "#F4F4F4",
-        'color': "#666666",
-        'border-top': "1px solid #BBBBBB",
-        'border-bottom': "1px solid #BBBBBB",
-        "font-size": "16px",
-        "text-align": "center"
-      },
-      choosenImg: [],//被选中的 图片 id
-      
-      uploadPic: UploadUrl,//上传地址 需要建立全局公共配置
-      isImgShow: false, //弹窗 显示标识
-      currentImg: {// 弹窗中显示 图片数据模型
-        imageUrl: '',
-        tags: [],
-        shareImageTags: []
-      },
-
-      tagArr: [],//标签列表数据
-      pageTagNum: 1,// 标签的当前页
-      pageTagSize: 10,//标签的每页条数
-      pageTagTotal: null,//总页数
-      islastPageTag: false,//
-    }
   },
 
   filters: {
@@ -140,20 +110,62 @@ export default {
       return tags.map(tag => tag.describe).join('/')
     }
   },
+  data() {
+    return {
+      tagId: '', // 来自地址上的标签id
+      imgArr: [], // 图片列表数据
+      totalNum: null, // 数据总条数
+      pageNo: 1, // 当前页
+      pageSize: 10, // 每页的条数
+      tabHeader: {
+        'background-color': '#F4F4F4',
+        'color': '#666666',
+        'border-top': '1px solid #BBBBBB',
+        'border-bottom': '1px solid #BBBBBB',
+        'font-size': '16px',
+        'text-align': 'center'
+      },
+      choosenImg: [], // 被选中的 图片 id
+
+      uploadPic: UploadUrl, // 上传地址 需要建立全局公共配置
+      isImgShow: false, // 弹窗 显示标识
+      currentImg: {// 弹窗中显示 图片数据模型
+        imageUrl: '',
+        tags: [],
+        shareImageTags: []
+      },
+
+      tagArr: [], // 标签列表数据
+      pageTagNum: 1, // 标签的当前页
+      pageTagSize: 10, // 标签的每页条数
+      pageTagTotal: null, // 总页数
+      islastPageTag: false //
+    }
+  },
+
+  // 初始化 获取 地址上的标签id 若地址上有标签id 参数 说明时 标签页 进入 页面上 不可新增 编辑 只可删除
+  created() {
+    const query = this.$route.query
+    this.tagId = query.tagId ? query.tagId : ''
+
+    this.initTags()
+
+    this.initImgs()
+  },
   methods: {
-     //分页改变 每页数量
+    // 分页改变 每页数量
     sizeChangeFn(pageSize) {
       this.pageSize = pageSize
       this.initImgs()
     },
 
-    //分页改变 页面
+    // 分页改变 页面
     currentPageChange(pageNo) {
       this.pageNo = pageNo
       this.initImgs()
     },
 
-    //关闭标签弹窗
+    // 关闭标签弹窗
     close(form) {
       this.isImgShow = false
       this.$refs[form].resetFields()
@@ -179,10 +191,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-      .then(() => {
-        this._delImgs(this.choosenImg)
-      })
-      .catch((err) => {})
+        .then(() => {
+          this._delImgs(this.choosenImg)
+        })
+        .catch((err) => {})
     },
 
     // 删除单个 图片
@@ -192,22 +204,22 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       })
-      .then(() => {
-        this._delImgs([row.id])
-      })
-      .catch((err) => {})
+        .then(() => {
+          this._delImgs([row.id])
+        })
+        .catch((err) => {})
     },
 
     // 删除 图片逻辑
     _delImgs(idArray) {
       delImgs(idArray)
-      .then(res => {
-        if(res.data.code) {
-          return res.data.message && this.$wran(res.data.message)
-        }
-        this.$success('操作成功')
-        this.initImgs()
-      })
+        .then(res => {
+          if (res.data.code) {
+            return res.data.message && this.$wran(res.data.message)
+          }
+          this.$success('操作成功')
+          this.initImgs()
+        })
     },
 
     // 添加图片 打开弹窗
@@ -223,22 +235,22 @@ export default {
     // 编辑图片 打开弹窗
     edit(index, row) {
       this.isImgShow = true
-      let currentImg = JSON.parse(JSON.stringify(row))
-      currentImg.tags = currentImg.shareImageTags.map(tag => tag.id)    
+      const currentImg = JSON.parse(JSON.stringify(row))
+      currentImg.tags = currentImg.shareImageTags.map(tag => tag.id)
 
       this.currentImg = currentImg
     },
 
-    //上传图片
+    // 上传图片
     uploadSuccess(res, file, fileList) {
-      this.currentImg.imageUrl = res.data;
+      this.currentImg.imageUrl = res.data
     },
 
     // 文件添加时 钩子
     onFileChange(file, fileList) {
-      let sizeBase = 1024;
+      const sizeBase = 1024
       let isLarge = file.size / 1024 > 300
-      if(isLarge) {
+      if (isLarge) {
         this.$wran('文件大于 300kb')
         this.$refs['uploader'].clearFiles()
       }
@@ -250,20 +262,20 @@ export default {
       this.$refs[form].validate(isValid => {
         if (!isValid) return
         postImg(this.currentImg)
-        .then(res => {
-          if(res.data.code) {
-            return res.data.message && this.$wran(res.data.message)
-          }
-          this.$success('操作成功')
-          this.initImgs()
-          this.close('imgForm')
-        })
+          .then(res => {
+            if (res.data.code) {
+              return res.data.message && this.$wran(res.data.message)
+            }
+            this.$success('操作成功')
+            this.initImgs()
+            this.close('imgForm')
+          })
       })
     },
 
     // 点击标签 箭头 上一页
     prev() {
-      if(this.pageTagNum <= 1) return
+      if (this.pageTagNum <= 1) return
       this.pageTagNum--
       this.initTags()
     },
@@ -281,7 +293,7 @@ export default {
       this.currentImg.tags = this.currentImg.tags.filter(item => item !== tag.id)
     },
 
-    // 勾选 标签 checkbox 
+    // 勾选 标签 checkbox
     // 勾选 推入 显示标签上 ， 反选 删除显示标签
     changeCheck(tag, e) {
       if (e) {
@@ -294,32 +306,32 @@ export default {
     // 初始化 标签列表
     // 对标签 数据进行缓存 有缓存时 使用缓存数据
     initTags() {
-      let selfFn = this.initTags
+      const selfFn = this.initTags
       if (selfFn[this.pageTagNum]) {
         this.tagArr = selfFn[this.pageTagNum]
         return
       }
 
-      let argsObj = {
+      const argsObj = {
         pageNum: this.pageTagNum,
         pageSize: this.pageTagSize,
-        keyWord:  ''
+        keyWord: ''
       }
-      
+
       getTags(argsObj)
-      .then(res => {
-        if(res.data.code) {
-          return res.data.message && this.$wran(res.data.message)
-        }
-        if (!res.data.data) return
-        let data = res.data.data
-        this.islastPageTag = data.isLast
-        this.pageTagTotal = data.total
-        let records = data.records
-        this.tagArr = records && records.length ? records : [];
+        .then(res => {
+          if (res.data.code) {
+            return res.data.message && this.$wran(res.data.message)
+          }
+          if (!res.data.data) return
+          const data = res.data.data
+          this.islastPageTag = data.isLast
+          this.pageTagTotal = data.total
+          const records = data.records
+          this.tagArr = records && records.length ? records : []
 
         selfFn[this.pageTagNum] = this.tagArr
-      })
+        })
     },
 
     // 初始化 图片列表
@@ -327,7 +339,7 @@ export default {
     initImgs() {
       this.choosenImg = []
 
-      let argsObj = {
+      const argsObj = {
         pageNum: this.pageNo,
         pageSize: this.pageSize
       }
@@ -336,37 +348,26 @@ export default {
         argsObj.tagId = this.tagId
       }
       getImgs(argsObj).then(res => {
-        if(res.data.code) {
+        if (res.data.code) {
           return res.data.message && this.$wran(res.data.message)
         }
         if (!res.data.data) return
         this.totalNum = res.data.data.total
-        let records = res.data.data.records
+        const records = res.data.data.records
         this.imgArr = records && records.length ? records : []
       })
     }
   },
   beforeRouteUpdate(from, to, next) {
     this.$nextTick(() => {
-      let query = this.$route.query
+      const query = this.$route.query
       this.tagId = query.tagId ? query.tagId : ''
-  
-      this.initTags()
-  
-      this.initImgs()
 
+      this.initTags()
+
+      this.initImgs()
     })
     next()
-  },
-
-  // 初始化 获取 地址上的标签id 若地址上有标签id 参数 说明时 标签页 进入 页面上 不可新增 编辑 只可删除
-  created() {
-    let query = this.$route.query
-    this.tagId = query.tagId ? query.tagId : ''
-
-    this.initTags()
-
-    this.initImgs()
   }
 }
 </script>
@@ -428,7 +429,7 @@ export default {
   margin: 0 40px
 }
 .tag_checkbox_item{
-  width:20%; 
+  width:20%;
 }
 .tag_checkbox_item /deep/ .el-checkbox__label{
   text-overflow:ellipsis;

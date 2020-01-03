@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import user from '@/store/modules/user'
 import { getUserId } from '@/utils/auth' // 验权
 
-
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
 
@@ -25,10 +24,14 @@ import Layout from '../views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
-  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  {
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
   { path: '/tinymce', component: () => import('@/components/Tinymce') },
- /* {
+  /* {
     path: '/test',
     component: Layout,
     redirect: '/test1',
@@ -67,10 +70,12 @@ export const constantRouterMap = [
     meta: {
       requireAuth: true // 1.需要登录校验
     },
-    children: [{
-      path: '/home',
-      component: () => import('@/views/home')
-    }]
+    children: [
+      {
+        path: '/home',
+        component: () => import('@/views/home')
+      }
+    ]
   },
   {
     path: '/home',
@@ -89,21 +94,22 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/shareMoneyManager/shareMoneyList',
     name: 'shareMoneyManager',
-    meta: {title: '纷享币管理', icon: 'money'},
+    meta: { title: '纷享币管理', icon: 'money' },
     children: [
       {
         path: 'shareMoneyList',
         name: 'shareMoneyList',
         component: () => import('@/views/shareMoneyManager/shareMoneyList'),
-        meta: {title: '纷享币信息', icon: 'money'}
+        meta: { title: '纷享币信息', icon: 'money' }
       },
       {
         path: 'shareMoneyDetails',
         name: 'shareMoneyDetails',
-        component: () => import('@/views/shareMoneyManager/shareMoneyList/details'),
-        meta: {title: '纷享币详情', icon: 'table'},
+        component: () =>
+          import('@/views/shareMoneyManager/shareMoneyList/details'),
+        meta: { title: '纷享币详情', icon: 'table' },
         hidden: true
-      },
+      }
       // {
       //   path: 'ArticleCat',
       //   name: 'ArticleCat',
@@ -126,7 +132,7 @@ export const constantRouterMap = [
         name: 'regionList',
         component: () => import('@/views/regionManager/index'),
         meta: { title: '地区列表', icon: '地区管理' }
-      },
+      }
     ]
   },
   {
@@ -146,14 +152,14 @@ export const constantRouterMap = [
         path: 'categoryDetails',
         name: 'categoryEdit',
         component: () => import('@/views/categoryManager/categoryEdit'),
-        meta: { title: '文章类目详情'},
+        meta: { title: '文章类目详情' },
         hidden: true
       },
       {
         path: 'categoryAdd',
         name: 'categoryAdd',
         component: () => import('@/views/categoryManager/categoryAdd'),
-        meta: { title: '添加标签'},
+        meta: { title: '添加标签' },
         hidden: true
       }
       // {
@@ -174,7 +180,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'categoryList',
-        name: 'categoryList',
+        name: 'videocategoryList',
         component: () => import('@/views/videoCategoryManager/categoryList'),
         meta: { title: '视频类目列表', icon: 'tag' }
       }
@@ -204,14 +210,14 @@ export const constantRouterMap = [
         path: 'advDetails',
         name: 'advDetails',
         component: () => import('@/views/advManager/advEdit'),
-        meta: { title: '广告详情'},
+        meta: { title: '广告详情' },
         hidden: true
       },
       {
         path: 'flotAdvDetails',
         name: 'flotAdvDetails',
         component: () => import('@/views/advManager/advEdit/flotAdvEdit'),
-        meta: { title: '浮窗详情'},
+        meta: { title: '浮窗详情' },
         hidden: true
       },
       {
@@ -231,26 +237,26 @@ export const constantRouterMap = [
     ]
   },
   {
-      path: '/flotAdv',
-      name: 'flotAdv',
-      component: Layout,
-      redirect: '/flotAdv/flotAdvList',
-      meta: { title: '浮窗管理', icon: 'ad' },
-      children: [
-        {
-          path: 'flotAdvList',
-          name:'flotAdvList',
-          component:() => import('@/views/advManager/advList/flotAdvList'),
-          meta: { title: '浮窗列表', icon: 'ad' }
-        },
-        {
-          path: 'flotAdvAdd',
-          name: 'flotAdvAdd',
-          component: () => import('@/views/advManager/advAdd/flotAdvAdd'),
-          meta: { title: '添加浮窗内容' },
-          hidden: true
-        }
-      ]
+    path: '/flotAdv',
+    name: 'flotAdv',
+    component: Layout,
+    redirect: '/flotAdv/flotAdvList',
+    meta: { title: '浮窗管理', icon: 'ad' },
+    children: [
+      {
+        path: 'flotAdvList',
+        name: 'flotAdvList',
+        component: () => import('@/views/advManager/advList/flotAdvList'),
+        meta: { title: '浮窗列表', icon: 'ad' }
+      },
+      {
+        path: 'flotAdvAdd',
+        name: 'flotAdvAdd',
+        component: () => import('@/views/advManager/advAdd/flotAdvAdd'),
+        meta: { title: '添加浮窗内容' },
+        hidden: true
+      }
+    ]
   },
   {
     path: '/ArticleManager',
@@ -269,7 +275,7 @@ export const constantRouterMap = [
         path: 'ArticleDetails',
         name: 'ArticleDetails',
         component: () => import('@/views/ArticleManager/ArticleDetails'),
-        meta: { title: '文章详情'},
+        meta: { title: '文章详情' },
         hidden: true
       },
       {
@@ -283,7 +289,7 @@ export const constantRouterMap = [
         path: 'ArticleAdd',
         name: 'ArticleAdd',
         component: () => import('@/views/ArticleManager/ArticleAdd'),
-        meta: { title: '添加文章'},
+        meta: { title: '添加文章' },
         hidden: true
       },
       {
@@ -309,6 +315,7 @@ export const constantRouterMap = [
       }
     ]
   },
+
   // 权限
   {
     path: '/permissionsManager',
@@ -330,7 +337,7 @@ export const constantRouterMap = [
     path: '/operationManager',
     component: Layout,
     redirect: '/operationManager/operationList',
-    name: 'permissionsManager',
+    name: 'operationManager',
     meta: { title: '操作管理', icon: 'operation' },
     children: [
       {
@@ -341,7 +348,7 @@ export const constantRouterMap = [
       }
     ]
   },
-/*  {
+  /*  {
     path: '/AppManager',
     component: Layout,
     redirect: '/AppManager/AppList',
@@ -440,7 +447,8 @@ export const constantRouterMap = [
         name: 'adminList',
         component: () => import('@/views/adminManager/adminList'),
         meta: { title: '管理员列表', icon: 'admin' }
-      }]
+      }
+    ]
   },
   {
     path: '/memberManager',
@@ -459,9 +467,10 @@ export const constantRouterMap = [
         path: 'memberDetais',
         name: 'memberDetais',
         component: () => import('@/views/memberManager/memberDetails'),
-        meta: { title: '会员详情'},
+        meta: { title: '会员详情' },
         hidden: true
-      }]
+      }
+    ]
   },
   // {
   //   path: '/businessManager',
@@ -489,35 +498,38 @@ export const constantRouterMap = [
         name: 'slideshowList',
         component: () => import('@/views/slideshowManager/slideshowList'),
         meta: { title: '轮播图列表', icon: 'slideshow' }
-      }]
+      }
+    ]
   },
   {
     path: '/kuaKuaMi',
     component: Layout,
     redirect: '/kuaKuaMi/withdrawList',
     name: 'kuaKuaMi',
-    meta: { title: '夸夸蜜',icon:'提现' },
+    meta: { title: '夸夸蜜', icon: '提现' },
     children: [
       {
         path: 'withdrawList',
         name: 'kuaKuaMiWithdrawList',
         component: () => import('@/views/kuaKuaMi/withdrawList'),
-        meta: { title: '夸夸蜜提现' ,icon:'提现'}
-      }]
+        meta: { title: '夸夸蜜提现', icon: '提现' }
+      }
+    ]
   },
   {
     path: '/spiderCategoryManager',
     component: Layout,
     name: 'spiderCategoryManage',
-    redirect:'/spiderCategoryManager/edit',
-    meta: { title: '',icon:'管理'},
+    redirect: '/spiderCategoryManager/edit',
+    meta: { title: '', icon: '管理' },
     children: [
       {
         path: 'edit',
         name: 'spiderCategoryEdit',
         component: () => import('@/views/spiderCategoryManager'),
-        meta: { title: '类目爬虫管理',icon:'管理'}
-      }]
+        meta: { title: '类目爬虫管理', icon: '管理' }
+      }
+    ]
   },
 
   {
@@ -525,13 +537,13 @@ export const constantRouterMap = [
     component: Layout,
     name: 'configuration',
     redirect: '/configuration/configurationList',
-    meta: {title: '常规配置', icon: 'operation'},
+    meta: { title: '常规配置', icon: 'operation' },
     children: [
       {
         path: 'configurationList',
         name: 'configurationList',
         component: () => import('@/views/configuration/configurationList'),
-        meta: {title: '配置列表', icon: 'operation'}
+        meta: { title: '配置列表', icon: 'operation' }
       }
     ]
   },
@@ -541,27 +553,27 @@ export const constantRouterMap = [
     component: Layout,
     name: 'cardGroup',
     redirect: '/cardGroup/cardGroupList',
-    meta: { title: '卡片组管理', icon: 'slideshow'},
+    meta: { title: '卡片组管理', icon: 'slideshow' },
     children: [
       {
         path: 'cardGroupList',
         name: 'cardGroupList',
         component: () => import('@/views/cardGroup/cardGroupList'),
-        meta: { title: '卡片组列表', icon: 'slideshow'}
+        meta: { title: '卡片组列表', icon: 'slideshow' }
       },
 
       {
         path: 'cardGroupAdd',
         name: 'cardGroupAdd',
         component: () => import('@/views/cardGroup/cardGroupAdd'),
-        meta: { title: '添加卡片组'},
+        meta: { title: '添加卡片组' },
         hidden: true
       },
       {
         path: 'card',
         name: 'card',
         component: () => import('@/views/cardGroup/card'),
-        meta: { title: '卡片管理'},
+        meta: { title: '卡片管理' },
         hidden: true
       }
     ]
@@ -571,15 +583,14 @@ export const constantRouterMap = [
     component: Layout,
     name: 'turnTable',
     redirect: '/turnTable/turnTableList',
-    meta: {title: '大转盘管理', icon: 'member'},
+    meta: { title: '大转盘管理', icon: 'member' },
     children: [
       {
         path: 'turnTableList',
         name: 'turnTableList',
         component: () => import('@/views/turnTable/turnTableList'),
-        meta: { title: '大转盘列表'}
-      },
-      
+        meta: { title: '大转盘列表' }
+      }
     ]
   },
   {
@@ -587,13 +598,13 @@ export const constantRouterMap = [
     component: Layout,
     name: 'turnTableReward',
     redirect: '/turnTableReward/turnTableRewardList',
-    meta: {title: '大转盘奖励管理', icon: 'commission'},
+    meta: { title: '大转盘奖励管理', icon: 'commission' },
     children: [
       {
         path: 'turnTableRewardList',
         name: 'turnTableRewardList',
         component: () => import('@/views/turnTableReward/turnTableRewardList'),
-        meta: { title: '大转盘奖励列表'}
+        meta: { title: '大转盘奖励列表' }
       }
     ]
   },
@@ -603,13 +614,14 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/activityWithdraw/activityWithdrawList',
     name: 'activityWithdraw',
-    meta: {title: '提现审核', icon: '提现'},
+    meta: { title: '提现审核', icon: '提现' },
     children: [
       {
         path: 'activityWithdrawList',
         name: 'activityWithdrawList',
-        component: () => import('@/views/activityWithdraw/activityWithdrawList'),
-        meta: {title: '提现列表', icon: '提现'}
+        component: () =>
+          import('@/views/activityWithdraw/activityWithdrawList'),
+        meta: { title: '提现列表', icon: '提现' }
       }
     ]
   },
@@ -618,14 +630,14 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/weMedia/weMediaList',
     name: 'weMedia',
-    meta: {title: '自媒体管理', icon: 'article'},
+    meta: { title: '自媒体管理', icon: 'article' },
     children: [
       {
         path: 'weMediaList',
         name: 'weMediaList',
         component: () => import('@/views/weMedia/weMediaList'),
-        meta: {title: '自媒体文章列表'}
-      },
+        meta: { title: '自媒体文章列表' }
+      }
     ]
   },
   {
@@ -633,14 +645,14 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/mediaPublish/mediaPublishList',
     name: 'mediaPublish',
-    meta: {title: '媒体人管理', icon: 'article'},
+    meta: { title: '媒体人管理', icon: 'article' },
     children: [
       {
         path: 'mediaPublishList',
         name: 'mediaPublishList',
         component: () => import('@/views/mediaPublish/mediaPublishList'),
-        meta: {title: '媒体人文章列表'}
-      },
+        meta: { title: '媒体人文章列表' }
+      }
     ]
   },
 
@@ -649,69 +661,67 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/searchRoll/searchRollList',
     name: 'searchRoll',
-    meta: {title: '搜索框管理', icon: 'article'},
+    meta: { title: '搜索框管理', icon: 'article' },
     children: [
       {
         path: 'searchRollList',
         name: 'searchRollList',
         component: () => import('@/views/searchRoll/searchRollList'),
-        meta: {title: '搜索框列表'}
-      },
+        meta: { title: '搜索框列表' }
+      }
     ]
   },
-  
+
   {
     path: '/tagManager',
     component: Layout,
     redirect: '/tagManager/tagList',
     name: 'tagManager',
-    meta: {title: '标签管理', icon: 'tag'},
+    meta: { title: '标签管理', icon: 'tag' },
     children: [
       {
         path: 'tagList',
         name: 'tagList',
         component: () => import('@/views/tagManager/tagList'),
-        meta: {title: '标签列表'}
-      },
-      
+        meta: { title: '标签列表' }
+      }
     ]
   },
-  
+
   {
     path: '/galleryManager',
     component: Layout,
     redirect: '/galleryManager/gallery',
     name: 'galleryManager',
-    meta: {title: '图库管理', icon: 'slideshow'},
+    meta: { title: '图库管理', icon: 'slideshow' },
     children: [
       {
         path: 'gallery',
         name: 'gallery',
-         component: () => import('@/views/galleryManager/gallery'),
-        meta: {title: '图库列表'} 
-      },
-      
+        component: () => import('@/views/galleryManager/gallery'),
+        meta: { title: '图库列表' }
+      }
     ]
   },
-  
+
   {
     path: '/happyRead',
     component: Layout,
     redirect: '/happyRead/happyReadList',
     name: 'happyRead',
-    meta: {title: '小说管理', icon: 'article'},
+    meta: { title: '小说管理', icon: 'article' },
     children: [
       {
         path: 'happyReadList',
         name: 'happyReadList',
         component: () => import('@/views/happyRead/happReadList'),
-        meta: {title: '小说列表'} 
+        meta: { title: '小说列表' }
       },
       {
         path: 'happyReadAdd',
         name: 'happyReadAdd',
         component: () => import('@/views/happyRead/happyReadAdd'),
-        meta: {title: '小说添加'},
+        meta: { title: '小说添加' },
         hidden: true
       }
     ]
@@ -721,13 +731,85 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/happyReadWithdraw/happyReadWithdrawList',
     name: 'happyReadWithdraw',
-    meta: {title: '小说提现管理', icon: 'article'},
+    meta: { title: '小说提现管理', icon: 'article' },
     children: [
       {
         path: 'happyReadWithdrawList',
         name: 'happyReadWithdrawList',
-        component: () => import('@/views/happyReadWithdraw/happyReadWithdrawList'),
-        meta: {title: '小说提现列表'} 
+        component: () =>
+          import('@/views/happyReadWithdraw/happyReadWithdrawList'),
+        meta: { title: '小说提现列表' }
+      }
+    ]
+  },
+
+  {
+    path: '/organization',
+    component: Layout,
+    redirect: '/organization/organizationList',
+    name: 'organization',
+    meta: { title: '机构资质审核', icon: 'member' },
+    children: [
+      {
+        path: 'organizationList',
+        name: 'OrganizationList',
+        component: () => import('@/views/organization/organizationList'),
+        meta: { title: '机构列表' }
+      },
+      {
+        path: 'organizationAudit',
+        name: 'OrganizationAudit',
+        component: () => import('@/views/organization/organizationList/organizationAudit'),
+        meta: { title: '机构审核' },
+        hidden: true
+      },
+      {
+        path: 'join',
+        name: 'Join',
+        component: () => import('@/views/organization/join'),
+        meta: { title: '机构加盟' }
+      },
+      {
+        path: 'tuition',
+        name: 'Tuition',
+        component: () => import('@/views/organization/tuition'),
+        meta: { title: '机构学费管理' }
+      },
+      {
+        path: 'tuitionLog',
+        name: 'TuitionLog',
+        component: () => import('@/views/organization/tuition/tuitionLog'),
+        meta: { title: '机构学费查看' }
+      },
+
+      {
+        path: 'refund',
+        name: 'Refund',
+        component: () => import('@/views/organization/refund'),
+        meta: { title: '退款管理' }
+      },
+      {
+        path: 'refundLog',
+        name: 'RefundLog',
+        component: () => import('@/views/organization/refund/refundLog'),
+        meta: { title: '退款详情' }
+      }, {
+        path: 'show',
+        name: 'Show',
+        component: () => import('@/views/organization/show'),
+        meta: { title: '才艺秀管理' }
+      },
+      {
+        path: 'showEdit',
+        name: 'ShowEdit',
+        component: () => import('@/views/organization/show/showEdit'),
+        meta: { title: '才艺秀编辑' }
+      },
+      {
+        path: 'organize-category',
+        name: 'OrganizeCategory',
+        component: () => import('@/views/organization/category'),
+        meta: { title: '机构类目管理' }
       }
     ]
   },
@@ -735,7 +817,7 @@ export const constantRouterMap = [
   {
     path: '/dataAnalysis',
     component: Layout,
-     name: 'dataAnalysis',
+    name: 'dataAnalysis',
     meta: { title: '数据分析', icon: '' },
     children: [
       {
@@ -804,13 +886,15 @@ export const constantRouterMap = [
             children: [
               {
                 path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
+                component: () =>
+                  import('@/views/nested/menu1/menu1-2/menu1-2-1'),
                 name: 'Menu1-2-1',
                 meta: { title: 'Menu1-2-1' }
               },
               {
                 path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
+                component: () =>
+                  import('@/views/nested/menu1/menu1-2/menu1-2-2'),
                 name: 'Menu1-2-2',
                 meta: { title: 'Menu1-2-2' }
               }
