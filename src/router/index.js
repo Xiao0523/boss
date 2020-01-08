@@ -742,78 +742,145 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  /*--add*/ 
+  {
+    path: '/classList',
+    component: Layout,
+    redirect: '/classList/typeList',
+    name: 'classList',
+    meta: { title: '类目管理', icon: 'member' },
+    children: [
+      {
+        path: 'join',
+        name: 'Join',
+        component: () => import('@/views/classList/join'),
+        meta: { title: '添加类目' }
+      },
+      {
+        path: 'typeList',
+        name: 'TypeList',
+        component: () => import('@/views/classList/typeList'),
+        meta: { title: '类目列表' }
+      },
+      {
+        path: 'typeListLevelTwo',
+        name: 'TypeListLevelTwo',
+        component: () => import('@/views/classList/typeListLevelTwo'),
+        meta: { title: '二级类目列表' },
+        hidden: true
+      }
+    ]
+  },
   {
     path: '/organization',
     component: Layout,
     redirect: '/organization/organizationList',
     name: 'organization',
-    meta: { title: '机构资质审核', icon: 'member' },
+    meta: { title: '商户审核', icon: 'member' },
     children: [
       {
         path: 'organizationList',
         name: 'OrganizationList',
         component: () => import('@/views/organization/organizationList'),
-        meta: { title: '机构列表' }
-      },
+        meta: { title: '商户列表' }
+      }
+    ]
+  },
+  {
+    path: '/tuition',
+    component: Layout,
+    redirect: '/tuition/tuitionList',
+    name: 'tuition',
+    meta: { title: '奖学金管理', icon: 'member' },
+    children: [
       {
-        path: 'organizationAudit',
-        name: 'OrganizationAudit',
-        component: () => import('@/views/organization/organizationList/organizationAudit'),
-        meta: { title: '机构审核' },
-        hidden: true
-      },
+        path: 'tuitionList',
+        name: 'TuitionList',
+        component: () => import('@/views/tuition'),
+        meta: { title: '奖学金列表' }
+      }
+    ]
+  },
+  {
+    path: '/refund',
+    component: Layout,
+    redirect: '/refund/refundList',
+    name: 'refund',
+    meta: { title: '退款管理', icon: 'member' },
+    children: [
       {
-        path: 'join',
-        name: 'Join',
-        component: () => import('@/views/organization/join'),
-        meta: { title: '机构加盟' }
-      },
+        path: 'refundList',
+        name: 'RefundList',
+        component: () => import('@/views/refund'),
+        meta: { title: '退款列表' }
+      }
+    ]
+  },
+  {
+    path: '/cashOut',
+    component: Layout,
+    redirect: '/cashOut/cashOutList',
+    name: 'cashOut',
+    meta: { title: '提现管理', icon: 'member' },
+    children: [
       {
-        path: 'tuition',
-        name: 'Tuition',
-        component: () => import('@/views/organization/tuition'),
-        meta: { title: '机构学费管理' }
-      },
+        path: 'cashOutList',
+        name: 'CashOutList',
+        component: () => import('@/views/cashOut'),
+        meta: { title: '提现列表' }
+      }
+    ]
+  },
+  {
+    path: '/talentShow',
+    component: Layout,
+    redirect: '/talentShow/show',
+    name: 'talentShow',
+    meta: { title: '才艺秀管理', icon: 'member' },
+    children: [
       {
-        path: 'tuitionLog',
-        name: 'TuitionLog',
-        component: () => import('@/views/organization/tuition/tuitionLog'),
-        meta: { title: '机构学费查看' }
-      },
-
-      {
-        path: 'refund',
-        name: 'Refund',
-        component: () => import('@/views/organization/refund'),
-        meta: { title: '退款管理' }
-      },
-      {
-        path: 'refundLog',
-        name: 'RefundLog',
-        component: () => import('@/views/organization/refund/refundLog'),
-        meta: { title: '退款详情' }
-      }, {
         path: 'show',
         name: 'Show',
-        component: () => import('@/views/organization/show'),
-        meta: { title: '才艺秀管理' }
+        component: () => import('@/views/talentShow/show'),
+        meta: { title: '才艺秀列表' }
       },
       {
         path: 'showEdit',
         name: 'ShowEdit',
-        component: () => import('@/views/organization/show/showEdit'),
-        meta: { title: '才艺秀编辑' }
+        component: () => import('@/views/talentShow/show/showEdit'),
+        meta: { title: '才艺秀编辑' },
+        hidden: true
       },
       {
-        path: 'organize-category',
-        name: 'OrganizeCategory',
-        component: () => import('@/views/organization/category'),
-        meta: { title: '机构类目管理' }
+        path: 'complaintList',
+        name: 'ComplaintList',
+        component: () => import('@/views/talentShow/complaintList'),
+        meta: { title: '投诉列表' }
+      },
+      {
+        path: 'compositionList',
+        name: 'CompositionList',
+        component: () => import('@/views/talentShow/compositionList'),
+        meta: { title: '才艺秀作品列表' },
+        hidden: true
+      },
+      {
+        path: 'compositionDetail',
+        name: 'CompositionDetail',
+        component: () => import('@/views/talentShow/compositionList/compositionDetail'),
+        meta: { title: '才艺秀作品详情' },
+        hidden: true
+      },
+      {
+        path: 'rewardList',
+        name: 'RewardList',
+        component: () => import('@/views/talentShow/rewardList'),
+        meta: { title: '才艺秀奖励列表' },
+        hidden: true
       }
     ]
   },
-
+  /*--add*/ 
   {
     path: '/dataAnalysis',
     component: Layout,

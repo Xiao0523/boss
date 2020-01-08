@@ -1,4 +1,6 @@
-const UploadUrl = 'https://dev.my51share.com/boss/upload'
+const UploadUrl = 'https://www.my51share.com/boss/upload'
+// const UPLOAD_BASE_URL = 'https://upload.my51share.com'
+// const UploadUrl = UPLOAD_BASE_URL + '/pic' // 'https://dev.my51share.com/boss/upload' //
 
 export {
   UploadUrl
