@@ -14,22 +14,21 @@
       <el-form-item label="活动时间" prop="time">
         <el-date-picker
           v-model="time"
+          :default-time="['12:00:00', '08:00:00']"
           type="datetimerange"
           align="right"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          :default-time="['12:00:00', '08:00:00']"
-        >
-        </el-date-picker>
+        />
       </el-form-item>
       <el-form-item label="才艺秀封面">
         <el-upload
-          class="uploader"
           :action="UploadUrl"
-          name="multipartFile"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
+          class="uploader"
+          name="multipartFile"
         >
           <img v-if="form.picCover" :src="form.picCover" class="avatar">
           <i v-else class="el-icon-picture uploader-icon" />
@@ -38,28 +37,22 @@
       </el-form-item>
 
       <el-form-item label="赞助商图标">
-        <el-upload
-          class="uploader"
-          :action="UploadUrl"
-          name="multipartFile"
-          :show-file-list="false"
-          :on-success="handleAvatarLogsSuccess"
-          :before-upload="beforeAvatarUpload"
-        >
-          <img v-if="form.logs[0].picUrl" :src="form.logs[0].picUrl" class="avatar">
-          <i v-else class="el-icon-picture uploader-icon" />
-        </el-upload>
-        <input type="hidden">
+        <div class="logosFlex">
+          <logosImg v-for="(item, index) in form.logs.length" :key="index" :list="form.logs[item - 1]" :indexs="item - 1" @handelLogsClick="logsCb" @handelLogsDel="delCb"/>
+          <div class="add" @click="addList">
+            <i class="el-icon-plus"/>
+          </div>
+        </div>
       </el-form-item>
 
       <el-form-item label="才艺秀奖品">
         <el-upload
-          class="uploader"
           :action="UploadUrl"
-          name="multipartFile"
           :show-file-list="false"
           :on-success="handleAvatarPrizesSuccess"
           :before-upload="beforeAvatarUpload"
+          class="uploader"
+          name="multipartFile"
         >
           <img v-if="form.prizes[0].picUrl" :src="form.prizes[0].picUrl" class="avatar">
           <i v-else class="el-icon-picture uploader-icon" />
@@ -68,15 +61,15 @@
       </el-form-item>
 
       <el-form-item label="才艺秀介绍" prop="name">
-        <textarea v-model="form.picIntroduce"></textarea>
+        <textarea v-model="form.picIntroduce"/>
       </el-form-item>
 
       <el-form-item label="才艺秀规则" prop="name">
-        <textarea v-model="form.rule"></textarea>
+        <textarea v-model="form.rule"/>
       </el-form-item>
 
       <el-form-item label="才艺秀标语" prop="name">
-        <textarea v-model="form.slogan"></textarea>
+        <textarea v-model="form.slogan"/>
       </el-form-item>
 
       <el-form-item>
@@ -90,9 +83,11 @@
 import { addTlentShow, getTlentShow, editTlentShow } from '@/api/tlentShow'
 import { fmtDate } from '@/utils/date'
 import { UploadUrl } from '@/http/url'
+import logosImg from '@/components/logosImg'
 
 export default {
   name: 'ShowEdit',
+  components: { logosImg },
   data() {
     return {
       UploadUrl: UploadUrl,
@@ -108,7 +103,8 @@ export default {
         endTime: '',
         logs: [{
           type: '6',
-          picUrl: ''
+          picUrl: '',
+          logoName: ''
         }],
         prizes: [{
           type: '5',
@@ -137,21 +133,35 @@ export default {
           return res.data.message && this.$wran(res.data.message)
         }
         if (!res.data.data) return
-        const {data} = res.data
+        const { data } = res.data
         this.form = data
         this.time = [new Date(data.beginTime), new Date(data.endTime)]
       })
     }
   },
   methods: {
+    delCb(index) {
+      this.form.logs.splice(index, 1)
+      console.log(this.form.logs)
+    },
+    logsCb(objs, index) {
+      this.form.logs[index] = objs
+    },
+    addList() {
+      this.form.logs.push({
+        type: '6',
+        picUrl: '',
+        logoName: ''
+      })
+    },
     handleAvatarSuccess(res, file) {
       this.form.picCover = res.data
     },
-    handleAvatarLogsSuccess(res, file) {
-      this.form.logs[0].picUrl = res.data
-    },
     handleAvatarPrizesSuccess(res, file) {
       this.form.prizes[0].picUrl = res.data
+    },
+    handleAvatarLogsSuccess(res, file) {
+      this.form.logs[0].picUrl = res.data
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
@@ -309,5 +319,13 @@ export default {
     height: 80px;
   }
 }
+.logosFlex {
+  display: flex;
+  .add {
+    margin-top: 25px;
+    i {
+      font-size: 20px;
+    }
+  }
+}
 </style>
-
