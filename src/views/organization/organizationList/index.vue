@@ -25,7 +25,7 @@
             </el-option>
           </el-select>
         </el-form-item>
- 
+
         <el-form-item>
           <el-date-picker
             v-model="keyWord.timeRange"
@@ -41,10 +41,10 @@
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
       <el-table-column align="center" prop="enterpriseName" label="机构名称" />
       <el-table-column align="center" prop="contactInformation" label="联系人" />
-      <el-table-column align="center" prop="contacts" label="号码"></el-table-column>
+      <el-table-column align="center" prop="contacts" label="号码"/>
       <el-table-column align="center" label="审核">
         <template slot-scope="scope">
-          <p>{{scope.row.status | statusFilter}}</p>
+          <p>{{ scope.row.status | statusFilter }}</p>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
@@ -64,13 +64,13 @@
       />
     </div>
     <el-dialog
-      title="审核"
       :visible.sync="diglogFlag"
+      title="审核"
       width="30%"
       center
     >
       <span class="diglog-textarea">
-        <textarea name="" id="" cols="30" rows="10" v-model="unSuccStr" placeholder="驳回请输入反馈！"></textarea>
+        <textarea id="" v-model="unSuccStr" name="" cols="30" rows="10" placeholder="驳回请输入反馈！"/>
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handelDiglogClick('success')">审核通过</el-button>
@@ -87,10 +87,16 @@ export default {
   components: {
     pageNum
   },
+  filters: {
+    statusFilter(val) {
+      return val == 0 ? '待审' : val == 1 ? '通过' : '驳回'
+    }
+  },
   data() {
     return {
       list: [], // 列表数据
       keyWord: {// 搜索关键字
+
         type: '1',
         auditTypes: '',
         timeRange: ''
@@ -139,12 +145,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchList();
-  },
-  filters: {
-    statusFilter(val) {
-      return val == 0 ? '待审' : val == 1 ? '通过' : '驳回'
-    }
+    this.fetchList()
   },
   methods: {
     // 审核
@@ -200,7 +201,7 @@ export default {
 
     // 搜索
     changeSearch(key, val) {
-      for (let item of this[key]) {
+      for (const item of this[key]) {
         if (item.label === val) {
           this.keyWord[key] = item.value
           return
@@ -213,7 +214,7 @@ export default {
       const argsObj = {
         pageNum: this.pageNo,
         pageSize: this.pageSize || 10,
-        type: this.keyWord.type || '1',
+        type: this.keyWord.type || '1'
       }
 
       const keyWord = this.keyWord
