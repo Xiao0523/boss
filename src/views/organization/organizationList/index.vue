@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <router-link :to="{name: 'organizationDetail', query: {id: scope.row.enterpriseId}}"><el-button type="danger" size="mini">查看</el-button></router-link>
+          <router-link :to="{name: 'OrganizationDetail', query: {id: scope.row.enterpriseId}}"><el-button type="danger" size="mini">查看</el-button></router-link>
           <el-button type="danger" size="mini" @click="audit(scope.row)">审核</el-button>
         </template>
       </el-table-column>
