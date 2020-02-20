@@ -16,7 +16,7 @@ function getTypeListTwo(data) {
   return request.get('training/category/levelTwo/' + data)
 }
 
-function getListDetail({id}) {
+function getListDetail({ id }) {
   return request.get('training/category/detail/' + id)
 }
 
@@ -28,6 +28,10 @@ function editList(data) {
   return request.patch('training/category', data)
 }
 
+function getBusinessDetail({ id }) {
+  return request.get('training/business/' + id)
+}
+
 export {
   getMerchantList,
   getAudit,
@@ -35,5 +39,6 @@ export {
   getTypeListTwo,
   addList,
   editList,
-  getListDetail
+  getListDetail,
+  getBusinessDetail
 }

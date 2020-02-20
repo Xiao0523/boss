@@ -742,7 +742,7 @@ export const constantRouterMap = [
       }
     ]
   },
-  /*--add*/ 
+  /* --add*/
   {
     path: '/classList',
     component: Layout,
@@ -783,6 +783,13 @@ export const constantRouterMap = [
         name: 'OrganizationList',
         component: () => import('@/views/organization/organizationList'),
         meta: { title: '商户列表' }
+      },
+      {
+        path: 'organizationDetail',
+        name: 'OrganizationDetail',
+        component: () => import('@/views/organization/organizationList/organizationAudit'),
+        meta: { title: '商户查看' },
+        hidden: true
       }
     ]
   },
@@ -872,7 +879,7 @@ export const constantRouterMap = [
         hidden: true
       },
       {
-        path: 'rewardList',
+        path: 'rewarList',
         name: 'RewardList',
         component: () => import('@/views/talentShow/rewardList'),
         meta: { title: '才艺秀奖励列表' },
@@ -880,7 +887,7 @@ export const constantRouterMap = [
       }
     ]
   },
-  /*--add*/ 
+  /* --add*/
   {
     path: '/dataAnalysis',
     component: Layout,

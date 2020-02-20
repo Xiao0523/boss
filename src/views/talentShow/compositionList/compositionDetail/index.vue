@@ -19,20 +19,26 @@
 
       <el-form-item v-if="form.type == 0" label="作品图片" prop="talentShowId">
         <div class="img-box">
-          <img :src="form.pics" />
+          <img v-for="item in pics" :src="item" :key="item" >
         </div>
       </el-form-item>
 
-      <el-form-item v-if="form.type == 1" label="视频封面" prop="talentShowId">
-        <div class="img-box">
-          <img :src="form.videoCover" />
-        </div>
+      <el-form-item v-if="form.type == 1" label="视频作品" prop="talentShowId">
+        <video
+          id="video"
+          :src="form.videoUrl"
+          :poster="form.videoCover"
+          controls = "true"
+          preload="auto"
+          webkit-playsinline="true"
+          playsinline="true"
+          x-webkit-airplay="allow"
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portraint"
+          style="object-fit:fill"
+        />
       </el-form-item>
-
-      <el-form-item v-if="form.type == 1" label="视频链接" prop="talentShowId">
-        {{ form.videoUrl }}
-      </el-form-item>
-
 
       <el-form-item>
         <el-button type="primary" @click="onSubmit">返回</el-button>
@@ -45,7 +51,12 @@
 import { getCompositionDetail } from '@/api/composition'
 
 export default {
-  name: 'compositionDetail',
+  name: 'CompositionDetail',
+  filters: {
+    typeStr(val) {
+      return val == 0 ? '图片' : '视频'
+    }
+  },
   data() {
     return {
       form: {
@@ -56,7 +67,8 @@ export default {
         videoCover: '',
         status: '',
         pics: ''
-      }
+      },
+      pics: []
     }
   },
   watch: {},
@@ -73,14 +85,11 @@ export default {
         return res.data.message && this.$wran(res.data.message)
       }
       if (!res.data.data) return
-      const {data} = res.data
+      const { data } = res.data
       this.form = data
+      this.pics = this.form.pics.split(',')
+      console.log(this.pics)
     })
-  },
-  filters: {
-    typeStr(val) {
-      return val == 0 ? '图片' : '视频'
-    }
   },
   methods: {
     onSubmit() {

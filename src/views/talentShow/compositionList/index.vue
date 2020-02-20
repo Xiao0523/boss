@@ -6,22 +6,12 @@
           v-for="item in options"
           :value="item.label"
           :key="item.label"
-        >
-        </el-option>
+        />
       </el-select>
     </el-row>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
       <el-table-column align="center" prop="id" label="作品编号" />
-      <el-table-column align="center" label="作品图片">
-        <template slot-scope="scope">
-          <div class="pic">
-            <img :src="scope.row.pics" alt="">
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column align="center" prop="talentShowId" label="才艺秀编号" />
-      <el-table-column align="center" prop="videoCover" label="视频作品封面" />
-      <el-table-column align="center" prop="videoUrl" label="视频作品URL地址" />
       <el-table-column align="center" label="作品类型">
         <template slot-scope="scope">
           {{ scope.row.type | typeStr }}
@@ -53,8 +43,8 @@
       />
     </div>
     <el-dialog
-      title="审核"
       :visible.sync="diglogFlag"
+      title="审核"
       width="30%"
       center
     >
@@ -68,11 +58,19 @@
 <script>
 import { getCompositionList, getCompositionStatus } from '@/api/composition'
 import pageNum from '@/components/pageNum'
-import {fmtDate} from '@/utils/date'
+import { fmtDate } from '@/utils/date'
 export default {
   name: 'Tuition',
   components: {
     pageNum
+  },
+  filters: {
+    typeStr(val) {
+      return val == 0 ? '图片' : '视频'
+    },
+    statusStr(val) {
+      return val == 0 ? '待审核' : val == 1 ? '审核通过' : val == 2 ? '审核未通过' : '违规'
+    }
   },
   data() {
     return {
@@ -116,17 +114,9 @@ export default {
     this.talentId = id
     this.fetchList()
   },
-  filters: {
-    typeStr(val) {
-      return val == 0 ? '图片' : '视频'
-    },
-    statusStr(val) {
-      return val == 0 ? '待审核' : val == 1 ? '审核通过' : val == 2 ? '审核未通过' : '违规'
-    }
-  },
   methods: {
     selectChange() {
-      for(let item of this.options) {
+      for (const item of this.options) {
         if (item.label === this.selectVal) {
           this.status = item.value
           this.fetchList()

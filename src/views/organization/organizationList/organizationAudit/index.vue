@@ -6,69 +6,58 @@
       :rules="rules"
       class="novel"
       label-position="left"
-      label-width="100px"
+      label-width="120px"
     >
       <el-form-item label="企业名称" prop="title">
-        <el-input v-model.trim="content.title" />
+        <el-input v-model.trim="content.enterpriseName" disabled/>
       </el-form-item>
       <el-form-item label="银行开户名" prop="bankName">
-        <el-input v-model.trim="content.bankName" />
+        <el-input v-model.trim="content.bankName" disabled/>
       </el-form-item>
-      <el-form-item label="开户银行" prop="bank">
-        <el-input v-model.trim="content.bank" />
+      <el-form-item label="开户银行号码" prop="bank">
+        <el-input v-model.trim="content.bankNo" disabled/>
       </el-form-item>
 
       <el-form-item label="联系人" prop="contact">
-        <el-input v-model.trim="content.contact" />
+        <el-input v-model.trim="content.contacts" disabled/>
       </el-form-item>
 
-      <el-form-item label="手机号码" prop="phone">
-        <el-input v-model.trim="content.phone" />
+      <el-form-item label="联系方式" prop="phone">
+        <el-input v-model.trim="content.contactInformation" disabled/>
       </el-form-item>
 
       <el-form-item label="工商执照" prop="businessLicense">
         <img v-if="content.businessLicense" :src="content.businessLicense" class="novel_img" >
       </el-form-item>
 
-      <el-form-item label="办学许可证" prop="permission">
-        <img v-if="content.permission" :src="content.permission" class="novel_img" >
+      <el-form-item label="办学许可证" prop="schoolLicense">
+        <img v-if="content.schoolLicense" :src="content.schoolLicense" class="novel_img" >
       </el-form-item>
 
-      <el-form-item label="民办非企业单位登记证" prop="regist">
-        <img v-if="content.regist" :src="content.regist" class="novel_img" >
-      </el-form-item>
-
-      <el-form-item label="组织机构代码证" prop="organizeCode">
-        <img v-if="content.organizeCode" :src="content.organizeCode" class="novel_img" >
-      </el-form-item>
-
-      <el-form-item label="税务登记证" prop="tax">
-        <img v-if="content.tax" :src="content.tax" class="novel_img" >
-      </el-form-item>
-
-      <el-form-item label="待打款" prop="bank">
-        <span>0.05元</span>
+      <el-form-item label="民办非企业单位登记证" prop="registrationCertificateOfPrivateNonEnterpriseUnit">
+        <img v-if="content.registrationCertificateOfPrivateNonEnterpriseUnit" :src="content.registrationCertificateOfPrivateNonEnterpriseUnit" class="novel_img" >
       </el-form-item>
 
       <el-form-item>
-        <el-button type="success" @click="onConfirmAudit('noveForm')">审核通过</el-button>
-        <el-button type="danger" @click="onRejectAudit('noveForm')">审核不通过</el-button>
+        <el-button type="success" @click="audit(content)">审核</el-button>
       </el-form-item>
     </el-form>
 
-    <Dialog
-      :title="'审核'"
-      :width="'40%'"
-      :is-show="isShow"
-      @cancelFn="close('auditForm')"
-      @confirmFn="onSubmit('auditForm')"
+    <el-dialog
+      :visible.sync="diglogFlag"
+      title="审核"
+      width="30%"
+      center
     >
-      <el-form ref="auditForm" :model="content" :rules="rules" label-width="100px">
-        <el-form-item label="备注" prop="status">
-          <el-input v-model.trim="content.des" type="textarea" autosize />
-        </el-form-item>
-      </el-form>
-    </Dialog>
+      <span class="diglog-textarea">
+        <textarea id="" v-model="unSuccStr" name="" cols="30" rows="10" placeholder="驳回请输入反馈！"/>
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handelDiglogClick('success')">审核通过</el-button>
+        <el-button @click="handelDiglogClick('unSuccess')">驳回</el-button>
+      </span>
+    </el-dialog>
+  </div>
   </div>
 </template>
 
@@ -76,6 +65,7 @@
 import { postNovel } from '@/api/happRead'
 import Dialog from '@/components/common/dialog'
 import { UploadUrl } from '@/http/url'
+import { getBusinessDetail, getAudit } from '@/api/merchant'
 export default {
   name: 'OrganizationAudit',
   components: {
@@ -90,6 +80,7 @@ export default {
         cover: '', // 企业封面
         xlsUrl: '' // 企业文件
       },
+      diglogFlag: false,
       isShow: false, // 弹窗开关
       rules: {
         title: [
@@ -133,11 +124,56 @@ export default {
           }
         ]
       },
-      uploadUrl: UploadUrl
+      uploadUrl: UploadUrl,
+      activeAudit: {},
+      unSuccStr: ''
     }
   },
-  created() {},
+  created() {
+    const id = this.$route.query.id
+    if (id) {
+      this.getView(id)
+    }
+  },
   methods: {
+    // 审核
+    audit(obj) {
+      this.activeAudit = obj
+      console.log(this.activeAudit, obj)
+      if (obj.status !== 0) {
+        this.$message({
+          message: '请选择待审核的数据',
+          type: 'warning'
+        })
+        return
+      }
+      this.diglogFlag = true
+    },
+
+    // 审核弹框选择
+    handelDiglogClick(flag) {
+      const auditObj = {
+        enterpriseId: this.$route.query.id
+      }
+      auditObj.status = flag === 'success' ? 1 : 2
+      if (auditObj.status === 2) {
+        auditObj.rejectReason = this.unSuccStr
+      }
+      this.auditFn(auditObj)
+      this.diglogFlag = false
+    },
+
+    // 审核接口请求
+    auditFn(obj) {
+      getAudit(obj).then(res => {
+        console.log(res)
+        this.$message({
+          message: '操作成功',
+          type: 'success'
+        })
+        this.$router.push({ name: 'OrganizationList' })
+      })
+    },
     // 上传成功
     uploadSuccess(res, file) {
       this.content.cover = res.data
@@ -153,6 +189,20 @@ export default {
         this.$refs['uploader'].clearFiles()
       }
       return isLarge
+    },
+
+    getView(id) {
+      const getObj = {
+        id: id
+      }
+      getBusinessDetail(getObj).then(res => {
+        if (res.data.code) {
+          return res.data.message && this.$wran(res.data.message)
+        }
+        if (!res.data.data) return
+        this.content = res.data.data
+        console.log(this.content)
+      })
     },
 
     // 上传企业内容
@@ -210,6 +260,22 @@ export default {
   height: 178px;
   display: block;
   object-fit: contain;
+}
+
+.diglog-textarea {
+  display: block;
+  width: 100%;
+  textarea {
+    display: block;
+    width: 100%;
+    border-radius: 5px;
+    resize: none;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 30px;
+    height: 120px;
+  }
 }
 </style>
 
