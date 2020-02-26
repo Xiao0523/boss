@@ -839,6 +839,21 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/verson',
+    component: Layout,
+    redirect: '/verson/versonAdd',
+    name: 'verson',
+    meta: { title: '版本管理', icon: 'member' },
+    children: [
+      {
+        path: 'versonAdd',
+        name: 'versonAdd',
+        component: () => import('@/views/verson'),
+        meta: { title: '版本管理' }
+      }
+    ]
+  },
+  {
     path: '/talentShow',
     component: Layout,
     redirect: '/talentShow/show',

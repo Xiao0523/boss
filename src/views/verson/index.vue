@@ -1,0 +1,99 @@
+<template>
+  <div>
+    <el-form
+      ref="noveForm"
+      class="novel"
+      label-position="left"
+      label-width="100px"
+    >
+      <el-form-item label="系统">
+        <el-radio v-model="radio" label="version_ios">IOS</el-radio>
+        <el-radio v-model="radio" label="version_android">安卓</el-radio>
+      </el-form-item>
+      <el-form-item label="版本号">
+        <el-input v-model="form.value"/>
+      </el-form-item>
+      <el-form-item label="扩展信息">
+        <el-input v-model="form.extendInfo" type="textarea" resize="none" rows="4" />
+      </el-form-item>
+      <el-form-item v-show="radio === 'version_android'" label="Apk下载地址">
+        <el-input v-model="form.apkDownloadUrl"/>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+</template>
+
+<script>
+import { getVerson, editVerson } from '@/api/verson'
+export default {
+  name: 'Verson',
+
+  data() {
+    return {
+      form: {},
+      selectList: [],
+      radio: 'version_ios',
+      dataList: []
+    }
+  },
+  watch: {
+    'dataList'() {
+      this.form = this.selectData(this.radio, this.dataList)
+    },
+    radio: {
+      handler(newKey, oldKey) {
+        this.saveEditObj(oldKey)
+        this.form = this.selectData(this.radio, this.dataList)
+      }
+    }
+  },
+  mounted() {
+    this.getViews()
+  },
+  methods: {
+    getViews() {
+      getVerson().then(res => {
+        if (res.data.code) {
+          return res.data.message && this.$warn(res.data.message)
+        }
+        this.dataList = res.data.data || []
+      })
+    },
+    selectData(key, data) {
+      for (const item of data) {
+        if (item.key === key) {
+          return item
+        }
+      }
+    },
+    saveEditObj(key = this.radio) {
+      for (const index in this.dataList) {
+        if (this.dataList[index].key === key) {
+          this.dataList.splice(index, 1, this.form)
+          break
+        }
+      }
+    },
+    onSubmit() {
+      this.saveEditObj()
+      const editObj = {
+        'versions': this.dataList
+      }
+      editVerson(editObj).then(res => {
+        if (res.data.code) {
+          return res.data.message && this.$warn(res.data.message)
+        }
+        this.$success(res.data.message)
+        this.getViews()
+      })
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+</style>
