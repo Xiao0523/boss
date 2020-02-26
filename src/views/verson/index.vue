@@ -17,7 +17,19 @@
         <el-input v-model="form.extendInfo" type="textarea" resize="none" rows="4" />
       </el-form-item>
       <el-form-item v-show="radio === 'version_android'" label="Apk下载地址">
-        <el-input v-model="form.apkDownloadUrl"/>
+        <el-input v-model="form.apkDownloadUrl" :disabled="true"/>
+        <el-upload
+          :on-success="handleSuccess"
+          :file-list="fileList"
+          :action="fileUpload"
+          :on-remove="handleRemove"
+          :limit="1"
+          class="upload-demo"
+          name="multipartFile"
+        >
+          <el-button size="small" type="primary">点击上传</el-button>
+          <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+        </el-upload>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -28,6 +40,7 @@
 
 <script>
 import { getVerson, editVerson } from '@/api/verson'
+import { fileUpload } from '@/http/url'
 export default {
   name: 'Verson',
 
@@ -36,7 +49,9 @@ export default {
       form: {},
       selectList: [],
       radio: 'version_ios',
-      dataList: []
+      dataList: [],
+      fileList: [],
+      fileUpload: fileUpload
     }
   },
   watch: {
@@ -65,6 +80,12 @@ export default {
     selectData(key, data) {
       for (const item of data) {
         if (item.key === key) {
+          if (key === 'version_android') {
+            this.fileList = [{
+              name: 'lanqing.apk',
+              url: item.apkDownloadUrl
+            }]
+          }
           return item
         }
       }
@@ -76,6 +97,25 @@ export default {
           break
         }
       }
+    },
+    handleRemove(file, fileList) {
+      if (file.status !== 'success') {
+        return this.$warn('删除失败')
+      }
+      this.$success('删除成功！！！')
+      this.form.apkDownloadUrl = ''
+      this.fileLst = []
+    },
+    handleSuccess(file, fileList) {
+      if (file.code) {
+        return file.message && this.$warn(file.message)
+      }
+      this.fileList = [{
+        name: 'lanqing.apk',
+        url: file.data
+      }]
+      this.form.apkDownloadUrl = file.data
+      this.$success('上传成功！！！')
     },
     onSubmit() {
       this.saveEditObj()
