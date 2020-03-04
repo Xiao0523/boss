@@ -16,6 +16,9 @@
       <el-form-item label="扩展信息">
         <el-input v-model="form.extendInfo" type="textarea" resize="none" rows="4" />
       </el-form-item>
+      <el-form-item label="App版本号">
+        <el-input v-model="form.versionNum" />
+      </el-form-item>
       <el-form-item v-show="radio === 'version_android'" label="Apk下载地址">
         <el-input v-model="form.apkDownloadUrl" :disabled="true"/>
         <el-upload
@@ -23,7 +26,6 @@
           :file-list="fileList"
           :action="fileUpload"
           :on-remove="handleRemove"
-          :limit="1"
           class="upload-demo"
           name="multipartFile"
         >
@@ -82,7 +84,7 @@ export default {
         if (item.key === key) {
           if (key === 'version_android') {
             this.fileList = [{
-              name: 'lanqing.apk',
+              name: 'lanqing' + this.form.value + '.apk',
               url: item.apkDownloadUrl
             }]
           }
@@ -111,7 +113,7 @@ export default {
         return file.message && this.$warn(file.message)
       }
       this.fileList = [{
-        name: 'lanqing.apk',
+        name: 'lanqing' + this.form.value + '.apk',
         url: file.data
       }]
       this.form.apkDownloadUrl = file.data
