@@ -40,8 +40,8 @@
     </el-row>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
       <el-table-column align="center" prop="enterpriseName" label="机构名称" />
-      <el-table-column align="center" prop="contactInformation" label="联系人" />
-      <el-table-column align="center" prop="contacts" label="号码"/>
+      <el-table-column align="center" prop="contactInformation" label="号码" />
+      <el-table-column align="center" prop="contacts" label="联系人"/>
       <el-table-column align="center" label="审核">
         <template slot-scope="scope">
           <p>{{ scope.row.status | statusFilter }}</p>
