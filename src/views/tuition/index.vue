@@ -6,8 +6,7 @@
           v-for="item in options"
           :value="item.label"
           :key="item.label"
-        >
-        </el-option>
+        />
       </el-select>
     </el-row>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
@@ -42,8 +41,8 @@
       />
     </div>
     <el-dialog
-      title="审核"
       :visible.sync="diglogFlag"
+      title="审核"
       width="30%"
       center
     >
@@ -55,12 +54,17 @@
   </div>
 </template>
 <script>
-import {getscholarShipList, getScholarShipStatus} from '@/api/scholarShip'
+import { getscholarShipList, getScholarShipStatus } from '@/api/scholarShip'
 import pageNum from '@/components/pageNum'
 export default {
   name: 'Tuition',
   components: {
     pageNum
+  },
+  filters: {
+    statusStr(val) {
+      return val == 0 ? '超棒' : val == 1 ? '很棒' : val == 2 ? '不错' : val == 3 ? '还行' : '不佳'
+    }
   },
   data() {
     return {
@@ -107,14 +111,9 @@ export default {
   created() {
     this.fetchList()
   },
-  filters: {
-    statusStr(val) {
-      return val == 0 ? '超棒' : val == 1 ? '很棒' : val == 2 ? '不错' : val == 3 ? '还行' : '不佳'
-    }
-  },
   methods: {
     selectChange() {
-      for(let item of this.options) {
+      for (const item of this.options) {
         if (item.label === this.selectVal) {
           this.status = item.value
           this.fetchList()

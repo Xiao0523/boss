@@ -11,7 +11,7 @@
         :key="item.value"
         :label="item.label"
       >
-        {{item.label}}
+        {{ item.label }}
       </el-option>
     </el-select>
 
@@ -72,6 +72,11 @@ export default {
   components: {
     pageNum
   },
+  filters: {
+    statusStr(val) {
+      return val == 0 ? '未开始' : val == 1 ? '进行中' : val == 2 ? '已结束' : '已取消'
+    }
+  },
   data() {
     return {
       dialogVisible: false,
@@ -101,17 +106,12 @@ export default {
       }
     }
   },
-  filters: {
-    statusStr(val) {
-      return val == 0 ? '未开始' : val == 1 ? '进行中' : val == 2 ? '已结束' : '已取消'
-    }
-  },
   mounted() {
     this.fetchList()
   },
   methods: {
     selectChange() {
-      for(let item of this.options) {
+      for (const item of this.options) {
         if (item.label === this.selectVal) {
           this.status = item.value
           this.fetchList()

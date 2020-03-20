@@ -47,11 +47,21 @@
       title="审核"
       width="30%"
       center
+      class="diglog"
     >
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handelDiglogClick('success')">审核通过</el-button>
-        <el-button @click="handelDiglogClick('unSuccess')">驳回</el-button>
-      </span>
+      <div class="model-box">
+        <div class="radio-box">
+          <span>是否需要动态封面：</span>
+          <el-radio-group v-model="dynamic">
+            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">否</el-radio>
+          </el-radio-group>
+        </div>
+        <div slot="footer" class="button-box">
+          <el-button type="primary" @click="handelDiglogClick('success')">审核通过</el-button>
+          <el-button @click="handelDiglogClick('unSuccess')">驳回</el-button>
+        </div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -74,6 +84,7 @@ export default {
   },
   data() {
     return {
+      dynamic: 0,
       list: [], // 列表数据
       options: [{
         value: '0',
@@ -103,7 +114,15 @@ export default {
         'text-align': 'center'
       },
       diglogFlag: false,
-      talentId: ''
+      talentId: '',
+      typeVideo: null
+    }
+  },
+  watch: {
+    dynamic() {
+      if (Number(this.typeVideo) === 1 && Number(this.typeVideo) === 1) return
+      this.$wran('只允许视频设置动态封面！！！')
+      this.dynamic = 0
     }
   },
   mounted() {
@@ -133,6 +152,8 @@ export default {
         })
         return
       }
+      this.typeVideo = obj.type
+      this.dynamic = 0
       this.diglogFlag = true
     },
     // 审核弹框选择
@@ -141,7 +162,8 @@ export default {
       if (!activeAudit.id) return
       const auditObj = {
         ids: [this.activeAudit.id],
-        status: this.activeAudit.status
+        status: this.activeAudit.status,
+        dynamic: this.dynamic
       }
       auditObj.status = flag === 'success' ? 1 : 2
       this.auditFn(auditObj)
@@ -210,6 +232,22 @@ export default {
   padding: 0 !important;
 }
 
+.radio-box {
+  display: flex;
+  height: 80px;
+  align-items: center;
+  justify-content: center;
+  & > span {
+    margin-right: 20px;
+  }
+}
+
+.button-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .diglog-textarea {
   display: block;
   width: 100%;
@@ -239,4 +277,5 @@ export default {
     max-height: 100%;
   }
 }
+
 </style>

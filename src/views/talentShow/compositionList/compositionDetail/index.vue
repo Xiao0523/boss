@@ -88,7 +88,6 @@ export default {
       const { data } = res.data
       this.form = data
       this.pics = this.form.pics.split(',')
-      console.log(this.pics)
     })
   },
   methods: {
