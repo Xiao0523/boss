@@ -237,51 +237,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/banner',
-    component: Layout,
-    redirect: '/banner/bannerList',
-    name: 'Banner',
-    meta: { title: '蓝青教育Banner管理', icon: 'ad' },
-    children: [
-      {
-        path: 'bannerList',
-        name: 'BannerList',
-        component: () => import('@/views/lanqing/banner/index'),
-        meta: { title: 'banner列表', icon: 'ad' },
-        hidden: true
-      }, {
-        path: 'bannerEdit',
-        name: 'BannerEdit',
-        component: () => import('@/views/lanqing/banner/edit'),
-        meta: { title: 'banner编辑', icon: 'ad' },
-        hidden: true
-      }
-    ]
-  },
-  {
-    path: '/recommendedBit',
-    component: Layout,
-    redirect: '/recommendedBit/recommendedBitList',
-    name: 'RecommendedBit',
-    meta: { title: '蓝青教育推荐页', icon: 'ad' },
-    children: [
-
-      {
-        path: 'recommendedBitList',
-        name: 'RecommendedBitList',
-        component: () => import('@/views/lanqing/recommendedBit/index'),
-        meta: { title: '推荐页列表', icon: 'ad' },
-        hidden: true
-      }, {
-        path: 'recommendedBitEdit',
-        name: 'RecommendedBitEdit',
-        component: () => import('@/views/lanqing/recommendedBit/edit'),
-        meta: { title: '推荐页编辑', icon: 'ad' },
-        hidden: true
-      }
-    ]
-  },
-  {
     path: '/flotAdv',
     name: 'flotAdv',
     component: Layout,
@@ -943,6 +898,51 @@ export const constantRouterMap = [
         name: 'RewardList',
         component: () => import('@/views/talentShow/rewardList'),
         meta: { title: '才艺秀奖励列表' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/banner',
+    component: Layout,
+    redirect: '/banner/bannerList',
+    name: 'Banner',
+    meta: { title: '蓝青教育Banner管理', icon: 'ad' },
+    children: [
+      {
+        path: 'bannerList',
+        name: 'BannerList',
+        component: () => import('@/views/lanqing/banner/index'),
+        meta: { title: 'banner列表', icon: 'ad' },
+        hidden: true
+      }, {
+        path: 'bannerEdit',
+        name: 'BannerEdit',
+        component: () => import('@/views/lanqing/banner/edit'),
+        meta: { title: 'banner编辑', icon: 'ad' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/recommendedBit',
+    component: Layout,
+    redirect: '/recommendedBit/recommendedBitList',
+    name: 'RecommendedBit',
+    meta: { title: '蓝青教育推荐页', icon: 'ad' },
+    children: [
+
+      {
+        path: 'recommendedBitList',
+        name: 'RecommendedBitList',
+        component: () => import('@/views/lanqing/recommendedBit/index'),
+        meta: { title: '推荐页列表', icon: 'ad' },
+        hidden: true
+      }, {
+        path: 'recommendedBitEdit',
+        name: 'RecommendedBitEdit',
+        component: () => import('@/views/lanqing/recommendedBit/edit'),
+        meta: { title: '推荐页编辑', icon: 'ad' },
         hidden: true
       }
     ]

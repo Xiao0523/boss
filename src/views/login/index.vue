@@ -33,7 +33,7 @@
 </template>
 
 <script>
-//import { isvalidUsername } from '@/utils/validate'
+// import { isvalidUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
@@ -90,12 +90,13 @@ export default {
           // 执行action登录
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
-//            console.log('即将跳转')
-            this.$router.push({ path: this.redirect || '/' })
+            // this.$router.push({ path: this.redirect || '/' })
+            //            console.log('即将跳转')
+            this.$router.push({ path: '/' })
             // 执行action登录获取用户信息
-            this.$store.dispatch('GetInfo').then(()=>{
-//              console.log('-------------------');
-            }).catch(()=>{})
+            this.$store.dispatch('GetInfo').then(() => {
+              //              console.log('-------------------');
+            }).catch(() => {})
           }).catch(() => {
             this.loading = false
           })
