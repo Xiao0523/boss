@@ -20,8 +20,8 @@
       :header-cell-style="tabHeader"
       class="table-box"
       border>
-
-      <el-table-column align="center" label="课程名称" prop="description"/>
+      <el-table-column align="center" label="课程名称" prop="curriculumName"/>
+      <el-table-column align="center" label="推荐描述" prop="description"/>
       <el-table-column align="center" label="排序" prop="orderIndex"/>
       <el-table-column align="center" label="图片">
         <template slot-scope="scope">

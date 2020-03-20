@@ -68,7 +68,7 @@
 <script>
 import { getCompositionList, getCompositionStatus } from '@/api/composition'
 import pageNum from '@/components/pageNum'
-import { fmtDate } from '@/utils/date'
+// import { fmtDate } from '@/utils/date'
 export default {
   name: 'Tuition',
   components: {

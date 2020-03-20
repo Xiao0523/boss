@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import user from '@/store/modules/user'
-import { getUserId } from '@/utils/auth' // 验权
+// import user from '@/store/modules/user'
+// import { getUserId } from '@/utils/auth' // 验权
 
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
