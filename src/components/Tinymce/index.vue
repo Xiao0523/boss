@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      includedComponents:'Tinymce',
+      includedComponents: 'Tinymce',
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
@@ -97,19 +97,19 @@ export default {
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
-        fontsize_formats: "12px 14px 16px 18px 20px 22px 24px 26px 28px 30px",
-//        style_formats_merge: true,
-//        style_formats: [
-//          {
-//            title: 'Line Height',
-//            items: [
-//              { title: 'Normal Line Height', inline: 'span', styles: { "line-height": '100%' } },
-//              { title: 'Line Height + 10%', inline: 'span', styles: { "line-height": '110%' } },
-//              { title: 'Line Height + 50%', inline: 'span', styles: { "line-height": '150%' } },
-//              { title: 'Line Height + 100%', inline: 'span', styles: { "line-height": '200%' } }
-//            ]
-//          }
-//        ],
+        fontsize_formats: '12px 14px 16px 18px 20px 22px 24px 26px 28px 30px',
+        //        style_formats_merge: true,
+        //        style_formats: [
+        //          {
+        //            title: 'Line Height',
+        //            items: [
+        //              { title: 'Normal Line Height', inline: 'span', styles: { "line-height": '100%' } },
+        //              { title: 'Line Height + 10%', inline: 'span', styles: { "line-height": '110%' } },
+        //              { title: 'Line Height + 50%', inline: 'span', styles: { "line-height": '150%' } },
+        //              { title: 'Line Height + 100%', inline: 'span', styles: { "line-height": '200%' } }
+        //            ]
+        //          }
+        //        ],
         menubar: this.menubar,
         plugins: plugins,
         end_container_on_empty_block: true,

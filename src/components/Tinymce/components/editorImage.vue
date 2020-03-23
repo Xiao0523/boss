@@ -10,8 +10,8 @@
         :on-remove="handleRemove"
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
+        :action="UploadUrl"
         class="editor-slide-upload"
-        action="https://www.my51share.com/boss/upload"
         name="multipartFile"
         list-type="picture-card">
         <el-button size="small" type="primary">点击上传</el-button>
@@ -24,6 +24,7 @@
 
 <script>
 // import { getToken } from 'api/qiniu'
+import { UploadUrl } from '@/http/url'
 
 export default {
   name: 'EditorSlideUpload',
@@ -37,7 +38,8 @@ export default {
     return {
       dialogVisible: false,
       listObj: {},
-      fileList: []
+      fileList: [],
+      UploadUrl: UploadUrl
     }
   },
   methods: {
@@ -56,30 +58,28 @@ export default {
       this.dialogVisible = false
     },
     handleSuccess(response, file) {
-
-      var url = response.data;//获得图片URL地址
-      //保持原先框架代码
+      var url = response.data// 获得图片URL地址
+      // 保持原先框架代码
       const uid = file.uid
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = url //把地址放到这里 其实还简单的
-          this.listObj[objKeyArr[i]].hasSuccess = true//每张图上传成功之后会返回true
+          this.listObj[objKeyArr[i]].url = url // 把地址放到这里 其实还简单的
+          this.listObj[objKeyArr[i]].hasSuccess = true// 每张图上传成功之后会返回true
           return
         }
       }
 
-      //原先的代码
-//      const uid = file.uid
-//      const objKeyArr = Object.keys(this.listObj)
-//      for (let i = 0, len = objKeyArr.length; i < len; i++) {
-//        if (this.listObj[objKeyArr[i]].uid === uid) {
-//          this.listObj[objKeyArr[i]].url = response.files.file
-//          this.listObj[objKeyArr[i]].hasSuccess = true
-//          return
-//        }
-//      }
-
+      // 原先的代码
+      //      const uid = file.uid
+      //      const objKeyArr = Object.keys(this.listObj)
+      //      for (let i = 0, len = objKeyArr.length; i < len; i++) {
+      //        if (this.listObj[objKeyArr[i]].uid === uid) {
+      //          this.listObj[objKeyArr[i]].url = response.files.file
+      //          this.listObj[objKeyArr[i]].hasSuccess = true
+      //          return
+      //        }
+      //      }
     },
     handleRemove(file) {
       const uid = file.uid

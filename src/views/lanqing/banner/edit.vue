@@ -47,15 +47,18 @@
         />
       </el-form-item>
       <el-form-item label="banner类型">
-        <el-radio v-model="form.type" label="0">课程</el-radio>
-        <el-radio v-model="form.type" label="1">活动</el-radio>
-        <el-radio v-model="form.type" label="2">其他</el-radio>
+        <el-radio-group v-model="form.type">
+          <el-radio label="0">课程</el-radio>
+          <el-radio label="1">活动</el-radio>
+          <el-radio label="2">其他</el-radio>
+        </el-radio-group>
       </el-form-item>
 
       <el-form-item :label="selectStr">
         <classSelect v-show="Number(form.type) === 0" :default-store="form.storeName" :default-class="form.curriculumName" :is-add="isAdd" @classCb="saveClass"/>
         <talentShowSelect v-show="Number(form.type) === 1" :default-value="form.trainingTalentShowName" @talentSelect="saveTalent" />
-        <el-input v-show="Number(form.type) === 2" v-model="form.content" type="textarea" resize="none" rows="5"/>
+        <!-- <el-input v-show="Number(form.type) === 2" v-model="form.content" type="textarea" resize="none" rows="5"/> -->
+        <Tinymce v-show="Number(form.type) === 2" v-model="form.content" class="editor-width"/>
       </el-form-item>
 
       <el-form-item>
@@ -71,12 +74,14 @@ import { fmtDate } from '@/utils/date'
 import { UploadUrl } from '@/http/url'
 import classSelect from '@/components/classSelect'
 import talentShowSelect from '@/components/talentShowSelect'
+import Tinymce from '@/components/Tinymce'
 
 export default {
   name: 'BannerEdit',
   components: {
     classSelect,
-    talentShowSelect
+    talentShowSelect,
+    Tinymce
   },
   data() {
     return {
@@ -97,7 +102,8 @@ export default {
         orderIndex: '',
         bannerDescription: '',
         curriculumId: '',
-        trainingTalentShowId: ''
+        trainingTalentShowId: '',
+        content: ''
       },
       selectStr: '',
       isAdd: true
@@ -317,5 +323,8 @@ export default {
       font-size: 20px;
     }
   }
+}
+.editor-width {
+  width: 900px;
 }
 </style>
