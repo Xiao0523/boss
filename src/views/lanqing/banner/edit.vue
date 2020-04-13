@@ -57,7 +57,6 @@
       <el-form-item :label="selectStr">
         <classSelect v-show="Number(form.type) === 0" :default-store="form.storeName" :default-class="form.curriculumName" :is-add="isAdd" @classCb="saveClass"/>
         <talentShowSelect v-show="Number(form.type) === 1" :default-value="form.trainingTalentShowName" @talentSelect="saveTalent" />
-        <!-- <el-input v-show="Number(form.type) === 2" v-model="form.content" type="textarea" resize="none" rows="5"/> -->
         <Tinymce v-show="Number(form.type) === 2" v-model="form.content" class="editor-width"/>
       </el-form-item>
 
