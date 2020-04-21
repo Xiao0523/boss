@@ -55,7 +55,7 @@
       </el-form-item>
 
       <el-form-item :label="selectStr">
-        <classSelect v-show="Number(form.type) === 0" :default-store="form.storeName" :default-class="form.curriculumName" :is-add="isAdd" @classCb="saveClass"/>
+        <classSelect v-show="Number(form.type) === 0" :default-obj="listObj" :is-add="isAdd" @classCb="saveClass"/>
         <talentShowSelect v-show="Number(form.type) === 1" :default-value="form.trainingTalentShowName" @talentSelect="saveTalent" />
         <Tinymce v-show="Number(form.type) === 2" v-model="form.content" class="editor-width"/>
       </el-form-item>
@@ -105,7 +105,8 @@ export default {
         content: ''
       },
       selectStr: '',
-      isAdd: true
+      isAdd: true,
+      listObj: {}
     }
   },
   watch: {
@@ -130,7 +131,10 @@ export default {
   },
   methods: {
     saveClass(val) {
-      this.form.curriculumId = val
+      this.form = {
+        ...this.form,
+        ...val
+      }
     },
     saveTalent(val) {
       this.form.trainingTalentShowId = val
@@ -180,6 +184,12 @@ export default {
             this.uploadStr = item.value
             break
           }
+        }
+        this.listObj = {
+          classId: this.form.curriculumId,
+          curriculumName: this.form.curriculumName,
+          storeName: this.form.storeName,
+          storeId: this.form.storeId
         }
         this.time = [new Date(data.beginTime), new Date(data.endTime)]
       })

@@ -750,45 +750,95 @@ export const constantRouterMap = [
     name: 'classList',
     meta: { title: '类目管理', icon: 'member' },
     children: [
+    ]
+  },
+  {
+    path: '/lanqing',
+    component: Layout,
+    redirect: '/lanqing/organizationList',
+    name: 'LanQing',
+    meta: { title: '蓝青商户', icon: 'member' },
+    children: [
       {
-        path: 'join',
-        name: 'Join',
-        component: () => import('@/views/classList/join'),
+        path: 'organizationList',
+        name: 'OrganizationList',
+        component: () => import('@/views/lanqing/organization/organizationList'),
+        meta: { title: '商户认证' }
+      },
+      {
+        path: 'organizationDetail',
+        name: 'OrganizationDetail',
+        component: () => import('@/views/lanqing/organization/organizationList/organizationAudit'),
+        meta: { title: '商户查看' },
+        hidden: true
+      },
+      {
+        path: 'storeList',
+        name: 'StoreList',
+        component: () => import('@/views/lanqing/organization/store/index'),
+        meta: { title: '店铺认证' }
+      },
+      {
+        path: 'recommendedBitList',
+        name: 'RecommendedBitList',
+        component: () => import('@/views/lanqing/recommendedBit/index'),
+        meta: { title: '推荐课程列表' }
+      },
+      {
+        path: 'recommendedBitEdit',
+        name: 'RecommendedBitEdit',
+        component: () => import('@/views/lanqing/recommendedBit/edit'),
+        meta: { title: '推荐课程编辑' },
+        hidden: true
+      },
+      {
+        path: 'recommendedTeacher',
+        name: 'RecommendedTeacher',
+        component: () => import('@/views/lanqing/teacher/index'),
+        meta: { title: '推荐讲师' }
+      },
+      {
+        path: 'recommendedTeacherEdit',
+        name: 'RecommendedTeacherEdit',
+        component: () => import('@/views/lanqing/teacher/edit/index'),
+        meta: { title: '编辑推荐讲师' },
+        hidden: true
+      },
+      {
+        path: 'groupList',
+        name: 'GroupList',
+        component: () => import('@/views/lanqing/group/index'),
+        meta: { title: '群组列表' }
+      },
+      {
+        path: 'groupEdit',
+        name: 'GroupEdit',
+        component: () => import('@/views/lanqing/group/edit/index'),
+        meta: { title: '添加群组' }
+      },
+      {
+        path: 'groupDetail',
+        name: 'GroupDetail',
+        component: () => import('@/views/lanqing/group/detail/index'),
+        meta: { title: '群组详情' }
+      },
+      {
+        path: 'classJoin',
+        name: 'ClassJoin',
+        component: () => import('@/views/lanqing/classList/join'),
         meta: { title: '添加类目' }
       },
       {
-        path: 'typeList',
-        name: 'TypeList',
-        component: () => import('@/views/classList/typeList'),
+        path: 'classList',
+        name: 'ClassList',
+        component: () => import('@/views/lanqing/classList/typeList'),
         meta: { title: '类目列表' }
       },
       {
         path: 'typeListLevelTwo',
         name: 'TypeListLevelTwo',
-        component: () => import('@/views/classList/typeListLevelTwo'),
+        component: () => import('@/views/lanqing/classList/typeListLevelTwo'),
         meta: { title: '二级类目列表' },
-        hidden: true
-      }
-    ]
-  },
-  {
-    path: '/organization',
-    component: Layout,
-    redirect: '/organization/organizationList',
-    name: 'organization',
-    meta: { title: '商户审核', icon: 'member' },
-    children: [
-      {
-        path: 'organizationList',
-        name: 'OrganizationList',
-        component: () => import('@/views/organization/organizationList'),
-        meta: { title: '商户列表' }
-      },
-      {
-        path: 'organizationDetail',
-        name: 'OrganizationDetail',
-        component: () => import('@/views/organization/organizationList/organizationAudit'),
-        meta: { title: '商户查看' },
         hidden: true
       }
     ]
@@ -920,29 +970,6 @@ export const constantRouterMap = [
         name: 'BannerEdit',
         component: () => import('@/views/lanqing/banner/edit'),
         meta: { title: 'banner编辑', icon: 'ad' },
-        hidden: true
-      }
-    ]
-  },
-  {
-    path: '/recommendedBit',
-    component: Layout,
-    redirect: '/recommendedBit/recommendedBitList',
-    name: 'RecommendedBit',
-    meta: { title: '蓝青教育推荐页', icon: 'ad' },
-    children: [
-
-      {
-        path: 'recommendedBitList',
-        name: 'RecommendedBitList',
-        component: () => import('@/views/lanqing/recommendedBit/index'),
-        meta: { title: '推荐页列表', icon: 'ad' },
-        hidden: true
-      }, {
-        path: 'recommendedBitEdit',
-        name: 'RecommendedBitEdit',
-        component: () => import('@/views/lanqing/recommendedBit/edit'),
-        meta: { title: '推荐页编辑', icon: 'ad' },
         hidden: true
       }
     ]

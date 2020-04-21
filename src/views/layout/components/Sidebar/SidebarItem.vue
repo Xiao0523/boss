@@ -1,11 +1,14 @@
 <template>
-  <div v-if="!item.hidden&&item.children&&isShow" class="menu-wrapper">
+  <div v-if="!item.hidden && item.children && isShow" class="menu-wrapper">
     <template
       v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.icon||item.meta.icon"
-                :title="onlyOneChild.meta.title"/>
+          <item
+            v-if="onlyOneChild.meta"
+            :icon="onlyOneChild.meta.icon || item.meta.icon"
+            :title="onlyOneChild.meta.title"
+          />
         </el-menu-item>
       </app-link>
     </template>
@@ -16,6 +19,7 @@
       </template>
 
       <template v-for="child in item.children" v-if="!child.hidden">
+        {{ child }}
         <sidebar-item
           v-if="child.children&&child.children.length>0"
           :is-nest="true"
@@ -58,24 +62,27 @@ export default {
       type: String,
       default: ''
     },
-    menu:{
-      type:Array
-    }
-  },
-  watch:{
-    menu(newValue){
-      for(let i=0;i<newValue.length;i++){
-        if(newValue[i]===this.item.redirect||newValue[i]===this.item.path){
-          this.isShow=true;
-          break;
-        }
+    menu: {
+      type: Array,
+      default: () => {
+        return []
       }
     }
   },
   data() {
     return {
       onlyOneChild: null,
-      isShow:false
+      isShow: false
+    }
+  },
+  watch: {
+    menu(newValue) {
+      for (let i = 0; i < newValue.length; i++) {
+        if (newValue[i] === this.item.redirect || newValue[i] === this.item.path) {
+          this.isShow = true
+          break
+        }
+      }
     }
   },
   methods: {

@@ -17,7 +17,7 @@
     "axios": "^0.18.0",
     "clone": "^2.1.2",
     "echarts": "^4.2.0-rc.2",
-    "element-ui": "2.4.6",
+    "element-ui": "^2.13.1",
     "file-save": "^0.2.0",
     "file-saver": "^2.0.0",
     "git": "^0.1.5",
