@@ -58,7 +58,7 @@ export default {
   },
   filters: {
     statusStr(val) {
-      return val === 0 ? '启用' : '关闭'
+      return Number(val) === 0 ? '启用' : '关闭'
     }
   },
   data() {
