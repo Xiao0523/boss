@@ -21,8 +21,8 @@ const del = function(url, params = '') {
   return service.delete(url, { params })
 }
 
-const del2 =  function(url, data) {
-  return service.delete(url, {data})
+const del2 = function(url, data) {
+  return service.delete(url, { data })
 }
 
 export default {

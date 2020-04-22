@@ -8,7 +8,22 @@ function getStoreAudit(data) {
   return request.post('training/store/examine', data)
 }
 
+function getStoreInfo() {
+  return request.get('training/store/main')
+}
+
+function getStoreDetail({ id }) {
+  return request.get('training/store/' + id)
+}
+
+function getClassList(data) {
+  return request.post('training/store/curriculum', data)
+}
+
 export {
   getStoreList,
-  getStoreAudit
+  getStoreAudit,
+  getStoreInfo,
+  getStoreDetail,
+  getClassList
 }

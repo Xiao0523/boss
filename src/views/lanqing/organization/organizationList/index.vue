@@ -32,11 +32,11 @@
       </el-form>
     </el-row>
     <span>
-      全部账号：{{ list.length }}&nbsp;&nbsp;&nbsp;&nbsp;
-      已认证 ：199&nbsp;&nbsp;&nbsp;&nbsp;
-      未认证：2&nbsp;&nbsp;&nbsp;&nbsp;
-      认证失败：1&nbsp;&nbsp;&nbsp;&nbsp;
-      待审核 ：1
+      全部账号：{{ infoObj.all }}&nbsp;&nbsp;&nbsp;&nbsp;
+      已认证：{{ infoObj.passed }}&nbsp;&nbsp;&nbsp;&nbsp;
+      未认证：{{ infoObj.noAuth }}&nbsp;&nbsp;&nbsp;&nbsp;
+      认证失败：{{ infoObj.failed }}&nbsp;&nbsp;&nbsp;&nbsp;
+      待审核：{{ infoObj.waiting }}
     </span>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
       <el-table-column align="center" prop="phone" label="注册手机号" />
@@ -80,7 +80,7 @@
   </div>
 </template>
 <script>
-import { getMerchantList, getAudit } from '@/api/merchant'
+import { getMerchantList, getAudit, getBusinessInfo } from '@/api/merchant'
 import pageNum from '@/components/pageNum'
 export default {
   name: 'OrganizationList',
@@ -142,11 +142,13 @@ export default {
         'text-align': 'center'
       },
       activeAudit: {},
-      unSuccStr: ''
+      unSuccStr: '',
+      infoObj: []
     }
   },
   mounted() {
     this.fetchList()
+    this.getInfo()
   },
   methods: {
     // 审核
@@ -154,7 +156,15 @@ export default {
       this.activeAudit = obj
       this.diglogFlag = true
     },
-
+    getInfo() {
+      getBusinessInfo().then(res => {
+        if (res.data.code) {
+          return res.data.message && this.$wran(res.data.message)
+        }
+        if (!res.data.data) return
+        this.infoObj = res.data.data
+      })
+    },
     // 审核接口请求
     auditFn(status) {
       const getObj = {

@@ -32,6 +32,10 @@ function getBusinessDetail({ id }) {
   return request.get('training/business/' + id)
 }
 
+function getBusinessInfo() {
+  return request.get('training/business/main')
+}
+
 export {
   getMerchantList,
   getAudit,
@@ -40,5 +44,6 @@ export {
   addList,
   editList,
   getListDetail,
-  getBusinessDetail
+  getBusinessDetail,
+  getBusinessInfo
 }

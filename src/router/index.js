@@ -779,6 +779,12 @@ export const constantRouterMap = [
         meta: { title: '店铺认证' }
       },
       {
+        path: 'storeDetail',
+        name: 'StoreDetail',
+        component: () => import('@/views/lanqing/organization/store/detail/index'),
+        meta: { title: '店铺查看' }
+      },
+      {
         path: 'recommendedBitList',
         name: 'RecommendedBitList',
         component: () => import('@/views/lanqing/recommendedBit/index'),
