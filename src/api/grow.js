@@ -9,7 +9,7 @@ function editGrow(data) {
 }
 
 function closeGrow({ id }) {
-  return request.delete('training/career/' + id)
+  return request.del('training/career/' + id)
 }
 
 function getGrowDetail({ id }) {
