@@ -22,14 +22,13 @@
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <router-link :to="{name: 'GrowEdit', query: { id: scope.row.uuid }}"><el-button type="danger" size="mini">编辑</el-button></router-link>
-          <el-button size="mini" @click="closeStatus(scope.row.uuid)">{{ scope.row.status | btnStr }}</el-button>
         </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 <script>
-import { getGrowList, closeGrow } from '@/api/grow'
+import { getGrowList } from '@/api/grow'
 import pageNum from '@/components/pageNum'
 export default {
   name: 'OrganizationList',
@@ -91,18 +90,6 @@ export default {
     },
     addGrow() {
       this.$router.push({ name: 'GrowEdit' })
-    },
-    closeStatus(id) {
-      const getObj = {
-        id
-      }
-      closeGrow(getObj).then(res => {
-        if (res.data.code) {
-          return res.data.message && this.$wran(res.data.message)
-        }
-        this.$success('操作成功！')
-        this.fetchList()
-      })
     }
   }
 }
