@@ -829,10 +829,24 @@ export const constantRouterMap = [
         meta: { title: '群组详情' }
       },
       {
+        path: 'growUp',
+        name: 'GrowUp',
+        component: () => import('@/views/lanqing/growUp/index'),
+        meta: { title: '成长记录' }
+      },
+      {
+        path: 'growEdit',
+        name: 'GrowEdit',
+        component: () => import('@/views/lanqing/growUp/edit/index'),
+        meta: { title: '编辑记录' },
+        hidden: true
+      },
+      {
         path: 'classJoin',
         name: 'ClassJoin',
         component: () => import('@/views/lanqing/classList/join'),
-        meta: { title: '添加类目' }
+        meta: { title: '添加类目' },
+        hidden: true
       },
       {
         path: 'classList',
