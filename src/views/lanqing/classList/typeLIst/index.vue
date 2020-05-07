@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="20">
-        <router-link :to="{name: 'Join' }">
+        <router-link :to="{name: 'ClassJoin' }">
           <el-button type="primary">添加类目</el-button>
         </router-link>
       </el-col>
@@ -18,7 +18,7 @@
             <el-button type="danger" size="mini">所属类目</el-button>
           </router-link>
           <el-button type="danger" size="mini" @click="handleStatusClick(scope.row.id, scope.row.status, scope.row.name)">{{ scope.row.status | statusStr }}</el-button>
-          <router-link :to="{name: 'Join', query:{id: scope.row.id, flag: 'edit' }}">
+          <router-link :to="{name: 'ClassJoin', query:{id: scope.row.id, flag: 'edit' }}">
             <el-button type="danger" size="mini">编辑</el-button>
           </router-link>
         </template>
@@ -39,12 +39,17 @@
 </template>
 
 <script>
-import {getTypeList, editList} from '@/api/merchant'
+import { getTypeList, editList } from '@/api/merchant'
 import pageNum from '@/components/pageNum'
 export default {
   name: 'JoinList',
   components: {
     pageNum
+  },
+  filters: {
+    statusStr(val) {
+      return val == 0 ? '关闭' : '打开'
+    }
   },
   data() {
     return {
@@ -64,11 +69,6 @@ export default {
   },
   mounted() {
     this.getList()
-  },
-  filters: {
-    statusStr(val) {
-      return val == 0 ? '关闭' : '打开'
-    }
   },
   methods: {
     handleStatusClick(id, status, name) {

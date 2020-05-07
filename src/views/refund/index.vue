@@ -15,8 +15,6 @@
         </template>
       </el-table-column>
     </el-table>
-    
-    
     <!--分页-->
     <div class="pageNumBox">
       <pageNum
@@ -28,13 +26,13 @@
       />
     </div>
     <el-dialog
-      title="审核"
       :visible.sync="diglogFlag"
+      title="审核"
       width="30%"
       center
     >
       <span class="diglog-textarea">
-        <textarea name="" id="" cols="30" rows="10" v-model="unSuccStr" placeholder="请输入反馈！"></textarea>
+        <textarea id="" v-model="unSuccStr" name="" cols="30" rows="10" placeholder="请输入反馈！"/>
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handelDiglogClick('success')">审核通过</el-button>
@@ -44,12 +42,17 @@
   </div>
 </template>
 <script>
-import {getRefundList, getRefundStatus} from '@/api/refund'
+import { getRefundList, getRefundStatus } from '@/api/refund'
 import pageNum from '@/components/pageNum'
 export default {
   name: 'Refund',
   components: {
     pageNum
+  },
+  filters: {
+    statusStr(val) {
+      return Number(val) === 1 ? '审核' : Number(val) === 2 ? '驳回' : '通过'
+    }
   },
   data() {
     return {
@@ -66,7 +69,8 @@ export default {
           }]
         }]
       }],
-      keyword: {// 搜索关键字
+      keyword: {
+        // 搜索关键字
         areas: '',
         organization: ''
       },
@@ -90,15 +94,10 @@ export default {
   created() {
     this.fetchList()
   },
-  filters: {
-    statusStr(val) {
-      return val == 1 ? '审核' : val == 2 ? '驳回' : '通过'
-    }
-  },
   methods: {
     audit(obj) {
       this.activeAudit = obj
-      if (obj.status != 1) {
+      if (Number(obj.status) !== 1) {
         this.$message({
           message: '请选择待审核的数据',
           type: 'warning'
@@ -119,7 +118,6 @@ export default {
       this.auditFn(auditObj)
       this.diglogFlag = false
     },
-
     // 审核接口请求
     auditFn(obj) {
       getRefundStatus(obj).then(res => {

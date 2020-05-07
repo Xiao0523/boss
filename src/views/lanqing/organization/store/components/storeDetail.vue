@@ -198,4 +198,10 @@ export default {
     }
   }
 }
+.tabel-flex {
+  display: flex;
+  img {
+    margin-right: 10px;
+  }
+}
 </style>

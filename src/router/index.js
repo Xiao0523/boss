@@ -759,6 +759,11 @@ export const constantRouterMap = [
     name: 'LanQing',
     meta: { title: '蓝青商户', icon: 'member' },
     children: [
+      // {
+      //   path: 'user',
+      //   name: 'User',
+      //   component: () => import('@/views/lanqing/user')
+      // },
       {
         path: 'organizationList',
         name: 'OrganizationList',
