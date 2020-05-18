@@ -787,7 +787,35 @@ export const constantRouterMap = [
         path: 'storeDetail',
         name: 'StoreDetail',
         component: () => import('@/views/lanqing/organization/store/detail/index'),
-        meta: { title: '店铺查看' }
+        meta: { title: '店铺详情' },
+        hidden: true
+      },
+      {
+        path: 'canvassList',
+        name: 'CanvassList',
+        component: () => import('@/views/lanqing/canvass'),
+        meta: { title: '入驻管理' }
+      },
+      {
+        path: 'classDetail',
+        name: 'ClassDetail',
+        component: () => import('@/views/lanqing/organization/store/detail/classDetail'),
+        meta: { title: '课程详情' },
+        hidden: true
+      },
+      {
+        path: 'teacherDetail',
+        name: 'TeacherDetail',
+        component: () => import('@/views/lanqing/organization/store/detail/teacherDetail'),
+        meta: { title: '教师详情' },
+        hidden: true
+      },
+      {
+        path: 'commentDetail',
+        name: 'CommentDetail',
+        component: () => import('@/views/lanqing/organization/store/detail/commentDetail'),
+        meta: { title: '评论详情' },
+        hidden: true
       },
       {
         path: 'recommendedBitList',
@@ -825,13 +853,48 @@ export const constantRouterMap = [
         path: 'groupEdit',
         name: 'GroupEdit',
         component: () => import('@/views/lanqing/group/edit/index'),
-        meta: { title: '添加群组' }
+        meta: { title: '添加群组' },
+        hidden: true
       },
       {
         path: 'groupDetail',
         name: 'GroupDetail',
         component: () => import('@/views/lanqing/group/detail/index'),
-        meta: { title: '群组详情' }
+        meta: { title: '群组详情' },
+        hidden: true
+      },
+      {
+        path: 'member',
+        name: 'Member',
+        component: () => import('@/views/lanqing/member/index'),
+        meta: { title: '用户管理' }
+      },
+      {
+        path: 'memberDetail',
+        name: 'MemberDetail',
+        component: () => import('@/views/lanqing/member/detail/index'),
+        meta: { title: '用户详情' },
+        hidden: true
+      },
+      {
+        path: 'operate',
+        name: 'Operate',
+        component: () => import('@/views/lanqing/operate/index'),
+        meta: { title: '运营费用管理' }
+      },
+      {
+        path: 'operateEdit',
+        name: 'OperateEdit',
+        component: () => import('@/views/lanqing/operate/edit/index'),
+        meta: { title: '运营费用编辑' },
+        hidden: true
+      },
+      {
+        path: 'operateDetail',
+        name: 'OperateDetail',
+        component: () => import('@/views/lanqing/operate/detail/index'),
+        meta: { title: '运营费用详情' },
+        hidden: true
       },
       {
         path: 'growUp',
@@ -865,140 +928,93 @@ export const constantRouterMap = [
         component: () => import('@/views/lanqing/classList/typeListLevelTwo'),
         meta: { title: '二级类目列表' },
         hidden: true
-      }
-    ]
-  },
-  {
-    path: '/tuition',
-    component: Layout,
-    redirect: '/tuition/tuitionList',
-    name: 'tuition',
-    meta: { title: '奖学金管理', icon: 'member' },
-    children: [
+      },
       {
         path: 'tuitionList',
         name: 'TuitionList',
-        component: () => import('@/views/tuition'),
+        component: () => import('@/views/lanqing/tuition'),
         meta: { title: '奖学金列表' }
-      }
-    ]
-  },
-  {
-    path: '/refund',
-    component: Layout,
-    redirect: '/refund/refundList',
-    name: 'refund',
-    meta: { title: '退款管理', icon: 'member' },
-    children: [
+      },
       {
         path: 'refundList',
         name: 'RefundList',
-        component: () => import('@/views/refund'),
+        component: () => import('@/views/lanqing/refund'),
         meta: { title: '退款列表' }
-      }
-    ]
-  },
-  {
-    path: '/cashOut',
-    component: Layout,
-    redirect: '/cashOut/cashOutList',
-    name: 'cashOut',
-    meta: { title: '提现管理', icon: 'member' },
-    children: [
+      },
+      {
+        path: 'setting',
+        name: 'Setting',
+        component: () => import('@/views/lanqing/setting/index'),
+        meta: { title: '配置管理' }
+      },
+      {
+        path: 'bannerList',
+        name: 'BannerList',
+        component: () => import('@/views/lanqing/banner/index'),
+        meta: { title: 'banner列表' }
+      },
+      {
+        path: 'bannerEdit',
+        name: 'BannerEdit',
+        component: () => import('@/views/lanqing/banner/edit'),
+        meta: { title: 'banner编辑' },
+        hidden: true
+      },
       {
         path: 'cashOutList',
         name: 'CashOutList',
-        component: () => import('@/views/cashOut'),
+        component: () => import('@/views/lanqing/cashOut'),
         meta: { title: '提现列表' }
-      }
-    ]
-  },
-  {
-    path: '/verson',
-    component: Layout,
-    redirect: '/verson/versonAdd',
-    name: 'verson',
-    meta: { title: '版本管理', icon: 'member' },
-    children: [
+      },
       {
         path: 'versonAdd',
         name: 'versonAdd',
-        component: () => import('@/views/verson'),
+        component: () => import('@/views/lanqing/verson'),
         meta: { title: '版本管理' }
-      }
-    ]
-  },
-  {
-    path: '/talentShow',
-    component: Layout,
-    redirect: '/talentShow/show',
-    name: 'talentShow',
-    meta: { title: '才艺秀管理', icon: 'member' },
-    children: [
+      },
       {
         path: 'show',
         name: 'Show',
-        component: () => import('@/views/talentShow/show'),
+        component: () => import('@/views/lanqing/talentShow/show'),
         meta: { title: '才艺秀列表' }
       },
       {
         path: 'showEdit',
         name: 'ShowEdit',
-        component: () => import('@/views/talentShow/show/showEdit'),
+        component: () => import('@/views/lanqing/talentShow/show/showEdit'),
         meta: { title: '才艺秀编辑' },
         hidden: true
       },
       {
         path: 'complaintList',
         name: 'ComplaintList',
-        component: () => import('@/views/talentShow/complaintList'),
+        component: () => import('@/views/lanqing/talentShow/complaintList'),
         meta: { title: '投诉列表' }
       },
       {
         path: 'compositionList',
         name: 'CompositionList',
-        component: () => import('@/views/talentShow/compositionList'),
+        component: () => import('@/views/lanqing/talentShow/compositionList'),
         meta: { title: '才艺秀作品列表' },
         hidden: true
       },
       {
         path: 'compositionDetail',
         name: 'CompositionDetail',
-        component: () => import('@/views/talentShow/compositionList/compositionDetail'),
+        component: () => import('@/views/lanqing/talentShow/compositionList/compositionDetail'),
         meta: { title: '才艺秀作品详情' },
         hidden: true
       },
       {
         path: 'rewarList',
         name: 'RewardList',
-        component: () => import('@/views/talentShow/rewardList'),
+        component: () => import('@/views/lanqing/talentShow/rewardList'),
         meta: { title: '才艺秀奖励列表' },
         hidden: true
       }
     ]
   },
-  {
-    path: '/banner',
-    component: Layout,
-    redirect: '/banner/bannerList',
-    name: 'Banner',
-    meta: { title: '蓝青教育Banner管理', icon: 'ad' },
-    children: [
-      {
-        path: 'bannerList',
-        name: 'BannerList',
-        component: () => import('@/views/lanqing/banner/index'),
-        meta: { title: 'banner列表', icon: 'ad' },
-        hidden: true
-      }, {
-        path: 'bannerEdit',
-        name: 'BannerEdit',
-        component: () => import('@/views/lanqing/banner/edit'),
-        meta: { title: 'banner编辑', icon: 'ad' },
-        hidden: true
-      }
-    ]
-  },
+
   /* --add*/
   {
     path: '/dataAnalysis',

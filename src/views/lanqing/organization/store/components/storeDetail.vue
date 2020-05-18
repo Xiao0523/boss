@@ -84,8 +84,6 @@
         <div v-html="list.introduce"/>
       </el-form-item>
     </el-form>
-      </el-tab-pane>
-    </el-form>
   </div>
 </template>
 <script>
@@ -97,6 +95,12 @@ export default {
       type: Boolean,
       default: () => {
         return true
+      }
+    },
+    val: {
+      type: String,
+      default: () => {
+        return ''
       }
     }
   },
@@ -111,12 +115,17 @@ export default {
       if (!this.leave) {
         video.pause()
       }
-    }
-  },
-  created() {
-    const id = this.$route.query.id
-    if (id) {
-      this.getDetail(id)
+    },
+    val: {
+      handler() {
+        if (this.val === 'getStoreDetail') {
+          const id = this.$route.query.id
+          if (id) {
+            this.getDetail(id)
+          }
+        }
+      },
+      immediate: true
     }
   },
   methods: {

@@ -62,22 +62,17 @@ export default {
       this.$emit('handelLogsDel', this.indexs)
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传图片只能是 JPG 格式!')
+      const isImg = (file.type === 'image/jpeg' || file.type === 'image/png')
+      if (!isImg) {
+        this.$message.error('请上传JPG/PNG格式的图片')
       }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
+      return isImg
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main {
   position: relative;
 }

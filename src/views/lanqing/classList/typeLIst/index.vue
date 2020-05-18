@@ -48,7 +48,7 @@ export default {
   },
   filters: {
     statusStr(val) {
-      return val == 0 ? '关闭' : '打开'
+      return Number(val) === 0 ? '关闭' : '打开'
     }
   },
   data() {

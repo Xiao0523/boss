@@ -2,37 +2,33 @@
   <div>
     <el-row>
       <el-form ref="searchForm" :inline="true" :model="keyWord">
-        <el-form-item>
+        <el-form-item label="店铺名称">
           <el-input v-model="keyWord.name" placeholder="请输入店铺名称" />
         </el-form-item>
 
-        <el-form-item>
+        <el-form-item lable="状态">
           <el-select v-model="keyWord.status">
             <el-option
               v-for="item in status"
               :key="item.label"
               :value="item.value"
               :label="item.label"
-            >
-              {{ item.label }}
-            </el-option>
+            />
           </el-select>
         </el-form-item>
 
-        <el-form-item>
+        <el-form-item label="类目">
           <el-select v-model="keyWord.categoryId">
             <el-option
               v-for="item in categoryList"
-              :key="item.label"
-              :value="item.value"
-              :label="item.label"
-            >
-              {{ item.label }}
-            </el-option>
+              :key="item.categoryName"
+              :value="item.categoryId"
+              :label="item.categoryName"
+            />
           </el-select>
         </el-form-item>
 
-        <el-button type="primary" @click="search('searchForm')">搜索</el-button>
+        <el-button type="primary" @click="fetchList">搜索</el-button>
       </el-form>
     </el-row>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
@@ -48,7 +44,7 @@
       <el-table-column align="center" prop="score" label="当前评分" />
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <router-link :to="{name: 'StoreDetail', query: { id: scope.row.storeId }}"><el-button type="danger" size="mini">查看</el-button></router-link>
+          <router-link :to="{name: 'ClassDetail', query: { storeId: viewId, id: scope.row.id }}"><el-button type="danger" size="mini">查看</el-button></router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -56,6 +52,7 @@
 </template>
 <script>
 import { getClassList } from '@/api/store'
+import { category } from '../mixins/getCategory'
 export default {
   name: 'StoreComponents',
   filters: {
@@ -63,9 +60,19 @@ export default {
       return val === 0 ? '启用' : '关闭'
     }
   },
+  mixins: [category],
+  props: {
+    val: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    }
+  },
   data() {
     return {
       list: [],
+      viewId: '',
       tabHeader: {
         'background-color': '#F4F4F4',
         color: '#666666',
@@ -90,17 +97,29 @@ export default {
         value: 1
       }],
       categoryList: [{
-        label: '全部',
-        value: ''
+        categoryName: '全部',
+        categoryId: ''
       }]
     }
   },
-  created() {
-    this.getClass()
+  watch: {
+    val: {
+      handler() {
+        if (this.val === 'getClassList') {
+          const id = this.$route.query.id
+          this.viewId = id
+          if (id) {
+            this.fetchList(id)
+          }
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
-    getClass() {
+    fetchList(id) {
       const getObj = this.keyWord
+      getObj.storeId = this.viewId || id
       getClassList(getObj).then(res => {
         if (res.data.code) return res.data.message && this.$warn(res.data.message)
         if (!res.data.data) return

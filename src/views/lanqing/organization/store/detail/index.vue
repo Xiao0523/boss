@@ -3,23 +3,47 @@
     <el-tabs v-model="storeVal" @tab-click="leaveClick">
       <el-tab-pane name="getStoreDetail">
         <span slot="label">店铺基本信息</span>
-        <store-details :leave="leave" />
+        <store-details :val="storeVal" :leave="leave" />
       </el-tab-pane>
-      <!-- <el-tab-pane name="getClassList">
+      <el-tab-pane name="getClassList">
         <span slot="label">课程信息</span>
-        <class-tabel />
-      </el-tab-pane> -->
+        <class-tabel :val="storeVal" />
+      </el-tab-pane>
+      <el-tab-pane name="getTeacherList">
+        <span slot="label">讲师信息</span>
+        <teacher-tabel :val="storeVal" />
+      </el-tab-pane>
+      <el-tab-pane name="getStudentList">
+        <span slot="label">学员信息</span>
+        <student-tabel :val="storeVal" />
+      </el-tab-pane>
+      <el-tab-pane name="getOrderList">
+        <span slot="label">订单信息</span>
+        <order-tabel :val="storeVal" />
+      </el-tab-pane>
+      <el-tab-pane name="getCommentList">
+        <span slot="label">评论信息</span>
+        <comment-tabel :val="storeVal" />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import StoreDetails from '../components/storeDetail'
-import classTabel from '../components/classTabel'
+import ClassTabel from '../components/classTabel'
+import TeacherTabel from '../components/teacherTabel'
+import StudentTabel from '../components/studentTabel'
+import OrderTabel from '../components/orderTabel'
+import CommentTabel from '../components/commentTabel'
 export default {
   name: 'StoreDetail',
   components: {
     StoreDetails,
-    classTabel
+    ClassTabel,
+    TeacherTabel,
+    StudentTabel,
+    OrderTabel,
+    CommentTabel
   },
   data() {
     return {
