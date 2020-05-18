@@ -34,7 +34,7 @@
           <el-button type="danger" size="mini" @click="changeVotes(scope.row.votes, scope.row.id)">票数管理</el-button>
         </template>
       </el-table-column>
-    </el-table-column></el-table>
+    </el-table>
 
     <!--分页-->
     <div class="pageNumBox">

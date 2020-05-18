@@ -54,7 +54,7 @@ export default {
   name: 'CompositionDetail',
   filters: {
     typeStr(val) {
-      return val == 0 ? '图片' : '视频'
+      return Number(val) === 0 ? '图片' : '视频'
     }
   },
   data() {

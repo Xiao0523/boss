@@ -48,7 +48,7 @@ server.interceptors.response.use(res => { // 响应成功关闭loading
   // 错误码处理
   if (error && error.response) {
     // console.log(error.response.status);
-    if (error.response.status == 403) {
+    if (Number(error.response.status) === 403) {
       Message({
         message: error.response.data.data,
         type: 'error'
