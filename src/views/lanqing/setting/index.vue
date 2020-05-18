@@ -81,11 +81,30 @@
         </td>
       </tr>
     </table>
+    <div class="uploads">
+      <span>视频上传</span>
+      <el-upload
+        :before-upload="uploading"
+        :on-remove="handleRemove"
+        :on-success="uploadOk"
+        :before-remove="beforeRemove"
+        :limit="1"
+        :file-list="fileList"
+        :action="videoIdUpload"
+        class="upload-demo"
+        name="multipartFile"
+      >
+        <el-button :loading="upload" size="small" type="primary" class="upload-btn">点击上传</el-button>
+      </el-upload>
+      <el-button :loading="upload" class="save-button" @click="save">保存</el-button>
+      <div v-show="upload" class="save-tip">请等待视频上传！</div>
+    </div>
   </div>
 </template>
 
 <script>
 import { getSetting, editSetting } from '@/api/setting'
+import { videoIdUpload } from '@/http/url'
 export default {
   name: 'Setting',
   filters: {
@@ -121,7 +140,10 @@ export default {
         uploadTalentShowStatus: '',
         uploadTalentShowTicket: null,
         uploadTalentShowTimes: null
-      }
+      },
+      fileList: [],
+      upload: false,
+      videoIdUpload: videoIdUpload
     }
   },
   mounted() {
@@ -143,6 +165,19 @@ export default {
         if (res.data.code) res.data.message && this.$warn(res.data.message)
         this.getSettingDetail()
       })
+    },
+    handleRemove(file, fileList) {
+      this.fileList = []
+      this.form.appLanqingVideoIntroduceId = ''
+    },
+    uploadOk(file) {
+      this.form.appLanqingVideoIntroduceId = file.data
+    },
+    uploading(file) {
+      this.upload = true
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`)
     }
   }
 }
@@ -192,5 +227,15 @@ export default {
       }
     }
   }
+}
+.uploads {
+  padding: 10px;
+  box-sizing: border-box;
+  .upload-btn {
+    margin-top: 20px;
+  }
+}
+.save-button, .save-tip {
+  margin-top: 20px;
 }
 </style>
