@@ -1006,7 +1006,7 @@ export const constantRouterMap = [
         hidden: true
       },
       {
-        path: 'rewarList',
+        path: 'rewardList',
         name: 'RewardList',
         component: () => import('@/views/lanqing/talentShow/rewardList'),
         meta: { title: '才艺秀奖励列表' },
