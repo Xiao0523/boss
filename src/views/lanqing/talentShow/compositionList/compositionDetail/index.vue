@@ -87,7 +87,7 @@ export default {
       if (!res.data.data) return
       const { data } = res.data
       this.form = data
-      this.pics = this.form.pics.split(',')
+      this.pics = this.form.pics
     })
   },
   methods: {
