@@ -248,7 +248,7 @@ export default {
         })
       } else {
         this.disableSubmit = true
-        this.$message.error('上传的文件大小超过150M，请重新上传')
+        this.$message.error('上传的文件大小超过10M，请重新上传')
       }
     },
     getAuth(callback) {
