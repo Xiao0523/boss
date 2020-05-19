@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'development') {
 // Add a request interceptor 添加请求拦截机
 server.interceptors.request.use(config => {
   // Do something before request is sent
-  if (config.url.indexOf('/ChinaCity') !== -1) {
+  if (config.url.indexOf('/ChinaCity') !== -1 || config.url.indexOf('/VodStsForApp') !== -1) {
     config.url = config.url.replace('/boss', '')
     config.baseURL = 'https://www.my51share.com/'
   }

@@ -55,7 +55,7 @@
         </div>
       </el-form-item>
 
-      <el-form-item label="赞助商图标">
+      <el-form-item label="奖品信息">
         <div class="boxWidth">
           <div class="logosFlex row">
             <gift v-for="(item, index) in form.prizes4Rank.length" :key="index" :list="form.prizes4Rank[item - 1]" :indexs="item - 1" @handelLogsClickVote="logsCbVote" @handelLogsDelVote="delCbVote"/>
@@ -79,7 +79,7 @@
         </div>
       </el-form-item>
 
-      <el-form-item label="赞助商图标">
+      <el-form-item label="幸运奖信息">
         <div class="boxWidth">
           <el-upload
             :action="UploadUrl"

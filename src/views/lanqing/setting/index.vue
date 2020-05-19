@@ -83,19 +83,39 @@
     </table>
     <div class="uploads">
       <span>视频上传</span>
-      <el-upload
+      <!-- <el-upload
+        :http-request="homepageUpload"
+        :limit="1"
+        :file-list="fileList"
+        class="upload-img"
+        list-type="text"
+        action="">
+        <el-button
+          icon="el-icon-upload"
+          class="btn-upload"
+          circle
+        />
+      </el-upload> -->
+      <div class="upload-box">
+        <input v-show="false" ref="input" type="file" accept="video/*" @change="fileChange">
+        <el-button :disabled="disableUpload" size="small" type="primary" @click="$refs.input.click()">
+          上传视频
+        </el-button>
+        <el-progress v-show="percentage" :percentage="percentage" :stroke-width="26" :text-inside="true" :color="customColors" class="progress" />
+      </div>
+      <!-- <el-upload
         :before-upload="uploading"
         :on-remove="handleRemove"
         :on-success="uploadOk"
         :before-remove="beforeRemove"
         :limit="1"
         :file-list="fileList"
-        :action="videoIdUpload"
+        action="videoIdUpload"
         class="upload-demo"
         name="multipartFile"
       >
         <el-button :loading="upload" size="small" type="primary" class="upload-btn">点击上传</el-button>
-      </el-upload>
+      </el-upload> -->
       <el-button :loading="upload" class="save-button" @click="save">保存</el-button>
       <div v-show="upload" class="save-tip">请等待视频上传！</div>
     </div>
@@ -104,7 +124,7 @@
 
 <script>
 import { getSetting, editSetting } from '@/api/setting'
-import { videoIdUpload } from '@/http/url'
+import { getUploadInfo } from '@/api/uploadInfo'
 export default {
   name: 'Setting',
   filters: {
@@ -117,6 +137,13 @@ export default {
   },
   data() {
     return {
+      customColors: [
+        { color: '#f56c6c', percentage: 20 },
+        { color: '#e6a23c', percentage: 40 },
+        { color: '#5cb87a', percentage: 60 },
+        { color: '#1989fa', percentage: 80 },
+        { color: '#409eff', percentage: 100 }
+      ],
       form: {
         addWxStatus: '',
         addWxTicket: 0,
@@ -143,7 +170,16 @@ export default {
       },
       fileList: [],
       upload: false,
-      videoIdUpload: videoIdUpload
+      securityToken: '',
+      accessKeyId: '',
+      accessKeySecret: '',
+      disableUpload: false,
+      disableSubmit: true,
+      uploadFile: null,
+      uploader: null,
+      callback: null,
+      videoId: '',
+      percentage: 0
     }
   },
   mounted() {
@@ -178,6 +214,116 @@ export default {
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`)
+    },
+
+    fileChange() {
+      if (!event.target.files[0]) {
+        return false
+      }
+      if (!event.target.files[0].type.match('video.*')) {
+        this.$message.error('请选择视频文件')
+        return false
+      }
+      this.uploadFile = event.target.files[0]
+      this.percentage = 0
+      // 上传文件的size的单位为 字节(B)
+      // 150兆字节(mb) = 157286400字节(B)
+      if (this.uploadFile.size <= 10485760) {
+        this.getAuth(() => {
+          // 给uploader大佬addFile
+          this.getUploder()
+          // 以下三个参数默认为空
+          // var endpoint = ''
+          // var bucket = ''
+          // var objectPre = ''
+          // if(objectPre)
+          // {
+          //     object = objectPre +"/"+ event.target.files[i].name
+          // }
+          // STS的上传方式，需要在userData里指定Title
+          var userData = '{"Vod":{"StorageLocation":"","Title":"' + this.uploadFile.name + '","Description":"默认描述信息暂无","CateId":"19","Tags":"测试视频"}}'
+          this.uploader.addFile(this.uploadFile, '', '', '', userData)
+          this.uploader.startUpload()
+          this.disableSubmit = false
+        })
+      } else {
+        this.disableSubmit = true
+        this.$message.error('上传的文件大小超过150M，请重新上传')
+      }
+    },
+    getAuth(callback) {
+      // 获取上传凭证
+      const getObj = {
+        uuid: JSON.parse(JSON.parse(localStorage.getItem('userInfo'))).phone
+      }
+      getUploadInfo(getObj).then(res => {
+        if (res.status === 200) {
+          this.securityToken = res.data.credentials.securityToken
+          this.accessKeyId = res.data.credentials.accessKeyId
+          this.accessKeySecret = res.data.credentials.accessKeySecret
+          callback()
+        } else {
+          this.$message.error(res.message)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
+    },
+    getUploder() {
+      const _this = this
+      /* eslint-disable no-undef */
+      _this.uploader = new AliyunUpload.Vod({ // 分片大小默认1M，不能小于100K
+        userId: '1402947514567452',
+        partSize: 1048576,
+        // 并行上传分片个数，默认5
+        parallel: 5,
+        // 网络原因失败时，重新上传次数，默认为3
+        retryCount: 3,
+        // 网络原因失败时，重新上传间隔时间，默认为2秒
+        retryDuration: 2,
+        // 是否上报上传日志到点播，默认为true
+        enableUploadProgress: true,
+        // 文件上传失败
+        'onUploadFailed': function(uploadInfo, code, message) {
+          _this.$message.error(`文件上传失败：${message}`)
+          // log(`onUploadFailed: file:${uploadInfo.file.name},code:${code}, message:${message}`)
+          _this.disableSubmit = true
+          _this.disableUpload = false
+        },
+        // 文件上传完成
+        'onUploadSucceed': function(uploadInfo) {
+          // log(uploadInfo)
+          // console.log(`onUploadSucceed: ${uploadInfo.file.name}, endpoint:${uploadInfo.endpoint}, bucket:${uploadInfo.bucket}, object:${uploadInfo.object}`)
+          _this.form.appLanqingVideoIntroduceId = uploadInfo.videoId
+          _this.$message.success('文件上传成功')
+          _this.disableSubmit = true
+          _this.disableUpload = false
+        },
+        // 文件上传进度
+        'onUploadProgress': function(uploadInfo, totalSize, loadedPercent) {
+          _this.percentage = +(loadedPercent * 100).toFixed(0)
+          // log(`onUploadProgress:file:${uploadInfo.file.name}, fileSize:${totalSize}, percent:${(loadedPercent * 100.00).toFixed(2)}%`)
+        },
+        // STS临时账号会过期，过期时触发函数
+        'onUploadTokenExpired': function(uploadInfo) {
+          console.log('onUploadTokenExpired STS临时账号过期了')
+          // 实现时，从新获取STS临时账号用于恢复上传
+          // uploader.resumeUploadWithSTSToken(accessKeyId, accessKeySecret, securityToken, expireTime)
+        },
+        'onUploadCanceled': function(uploadInfo) {
+          console.log(`onUploadCanceled:file:${uploadInfo.file.name}`)
+        },
+        // 开始上传
+        'onUploadstarted': function(uploadInfo) {
+          var accessKeyId = _this.accessKeyId
+          var accessKeySecret = _this.accessKeySecret
+          var securityToken = _this.securityToken
+          _this.uploader.setSTSToken(uploadInfo, accessKeyId, accessKeySecret, securityToken)
+        },
+        'onUploadEnd': function(uploadInfo) {
+          console.log('onUploadEnd: uploaded all the files')
+        }
+      })
     }
   }
 }
@@ -237,5 +383,11 @@ export default {
 }
 .save-button, .save-tip {
   margin-top: 20px;
+}
+.upload-box {
+  margin-top: 20px;
+}
+.progress {
+  margin-top: 10px;
 }
 </style>
