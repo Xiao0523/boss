@@ -44,7 +44,11 @@
       <el-table-column align="center" prop="storeName" label="店铺名称" />
       <el-table-column align="center" prop="authStatusString" label="认证状态" />
       <el-table-column align="center" prop="storeStatusString" label="店铺状态" />
-      <el-table-column align="center" prop="submitTime" label="认证时间" />
+      <el-table-column align="center" prop="submitTime" label="认证时间">
+        <template slot-scope="scope">
+          {{ scope.row.submitTime | timeStr }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="lastAuthTime" label="审核完成时间"/>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
@@ -82,6 +86,7 @@
 <script>
 import { getMerchantList, getAudit, getBusinessInfo } from '@/api/merchant'
 import pageNum from '@/components/pageNum'
+import { fmtDate } from '@/utils/date'
 export default {
   name: 'OrganizationList',
   components: {
@@ -90,6 +95,9 @@ export default {
   filters: {
     statusFilter(val) {
       return val === 0 ? '待审' : val === 1 ? '通过' : '驳回'
+    },
+    timeStr(val) {
+      return val && fmtDate(val)
     }
   },
   data() {

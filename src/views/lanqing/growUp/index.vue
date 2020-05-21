@@ -8,7 +8,11 @@
     </el-row>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
       <el-table-column align="center" prop="topic" label="主题" />
-      <el-table-column align="center" prop="createTime" label="创建时间" />
+      <el-table-column align="center" label="创建时间">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | timeStr }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="主题图片">
         <template slot-scope="scope">
           <img v-show="scope.row.pic" :src="scope.row.pic" class="img-box" alt="">
@@ -30,6 +34,7 @@
 <script>
 import { getGrowList } from '@/api/grow'
 import pageNum from '@/components/pageNum'
+import { fmtDate } from '@/utils/date'
 export default {
   name: 'OrganizationList',
   components: {
@@ -41,6 +46,9 @@ export default {
     },
     btnStr(val) {
       return Number(val) === 0 ? '隐藏' : '显示'
+    },
+    timeStr(val) {
+      return val && fmtDate(val)
     }
   },
   data() {

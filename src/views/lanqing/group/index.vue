@@ -30,7 +30,11 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="groupName" label="群聊名称" />
-      <el-table-column align="center" prop="createTime" label="创建时间" />
+      <el-table-column align="center" prop="createTime" label="创建时间">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | timeStr }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="推荐状态">
         <template slot-scope="scope">
           {{ scope.row.recommend | recommendStr }}
@@ -53,6 +57,7 @@
 <script>
 import { getGroupList, delGroup } from '@/api/group'
 import pageNum from '@/components/pageNum'
+import { fmtDate } from '@/utils/date'
 export default {
   name: 'OrganizationList',
   components: {
@@ -64,6 +69,9 @@ export default {
     },
     recommendStr(val) {
       return val === 0 ? '不推荐' : '推荐'
+    },
+    timeStr(val) {
+      return val && fmtDate(val)
     }
   },
   data() {

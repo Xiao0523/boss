@@ -42,7 +42,11 @@
     </el-row>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
       <el-table-column align="center" prop="phone" label="手机号" />
-      <el-table-column align="center" prop="createTime" label="注册时间" />
+      <el-table-column align="center" label="注册时间">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | timeStr }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="way" label="注册方式" />
       <el-table-column align="center" prop="nickName" label="昵称" />
       <el-table-column align="center" prop="codeName" label="区域" />
@@ -75,6 +79,7 @@
 import { getStudentList, editStudentWx } from '@/api/member'
 import { getChinaCity, getChinaCode } from '@/api/global'
 import pageNum from '@/components/pageNum'
+import { fmtDate } from '@/utils/date'
 export default {
   name: 'MemberList',
   components: {
@@ -83,6 +88,9 @@ export default {
   filters: {
     wxCustomerStr(val) {
       return Number(val) === 1 ? '已加' : '未加'
+    },
+    timeStr(val) {
+      return val && fmtDate(val)
     }
   },
   data() {

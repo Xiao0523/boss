@@ -44,21 +44,27 @@
       <el-table-column align="center" prop="score" label="当前评分" />
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
+          <el-button type="danger" size="mini" @click="comment(scope.row.id)">评论</el-button>
           <router-link :to="{name: 'ClassDetail', query: { storeId: viewId, id: scope.row.id }}"><el-button type="danger" size="mini">查看</el-button></router-link>
         </template>
       </el-table-column>
     </el-table>
+    <comment :type="1" :store-id="viewId" :curriculum-id="curriculumId" :show-flag="showFlag" />
   </div>
 </template>
 <script>
 import { getClassList } from '@/api/store'
 import { category } from '../mixins/getCategory'
+import comment from '@/components/comment'
 export default {
   name: 'StoreComponents',
   filters: {
     statusStr(val) {
       return val === 0 ? '启用' : '关闭'
     }
+  },
+  components: {
+    comment
   },
   mixins: [category],
   props: {
@@ -99,7 +105,9 @@ export default {
       categoryList: [{
         categoryName: '全部',
         categoryId: ''
-      }]
+      }],
+      curriculumId: '',
+      showFlag: false
     }
   },
   watch: {
@@ -117,6 +125,10 @@ export default {
     }
   },
   methods: {
+    comment(id) {
+      this.showFlag = !this.showFlag
+      this.curriculumId = id
+    },
     fetchList(id) {
       const getObj = this.keyWord
       getObj.storeId = this.viewId || id

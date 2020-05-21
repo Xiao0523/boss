@@ -54,13 +54,22 @@
       <el-table-column align="center" prop="phone" label="注册手机号" />
       <el-table-column align="center" prop="name" label="店铺名称" />
       <el-table-column align="center" prop="statusString" label="店铺状态" />
-      <el-table-column align="center" prop="submitTime" label="提交时间" />
-      <el-table-column align="center" prop="lastAuthTime" label="审核完成时间" />
+      <el-table-column align="center" prop="" label="提交时间">
+        <template slot-scope="scope">
+          {{ scope.row.submitTime | timeStr }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="审核完成时间">
+        <template slot-scope="scope">
+          {{ scope.row.lastAuthTime | timeStr }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="score" label="评分" />
       <el-table-column align="center" prop="weight" label="权重" sortable />
       <el-table-column align="center" prop="orderNum" label="订单数"/>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
+          <el-button type="danger" size="mini" @click="comment(scope.row.storeId)">评论</el-button>
           <router-link :to="{name: 'StoreDetail', query: { id: scope.row.storeId }}"><el-button type="danger" size="mini">查看</el-button></router-link>
           <el-button :disabled="scope.row.status !== 2 && scope.row.status !== 4" type="danger" size="mini" @click="audit(scope.row)">审核</el-button>
         </template>
@@ -90,19 +99,23 @@
         <el-button @click="auditFn('2')">驳回</el-button>
       </span>
     </el-dialog>
+    <comment :type="0" :store-id="storeId" :show-flag="showFlag" />
   </div>
 </template>
 <script>
 import { getStoreList, getStoreAudit, getStoreInfo } from '@/api/store'
 import pageNum from '@/components/pageNum'
+import comment from '@/components/comment'
+import { fmtDate } from '@/utils/date'
 export default {
   name: 'StoreList',
   components: {
-    pageNum
+    pageNum,
+    comment
   },
   filters: {
-    statusFilter(val) {
-      return val === 0 ? '待审' : val === 1 ? '通过' : '驳回'
+    timeStr(val) {
+      return val && fmtDate(val)
     }
   },
   data() {
@@ -181,7 +194,9 @@ export default {
       },
       activeAudit: {},
       unSuccStr: '',
-      infoObj: []
+      infoObj: [],
+      storeId: '',
+      showFlag: false
     }
   },
   mounted() {
@@ -189,6 +204,10 @@ export default {
     this.getInfo()
   },
   methods: {
+    comment(id) {
+      this.storeId = id
+      this.showFlag = !this.showFlag
+    },
     // 审核
     audit(obj) {
       this.activeAudit = obj
