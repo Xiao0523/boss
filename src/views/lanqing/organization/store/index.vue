@@ -51,23 +51,23 @@
       待审核：{{ infoObj.waiting }}
     </span>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
-      <el-table-column align="center" prop="phone" label="注册手机号" />
-      <el-table-column align="center" prop="name" label="店铺名称" />
-      <el-table-column align="center" prop="statusString" label="店铺状态" />
-      <el-table-column align="center" prop="" label="提交时间">
+      <el-table-column align="center" min-width="10%" prop="phone" label="注册手机号" />
+      <el-table-column align="center" min-width="20%" prop="name" label="店铺名称" />
+      <el-table-column align="center" min-width="10%" prop="statusString" label="店铺状态" />
+      <el-table-column align="center" min-width="15%" label="提交时间">
         <template slot-scope="scope">
           {{ scope.row.submitTime | timeStr }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="审核完成时间">
+      <el-table-column align="center" min-width="15%" label="审核完成时间">
         <template slot-scope="scope">
           {{ scope.row.lastAuthTime | timeStr }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="score" label="评分" />
-      <el-table-column align="center" prop="weight" label="权重" sortable />
-      <el-table-column align="center" prop="orderNum" label="订单数"/>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" min-width="5%" prop="score" label="评分" />
+      <el-table-column align="center" min-width="5%" prop="weight" label="权重" />
+      <el-table-column align="center" min-width="5%" prop="orderNum" label="订单数"/>
+      <el-table-column align="center" min-width="15%" label="操作">
         <template slot-scope="scope">
           <el-button type="danger" size="mini" @click="comment(scope.row.storeId)">评论</el-button>
           <router-link :to="{name: 'StoreDetail', query: { id: scope.row.storeId }}"><el-button type="danger" size="mini">查看</el-button></router-link>
