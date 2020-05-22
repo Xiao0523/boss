@@ -1145,8 +1145,8 @@ export const constantRouterMap = [
         path: 'articles',
         name: 'Articles',
         component: () => import('@/views/waimao/articles'),
-        meta: { title: '文章管理' },
-        //hidden: true
+        meta: { title: '文章管理' }
+        // hidden: true
       },
       {
         path: 'toViewArticle',
@@ -1156,7 +1156,7 @@ export const constantRouterMap = [
         hidden: true
       },
       {
-        
+
       }
       // {
       //   path: 'organizationDetail',
