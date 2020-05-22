@@ -1128,7 +1128,45 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/waimao',
+    component: Layout,
+    redirect: '/waimao/articles',
+    name: 'Waimao',
+    meta: { title: '外贸水手官网', icon: 'member' },
+    children: [
+      // {
+      //   path: 'banner',
+      //   name: 'banner',
+      //   component: () => import('@/views/waimao/banner/bannerList'),
+      //   meta: { title: 'BANNER管理' }
+      // },
+      {
+        path: 'articles',
+        name: 'Articles',
+        component: () => import('@/views/waimao/articles'),
+        meta: { title: '文章管理' },
+        //hidden: true
+      },
+      {
+        path: 'toViewArticle',
+        name: 'ToViewArticle',
+        component: () => import('@/views/waimao/toViewArticle'),
+        meta: { title: '查看文章' },
+        hidden: true
+      },
+      {
+        
+      }
+      // {
+      //   path: 'organizationDetail',
+      //   name: 'OrganizationDetail',
+      //   component: () => import('@/views/lanqing/organization/organizationList/organizationAudit'),
+      //   meta: { title: '服务管理' },
+      //   hidden: true
+      // },
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 const router = new Router({
