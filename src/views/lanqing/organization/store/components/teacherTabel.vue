@@ -56,6 +56,7 @@
 import { getTeacherList } from '@/api/store'
 import { category } from '../mixins/getCategory'
 import comment from '@/components/comment'
+import { comments } from '../mixins/comments'
 export default {
   name: 'TeacherComponent',
   filters: {
@@ -66,7 +67,7 @@ export default {
   components: {
     comment
   },
-  mixins: [category],
+  mixins: [category, comments],
   props: {
     val: {
       type: String,
@@ -127,7 +128,7 @@ export default {
   },
   methods: {
     comment(id) {
-      this.showFlag = !this.showFlag
+      this.showFlag = true
       this.teacherId = id
     },
     fetchList() {

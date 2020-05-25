@@ -2,6 +2,7 @@
   <div>
     <el-dialog
       :visible.sync="diglogFlag"
+      :before-close="editFlag"
       title="评论"
       width="30%"
       center
@@ -15,7 +16,7 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="getComment">评论</el-button>
-        <el-button @click="diglogFlag = false">关闭</el-button>
+        <el-button @click="editFlag">关闭</el-button>
       </span>
     </el-dialog>
   </div>
@@ -83,9 +84,11 @@ export default {
     },
     type() {
       this.form.type = this.type
+      console.log(this.form.type)
     },
     storeId() {
       this.form.storeId = this.storeId
+      console.log(this.form.storeId)
     },
     teacherId() {
       this.form.teacherId = this.teacherId
@@ -106,16 +109,13 @@ export default {
       changeComment(getObj).then(res => {
         if (res.data.code) return res.data.message && this.$warn(res.data.message)
         this.$success('回复成功！')
-        this.diglogFlag = false
-        this.form = {
-          content: '',
-          curriculumId: '',
-          score: 0,
-          storeId: '',
-          teacherId: '',
-          type: ''
-        }
+        this.editFlag()
+        this.form.content = ''
+        this.form.score = 0
       })
+    },
+    editFlag() {
+      this.$emit('editFlags')
     }
   }
 }
