@@ -49,7 +49,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <comment :type="2" :store-id="viewId" :teacher-id="teacherId" :show-flag="showFlag" />
+    <comment :type="2" :store-id="viewId" :teacher-id="teacherId" :show-flag="showFlag" @editFlags="editFlag" />
   </div>
 </template>
 <script>

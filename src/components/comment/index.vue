@@ -84,11 +84,9 @@ export default {
     },
     type() {
       this.form.type = this.type
-      console.log(this.form.type)
     },
     storeId() {
       this.form.storeId = this.storeId
-      console.log(this.form.storeId)
     },
     teacherId() {
       this.form.teacherId = this.teacherId
@@ -115,6 +113,7 @@ export default {
       })
     },
     editFlag() {
+      console.log('close')
       this.$emit('editFlags')
     }
   }
