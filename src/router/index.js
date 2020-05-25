@@ -1154,9 +1154,6 @@ export const constantRouterMap = [
         component: () => import('@/views/waimao/toViewArticle'),
         meta: { title: '查看文章' },
         hidden: true
-      },
-      {
-
       }
       // {
       //   path: 'organizationDetail',
