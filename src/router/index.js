@@ -1142,6 +1142,13 @@ export const constantRouterMap = [
       //   meta: { title: 'BANNER管理' }
       // },
       {
+        path: 'category',
+        name: 'Category',
+        component: () => import('@/views/waimao/category'),
+        meta: { title: '类目管理' },
+        //hidden: true
+      },
+      {
         path: 'articles',
         name: 'Articles',
         component: () => import('@/views/waimao/articles'),
@@ -1156,8 +1163,19 @@ export const constantRouterMap = [
         hidden: true
       },
       {
-        
-      }
+        path: 'newArticle',
+        name: 'newArticle',
+        component: () => import('@/views/waimao/newArticle'),
+        meta: { title: '新增文章' },
+        hidden: true
+      },
+      {
+        path: 'consulting',
+        name: 'Consulting',
+        component: () => import('@/views/waimao/consulting'),
+        meta: { title: '咨询管理' },
+        //hidden: true
+      },
       // {
       //   path: 'organizationDetail',
       //   name: 'OrganizationDetail',

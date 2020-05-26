@@ -10,10 +10,10 @@
         label-width="100px"
       >
         <el-form-item label="文章标题：" prop="title">
-          <el-input v-model.trim="fromMenu.title" placeholder="请输入文章标题" clearable style="width: 600px;"></el-input>
+          <el-input v-model.trim="title" placeholder="请输入文章标题" clearable style="width: 600px;"></el-input>
         </el-form-item>
         <el-form-item label="文章类目：" prop="category">
-          <el-select v-model="fromMenu.category" clearable placeholder="请选择文章类目" style="width: 600px;">
+          <el-select v-model="category" clearable placeholder="请选择文章类目" style="width: 600px;">
             <el-option
               v-for="item in categoryList"
               :key="item.categoryId"
@@ -33,11 +33,11 @@
         label-width="100px"
       >
         <el-form-item label="发布人：" prop="publisher">
-          <el-input v-model.trim="fromMenu.publisher" placeholder="请输入发布人" clearable style="width: 600px;"></el-input>
+          <el-input v-model.trim="publisher" placeholder="请输入发布人" clearable style="width: 600px;"></el-input>
         </el-form-item>
 
         <el-form-item label="文章状态：" prop="status">
-          <el-select v-model="fromMenu.status" clearable placeholder="请选择文章状态" style="width: 600px;">
+          <el-select v-model="status" clearable placeholder="请选择文章状态" style="width: 600px;">
             <el-option
               v-for="item in statusList"
               :key="item.id"
@@ -50,7 +50,7 @@
           <el-input
             type="textarea"
             :rows="4"
-            v-model="fromMenu.simpleContext"
+            v-model="simpleContext"
             placeholder="请输入文章简要"
             style="width: 600px;"
           ></el-input>
@@ -68,7 +68,7 @@
         <el-form-item label="正文" prop="context">
           <quill-editor
             ref="myQuillEditor"
-            v-model="fromMenu.context"
+            v-model="context"
             :options="editorOption"
             @change="onEditorChange($event)"
           />
@@ -94,9 +94,9 @@
             class="img-uploader"
             name="multipartFile"
           >
-            <img v-if="pic" :src="fromMenu.pic" class="novel_img" />
+            <img v-if="pic" :src="pic" class="novel_img" />
             <i v-else class="el-icon-plus img-uploader-icon" />
-            <el-input v-model.trim="fromMenu.context.introduction" style="display: none" />
+            <el-input v-model.trim="context.introduction" style="display: none" />
           </el-upload>
         </el-form-item>
       </el-form>
@@ -198,8 +198,7 @@ export default {
       },
       uploadUrl: UploadUrl,
       pic: "",
-      simpleContext:"",
-      fromMenu:{}
+      simpleContext:""
     };
   },
   components: {
@@ -207,9 +206,6 @@ export default {
   },
   created() {
     this.getCategoryList();
-  },
-  mounted() {
-    this.fromMenu = this.$route.query.row
   },
   methods: {
     getCategoryList() {

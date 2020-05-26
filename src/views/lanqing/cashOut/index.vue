@@ -104,7 +104,7 @@ export default {
     createTimeStr(val) {
       return fmtDate(val)
     },
-    endTimeStr(val) {
+    endStr(val) {
       if(val) {
         return fmtDate(val)
       }
