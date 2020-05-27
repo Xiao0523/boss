@@ -1185,6 +1185,22 @@ export const constantRouterMap = [
       // },
     ]
   },
+  {
+    path: '/personalStand',
+    component: Layout,
+    redirect: '/personalStand/supplierModule',
+    name: 'personalStand',
+    meta: { title: '个人站管理', icon: 'member' },
+    children: [
+    {
+      path: 'supplierModule',
+      name: 'personalStand',
+      component: () => import('@/views/personalStand/supplierModule'),
+      meta: { title: '供应商管理' },
+      //hidden: true
+    },
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 const router = new Router({
@@ -1192,15 +1208,4 @@ const router = new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
-// router.beforeEach((to, from, next) => {
-//   if (getUserId()) { // 通过vuex state获取当前的token是否存在
-//     next()
-//   } else { // token失效的情况
-//     next({
-//       path: '/login'
-//       // query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
-//     })
-//   }
-// })
-
 export default router

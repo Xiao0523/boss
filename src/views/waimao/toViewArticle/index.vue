@@ -1,114 +1,88 @@
 <template>
   <div>
-    <el-row>
-      <el-form
-        :inline="true"
-        ref="noveForm"
-        :rules="rules"
-        class="novel"
-        label-position="right"
-        label-width="100px"
-      >
-        <el-form-item label="文章标题：" prop="title">
-          <el-input v-model.trim="fromMenu.title" placeholder="请输入文章标题" clearable style="width: 600px;"></el-input>
-        </el-form-item>
-        <el-form-item label="文章类目：" prop="category">
-          <el-select v-model="fromMenu.category" clearable placeholder="请选择文章类目" style="width: 600px;">
-            <el-option
-              v-for="item in categoryList"
-              :key="item.categoryId"
-              :label="item.categoryName"
-              :value="item.categoryId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-    </el-row>
-    <el-row>
-      <el-form
-        :inline="true"
-        class="novel"
-        :rules="rules"
-        label-position="right"
-        label-width="100px"
-      >
-        <el-form-item label="发布人：" prop="publisher">
-          <el-input v-model.trim="fromMenu.publisher" placeholder="请输入发布人" clearable style="width: 600px;"></el-input>
-        </el-form-item>
+    <el-form
+      :inline="true"
+      :model="ruleForm"
+      ref="ruleForm"
+      :rules="rules"
+      label-position="right"
+      label-width="100px"
+      class="demo-ruleForm"
+    >
+      <el-form-item label="文章标题：" prop="title">
+        <el-input v-model.trim="ruleForm.uuid" style="display: none" />
+        <el-input
+          v-model.trim="ruleForm.title"
+          placeholder="请输入文章标题"
+          clearable
+          style="width: 600px;"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="文章类目：" prop="categoryId">
+        <el-select v-model="ruleForm.categoryId" clearable placeholder="请选择文章类目">
+          <el-option
+            v-for="item in categoryList"
+            :key="item.categoryId"
+            :label="item.categoryName"
+            :value="item.categoryId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
 
-        <el-form-item label="文章状态：" prop="status">
-          <el-select v-model="fromMenu.status" clearable placeholder="请选择文章状态" style="width: 600px;">
-            <el-option
-              v-for="item in statusList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+      <el-form-item label="发布人：" prop="publisher">
+        <el-input
+          v-model.trim="ruleForm.publisher"
+          placeholder="请输入发布人"
+          clearable
+          style="width: 600px;"
+        ></el-input>
+      </el-form-item>
+
+      <el-form-item label="文章状态：" prop="status">
+        <el-select v-model="ruleForm.status" clearable placeholder="请选择文章状态">
+          <el-option v-for="item in statusList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="文章简要：" prop="simpleContext">
+        <el-input
+          type="textarea"
+          :rows="4"
+          v-model="ruleForm.simpleContext"
+          placeholder="请输入文章简要"
+          style="width: 1000px;"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="正文" prop="context">
+        <quill-editor
+          ref="myQuillEditor"
+          v-model="ruleForm.context"
+          :options="ruleForm.editorOption"
+          @change="onEditorChange($event)"
+        />
+      </el-form-item>
+      <el-form-item label="文章封面" prop="pic">
+        <el-upload
+          ref="uploader"
+          :action="uploadUrl"
+          :show-file-list="false"
+          :on-success="uploadSuccess"
+          :on-error="fileError"
+          :on-change="fileChange"
+          class="img-uploader"
+          name="multipartFile"
+        >
+          <img v-if="ruleForm.pic" :src="ruleForm.pic" class="novel_img" />
+          <i v-else class="el-icon-plus img-uploader-icon" />
+        </el-upload>
+      </el-form-item>
+      <el-row>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit('ruleForm')" style=" text-align: center;">提交</el-button>
+          <el-button type="info" @click="cancel('ruleForm')" style="left:100px">取消</el-button>
         </el-form-item>
-        <el-form-item label="文章简要：" prop="simpleContext">
-          <el-input
-            type="textarea"
-            :rows="4"
-            v-model="fromMenu.simpleContext"
-            placeholder="请输入文章简要"
-            style="width: 600px;"
-          ></el-input>
-        </el-form-item>
-      </el-form>
-    </el-row>
-    <el-row>
-      <el-form
-        :inline="true"
-        ref="noveForm"
-        :rules="rules"
-        label-position="right"
-        label-width="100px"
-      >
-        <el-form-item label="正文" prop="context">
-          <quill-editor
-            ref="myQuillEditor"
-            v-model="fromMenu.context"
-            :options="editorOption"
-            @change="onEditorChange($event)"
-          />
-        </el-form-item>
-      </el-form>
-    </el-row>
-    <el-row>
-      <el-form
-        :inline="true"
-        class="novel"
-        :rules="rules"
-        label-position="right"
-        label-width="100px"
-      >
-        <el-form-item label="文章封面" prop="pic">
-          <el-upload
-            ref="uploader"
-            :action="uploadUrl"
-            :show-file-list="false"
-            :on-success="uploadSuccess"
-            :on-error="fileError"
-            :on-change="fileChange"
-            class="img-uploader"
-            name="multipartFile"
-          >
-            <img v-if="pic" :src="fromMenu.pic" class="novel_img" />
-            <i v-else class="el-icon-plus img-uploader-icon" />
-            <el-input v-model.trim="fromMenu.context.introduction" style="display: none" />
-          </el-upload>
-        </el-form-item>
-      </el-form>
-    </el-row>
-    <el-row>
-      <el-col :span="2">
-        <el-button type="primary" @click="onSubmit" style=" text-align: center;">提交</el-button>
-      </el-col>
-      <el-col :span="4">
-        <el-button type="info" @click="cancel" style="left:100px">取消</el-button>
-      </el-col>
-    </el-row>
+      </el-row>
+    </el-form>
   </div>
 </template>
 
@@ -123,7 +97,6 @@ import { quillEditor } from "vue-quill-editor";
 export default {
   data() {
     return {
-      title: "",
       categoryList: [],
       publisher: "",
       statusList: [
@@ -141,12 +114,12 @@ export default {
             trigger: "blur"
           }
         ],
-        category: [
+        categoryId: [
           {
             required: true,
             type: "string",
             message: "请选择文章类目！",
-            trigger: "blur"
+            trigger: "change"
           }
         ],
         publisher: [
@@ -162,7 +135,7 @@ export default {
             required: true,
             type: "string",
             message: "请选择文章状态！",
-            trigger: "blur"
+            trigger: "change"
           }
         ],
         context: [
@@ -191,15 +164,20 @@ export default {
         ]
       },
 
-      context: "",
-      editorOption: {
-        // Some Quill options...
-        height: "500px"
-      },
       uploadUrl: UploadUrl,
-      pic: "",
-      simpleContext:"",
-      fromMenu:{}
+      ruleForm: {
+        title: "",
+        status: "",
+        context: "",
+        pic: "",
+        simpleContext: "",
+        categoryId: "",
+        uuid: "",
+        editorOption: {
+          // Some Quill options...
+          height: "500px"
+        }
+      }
     };
   },
   components: {
@@ -209,7 +187,8 @@ export default {
     this.getCategoryList();
   },
   mounted() {
-    this.fromMenu = this.$route.query.row
+    debugger;
+    this.ruleForm = this.$route.query.row;
   },
   methods: {
     getCategoryList() {
@@ -218,16 +197,19 @@ export default {
           return res.data.message && this.$wran(res.data.message);
         }
 
-        this.categoryList = res.data.data;
+        const categoryList = res.data.data.filter(
+          (item, index) => item.categoryId
+        );
+        this.categoryList = categoryList;
       });
     },
     onEditorChange({ quill, html, text }) {
       console.log("editor change!", quill, html, text);
-      this.context = html;
+      this.ruleForm.context = html;
     },
     // 上传成功
     uploadSuccess(res, file) {
-      this.pic = res.data;
+      this.ruleForm.pic = res.data;
     },
 
     // 封面图片大小限制
@@ -245,40 +227,19 @@ export default {
       const data = err.message ? JSON.parse(err.message) : "";
       this.$wran(data && data.data ? data.data : "上传失败");
     },
-    cancel() {
+    cancel(formName) {
+      this.$refs[formName].resetFields();
       this.$router.go(-1);
     },
-    onSubmit() {
-      if (!this.title) {
-        this.$wran("请输入文章标题");
-        return;
-      }
-      if (!this.category) {
-        this.$wran("请选择文章类目");
-        return;
-      }
-      if (!this.publisher) {
-        this.$wran("请输入发布人");
-        return;
-      }
-      if (!this.status) {
-        this.$wran("请选择文章状态");
-        return;
-      }
-      if (!this.simpleContext) {
-        this.$wran("请输入文章简要");
-        return;
-      }
-      if (!this.context) {
-        this.$wran("请输入文章正文");
-        return;
-      }
-      if (!this.pic) {
-        this.$wran("请上传文章封面");
-        return;
-      }
+    onSubmit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (!valid) {
+          this.$wran("请先检查数据是否全部填写");
+          return false;
+        }
+      });
       debugger;
-      let categoryId = this.category;
+      let categoryId = this.ruleForm.categoryId;
       let category = this.categoryList.filter(
         (item, intex) => item.categoryId === categoryId
       );
@@ -286,14 +247,14 @@ export default {
       const data = {
         categoryId,
         categoryName,
-        context: this.context,
+        context: this.ruleForm.context,
         createTime: "",
-        pic: this.pic,
-        publisher: this.publisher,
-        simpleContext: this.simpleContext,
-        status: this.status,
-        title: this.title,
-        uuid: ""
+        pic: this.ruleForm.pic,
+        publisher: this.ruleForm.publisher,
+        simpleContext: this.ruleForm.simpleContext,
+        status: this.ruleForm.status,
+        title: this.ruleForm.title,
+        uuid: this.ruleForm.uuid
       };
       AddArticle(data).then(res => {
         if (res.data.code) {
