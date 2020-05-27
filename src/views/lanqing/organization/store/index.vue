@@ -99,7 +99,7 @@
         <el-button @click="auditFn('2')">驳回</el-button>
       </span>
     </el-dialog>
-    <comment :type="0" :store-id="storeId" :show-flag="showFlag" />
+    <comment :type="0" :store-id="storeId" :show-flag="showFlag" @editFlags="editFlag" />
   </div>
 </template>
 <script>
@@ -107,6 +107,7 @@ import { getStoreList, getStoreAudit, getStoreInfo } from '@/api/store'
 import pageNum from '@/components/pageNum'
 import comment from '@/components/comment'
 import { fmtDate } from '@/utils/date'
+import { comments } from './mixins/comments'
 export default {
   name: 'StoreList',
   components: {
@@ -118,6 +119,7 @@ export default {
       return val && fmtDate(val)
     }
   },
+  mixins: [comments],
   data() {
     return {
       list: [], // 列表数据
@@ -206,7 +208,7 @@ export default {
   methods: {
     comment(id) {
       this.storeId = id
-      this.showFlag = !this.showFlag
+      this.showFlag = true
     },
     // 审核
     audit(obj) {

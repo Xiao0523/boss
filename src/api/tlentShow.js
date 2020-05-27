@@ -1,6 +1,6 @@
 import request from '@/http/api'
 
-function getTlentShowList({status = 0, pageNum = 1, pageSize = 10}) {
+function getTlentShowList({ status = 0, pageNum = 1, pageSize = 10 }) {
   return request.get('training/trainingTalentShow/list/' + status + '/' + pageNum + '/' + pageSize)
 }
 
@@ -14,7 +14,6 @@ function getTlentShow({ id }) {
 
 function editTlentShow(data) {
   return request.post('training/trainingTalentShow/edit', data)
-  
 }
 
 function delTlentShow({ id }) {

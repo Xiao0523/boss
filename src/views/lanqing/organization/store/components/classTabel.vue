@@ -49,12 +49,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <comment :type="1" :store-id="viewId" :curriculum-id="curriculumId" :show-flag="showFlag" />
+    <comment :type="1" :store-id="viewId" :curriculum-id="curriculumId" :show-flag="showFlag" @editFlags="editFlag" />
   </div>
 </template>
 <script>
 import { getClassList } from '@/api/store'
 import { category } from '../mixins/getCategory'
+import { comments } from '../mixins/comments'
 import comment from '@/components/comment'
 export default {
   name: 'StoreComponents',
@@ -66,7 +67,7 @@ export default {
   components: {
     comment
   },
-  mixins: [category],
+  mixins: [category, comments],
   props: {
     val: {
       type: String,
@@ -126,7 +127,7 @@ export default {
   },
   methods: {
     comment(id) {
-      this.showFlag = !this.showFlag
+      this.showFlag = true
       this.curriculumId = id
     },
     fetchList(id) {
