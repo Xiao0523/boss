@@ -77,18 +77,22 @@
                 </p>
               </div>
             </div>
-            <div class="ax_default">
-              <div class></div>
+            <div class="_其他">
               <div class="text">
                 <p>
-                  <span class="label">添加时间：{{ scope.row.createTime | formatDate}}</span>
+                  <span class="_其他" style="width:300px">添加时间：{{ scope.row.createTime | formatDate}}</span>
                   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  <span class="center">
+                  <span class="center" style="width:400px">
                     文章类目：
                     {{ scope.row.categoryName }}
                   </span>
-                  <span class="center">发布人：{{ scope.row.publisher }}</span>
-                  <span class="center">文章状态：{{ scope.row.status === '0' ? '显示' :'不显示' }}</span>
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <span class="center" style="width:300px">发布人：{{ scope.row.publisher }}</span>
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <span class="center">文章状态：</span>
+                  <span 
+                    :class="scope.row.status ? 'success' : 'danger' "
+                  >{{ scope.row.status === '0' ? '显示' :'不显示' }}</span>
                 </p>
               </div>
             </div>
@@ -97,11 +101,20 @@
       </el-table-column>
       <el-table-column width="180">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            class="ax_default shape"
-            @click="handleEdit(scope.$index, scope.row)"
-          >查看详情</el-button>
+          <div>
+            <el-button
+              size="mini"
+              type="primary"
+              round
+              @click="handleEdit(scope.$index, scope.row)"
+            >查看详情</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              round
+              @click="handleDelete(scope.$index, scope.row)"
+            >删除</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -118,7 +131,7 @@
   </div>
 </template>
 <script>
-import { getArticleList, getCategory } from "@/api/consultation";
+import { getArticleList, getCategory, deleteArticle } from "@/api/consultation";
 import pageNum from "@/components/pageNum";
 export default {
   name: "Articles",
@@ -135,7 +148,7 @@ export default {
         { id: "1", name: "不显示" },
         { id: "2", name: "全部" }
       ],
-      value: "全部",
+      value: "",
       categoryList: [],
       timeRange: "",
       beginTime: "",
@@ -165,7 +178,7 @@ export default {
     },
     // 获取文章列表
     fetchList() {
-      const status = this.value === "" ? "" : this.value;
+      const status = this.value === "2" ? "" : this.value;
       const fetchObj = {
         beginTime: this.beginTime,
         categoryId: this.category,
@@ -183,7 +196,7 @@ export default {
         this.articleList = res.data.data.records;
       });
     },
-    handleTabClick(tab, event) {},
+
     // 点击搜索 获取文章列表 列表置为第一页
     search() {
       this.pageNo = 1;
@@ -217,6 +230,28 @@ export default {
         }
       });
     },
+    handleDelete(index, row) {
+      const getObj = {
+        uuid: row.uuid
+      };
+      this.$confirm("确定要删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          deleteArticle(getObj).then(res => {
+            if (res.data.code) {
+              return res.data.message && this.$wran(res.data.message);
+            }
+            this.$success(res.data.message);
+            this.fetchList();
+          });
+        })
+        .catch(res => {
+          console.log(res);
+        });
+    },
     addArticle() {
       this.$router.push({
         path: "/waimao/newArticle"
@@ -225,13 +260,13 @@ export default {
     getCategoryList() {
       getCategory().then(res => {
         if (res.data.code) {
-           return res.data.message && this.$wran(res.data.message);
+          return res.data.message && this.$wran(res.data.message);
         }
-        this.categoryList = res.data.data
-      })
+        this.categoryList = res.data.data;
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .table-box {
@@ -273,5 +308,14 @@ export default {
 }
 .center {
   background-position: center;
+}
+._其他{
+   font-size: 18px;
+}
+.danger{
+  color:#F56C6C
+}
+.success{
+  color: #67C23A
 }
 </style>

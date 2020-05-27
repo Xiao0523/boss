@@ -1,13 +1,7 @@
 import request from '@/http/api'
 
-function getConsulting(data) {
-  return request.post('waimaoshuishou/consultation',data)
-}
-function editConsulting(uuid,status) {
-  return request.patch('waimaoshuishou/consultation/' + uuid + '/' + status )
-}
-function getCategoryList(data) {
-  return request.post('waimaoshuishou/category_list' ,data)
+function getSuppliersList(data) {
+  return request.post('waimaoshuishou/person/suppliers' ,data)
 }
 function editCategory(data) {
   return request.post('waimaoshuishou/category' ,data)
@@ -30,9 +24,7 @@ function deleteArticle({ uuid }) {
   return request.del('waimaoshuishou/article/' + uuid)
 }
 export {
-  getConsulting,
-  editConsulting,
-  getCategoryList,
+  getSuppliersList,
   editCategory,
   delCategory,
   getArticleList,
