@@ -1206,6 +1206,20 @@ export const constantRouterMap = [
         component: () => import('@/views/personalStand/supplierDetails'),
         meta: { title: '供应商详细' },
         hidden: true
+      },
+      {
+        path: 'categoryModule',
+        name: 'categoryModule',
+        component: () => import('@/views/personalStand/categoryModule'),
+        meta: { title: '类目管理' }
+        // hidden: true
+      },
+      {
+        path: 'tagsModule',
+        name: 'tagsModule',
+        component: () => import('@/views/personalStand/tagsModule'),
+        meta: { title: '标签管理' }
+        // hidden: true
       }
     ]
   },

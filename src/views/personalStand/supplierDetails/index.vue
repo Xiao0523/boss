@@ -125,7 +125,7 @@ export default {
         'email': this.ruleForm.email,
         'mobilePhone': this.ruleForm.mobilePhone,
         'personName': this.ruleForm.personName,
-        'status': '1',
+        'status': this.ruleForm.status,
         terminationTime,
         'uuid': this.ruleForm.uuid,
         'webAddress': this.ruleForm.webAddress

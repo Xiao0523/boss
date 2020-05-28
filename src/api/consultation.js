@@ -1,29 +1,29 @@
 import request from '@/http/api'
 
 function getConsulting(data) {
-  return request.post('waimaoshuishou/consultation',data)
+  return request.post('waimaoshuishou/consultation', data)
 }
-function editConsulting(uuid,status) {
-  return request.patch('waimaoshuishou/consultation/' + uuid + '/' + status )
+function editConsulting(uuid, status) {
+  return request.patch('waimaoshuishou/consultation/' + uuid + '/' + status)
 }
 function getCategoryList(data) {
-  return request.post('waimaoshuishou/category_list' ,data)
+  return request.post('waimaoshuishou/category_list', data)
 }
 function editCategory(data) {
-  return request.post('waimaoshuishou/category' ,data)
+  return request.post('waimaoshuishou/category', data)
 }
 
-function delCategory(uuid,status) {
-  return request.patch('waimaoshuishou/category/' + uuid + '/' + status )
+function delCategory(uuid, status) {
+  return request.patch('waimaoshuishou/category/' + uuid + '/' + status)
 }
 function getArticleList(data) {
-  return request.post('waimaoshuishou/article_list',data )
+  return request.post('waimaoshuishou/article_list', data)
 }
 function getCategory() {
   return request.get('waimaoshuishou/category')
 }
 function AddArticle(data) {
-  return request.post('waimaoshuishou/article',data )
+  return request.post('waimaoshuishou/article', data)
 }
 
 function deleteArticle({ uuid }) {

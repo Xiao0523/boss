@@ -9,29 +9,16 @@ function editSupplier(data) {
 function getSupplier({ uuid }) {
   return request.get('waimaoshuishou/person/supplier/' + uuid)
 }
-function delCategory(uuid, status) {
-  return request.patch('waimaoshuishou/category/' + uuid + '/' + status)
+function getcategoryList(data) {
+  return request.post('waimaoshuishou/person/categories', data)
 }
-function getArticleList(data) {
-  return request.post('waimaoshuishou/article_list', data)
+function editCategoryr(data) {
+  return request.post('waimaoshuishou/person/category/product', data)
 }
-function getCategory() {
-  return request.get('waimaoshuishou/category')
+function getTags() {
+  return request.get('waimaoshuishou/person/tags')
 }
-function AddArticle(data) {
-  return request.post('waimaoshuishou/article', data)
+function editTags(data) {
+  return request.post('waimaoshuishou/person/tag/product', data)
 }
-
-function deleteArticle({ uuid }) {
-  return request.del('waimaoshuishou/article/' + uuid)
-}
-export {
-  getSuppliersList,
-  editSupplier,
-  getSupplier,
-  delCategory,
-  getArticleList,
-  getCategory,
-  AddArticle,
-  deleteArticle
-}
+export { getSuppliersList, editSupplier, getSupplier, getcategoryList, editCategoryr, getTags, editTags }
