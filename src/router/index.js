@@ -105,8 +105,7 @@ export const constantRouterMap = [
       {
         path: 'shareMoneyDetails',
         name: 'shareMoneyDetails',
-        component: () =>
-          import('@/views/shareMoneyManager/shareMoneyList/details'),
+        component: () => import('@/views/shareMoneyManager/shareMoneyList/details'),
         meta: { title: '纷享币详情', icon: 'table' },
         hidden: true
       }
@@ -619,8 +618,7 @@ export const constantRouterMap = [
       {
         path: 'activityWithdrawList',
         name: 'activityWithdrawList',
-        component: () =>
-          import('@/views/activityWithdraw/activityWithdrawList'),
+        component: () => import('@/views/activityWithdraw/activityWithdrawList'),
         meta: { title: '提现列表', icon: '提现' }
       }
     ]
@@ -736,8 +734,7 @@ export const constantRouterMap = [
       {
         path: 'happyReadWithdrawList',
         name: 'happyReadWithdrawList',
-        component: () =>
-          import('@/views/happyReadWithdraw/happyReadWithdrawList'),
+        component: () => import('@/views/happyReadWithdraw/happyReadWithdrawList'),
         meta: { title: '小说提现列表' }
       }
     ]
@@ -749,8 +746,7 @@ export const constantRouterMap = [
     redirect: '/classList/typeList',
     name: 'classList',
     meta: { title: '类目管理', icon: 'member' },
-    children: [
-    ]
+    children: []
   },
   {
     path: '/lanqing',
@@ -1088,15 +1084,13 @@ export const constantRouterMap = [
             children: [
               {
                 path: 'menu1-2-1',
-                component: () =>
-                  import('@/views/nested/menu1/menu1-2/menu1-2-1'),
+                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
                 name: 'Menu1-2-1',
                 meta: { title: 'Menu1-2-1' }
               },
               {
                 path: 'menu1-2-2',
-                component: () =>
-                  import('@/views/nested/menu1/menu1-2/menu1-2-2'),
+                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
                 name: 'Menu1-2-2',
                 meta: { title: 'Menu1-2-2' }
               }
@@ -1145,15 +1139,15 @@ export const constantRouterMap = [
         path: 'category',
         name: 'Category',
         component: () => import('@/views/waimao/category'),
-        meta: { title: '类目管理' },
-        //hidden: true
+        meta: { title: '类目管理' }
+        // hidden: true
       },
       {
         path: 'articles',
         name: 'Articles',
         component: () => import('@/views/waimao/articles'),
-        meta: { title: '文章管理' },
-        //hidden: true
+        meta: { title: '文章管理' }
+        // hidden: true
       },
       {
         path: 'toViewArticle',
@@ -1173,9 +1167,9 @@ export const constantRouterMap = [
         path: 'consulting',
         name: 'Consulting',
         component: () => import('@/views/waimao/consulting'),
-        meta: { title: '咨询管理' },
-        //hidden: true
-      },
+        meta: { title: '咨询管理' }
+        // hidden: true
+      }
       // {
       //   path: 'organizationDetail',
       //   name: 'OrganizationDetail',
@@ -1192,13 +1186,27 @@ export const constantRouterMap = [
     name: 'personalStand',
     meta: { title: '个人站管理', icon: 'member' },
     children: [
-    {
-      path: 'supplierModule',
-      name: 'personalStand',
-      component: () => import('@/views/personalStand/supplierModule'),
-      meta: { title: '供应商管理' },
-      //hidden: true
-    },
+      {
+        path: 'supplierModule',
+        name: 'supplierModule',
+        component: () => import('@/views/personalStand/supplierModule'),
+        meta: { title: '供应商管理' }
+        // hidden: true
+      },
+      {
+        path: 'newSuppliers',
+        name: 'newSuppliers',
+        component: () => import('@/views/personalStand/newSuppliers'),
+        meta: { title: '新增供应商' },
+        hidden: true
+      },
+      {
+        path: 'supplierDetails',
+        name: 'supplierDetails',
+        component: () => import('@/views/personalStand/supplierDetails'),
+        meta: { title: '供应商详细' },
+        hidden: true
+      }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

@@ -4,19 +4,19 @@
       <el-col :span="8">
         <div class="grid-content bg-purple">
           <p class="character">代办咨询</p>
-          <p class="digital">{{wait}}</p>
+          <p class="digital">{{ wait }}</p>
         </div>
       </el-col>
       <el-col :span="8">
         <div class="grid-content bg-purple-light">
           <p class="character">回访成功</p>
-          <p class="digital">{{success}}</p>
+          <p class="digital">{{ success }}</p>
         </div>
       </el-col>
       <el-col :span="8">
         <div class="grid-content bg-purple">
           <p class="character">总咨询量</p>
-          <p class="digital">{{count}}</p>
+          <p class="digital">{{ count }}</p>
         </div>
       </el-col>
     </el-row>
@@ -39,26 +39,26 @@
       </el-col>
       <el-col :span="8">
         <div style="margin-top: 20px ">
-          <el-input placeholder="姓名/联系方式" v-model="keyword" @change="changeTheme">
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          <el-input v-model="keyword" placeholder="姓名/联系方式" @change="changeTheme">
+            <i slot="prefix" class="el-input__icon el-icon-search"/>
           </el-input>
         </div>
       </el-col>
     </el-row>
-    <el-table :data="listData" border :header-cell-style="tabHeader" style="width: 100%">
-      <el-table-column fixed prop="no" align="center" label="序号" tyle="width: 5%"></el-table-column>
+    <el-table :data="listData" :header-cell-style="tabHeader" border style="width: 100%">
+      <el-table-column fixed prop="no" align="center" label="序号" tyle="width: 5%"/>
       <el-table-column label="咨询时间" tyle="width: 15%" align="center">
         <template slot-scope="scope">{{ scope.row.createTime | formatDate }}</template>
       </el-table-column>
-      <el-table-column prop="name" label="姓名" tyle="width: 10%" align="center"></el-table-column>
-      <el-table-column prop="way" label="联系方式" tyle="width: 10%" align="center"></el-table-column>
-      <el-table-column prop="detail" label="内容描述" tyle="width: 30%"></el-table-column>
+      <el-table-column prop="name" label="姓名" tyle="width: 10%" align="center"/>
+      <el-table-column prop="way" label="联系方式" tyle="width: 10%" align="center"/>
+      <el-table-column prop="detail" label="内容描述" tyle="width: 30%"/>
       <el-table-column prop="statusDescription" label="咨询状态" tyle="width: 10%" align="center">
         <template slot-scope="scope">
-          <i class="el-icon-chat-dot-round" v-if="scope.row.status === 0"></i>
-          <i class="el-icon-loading" v-if="scope.row.status === 1"></i>
-          <i class="el-icon-success" v-if="scope.row.status === 2"></i>
-          <i class="el-icon-warning" v-if="scope.row.status === 3"></i>
+          <i v-if="scope.row.status === 0" class="el-icon-chat-dot-round"/>
+          <i v-if="scope.row.status === 1" class="el-icon-loading"/>
+          <i v-if="scope.row.status === 2" class="el-icon-success"/>
+          <i v-if="scope.row.status === 3" class="el-icon-warning"/>
           <span style="margin-left: 10px">{{ scope.row.statusDescription }}</span>
         </template>
       </el-table-column>
@@ -93,97 +93,97 @@
     <!--分页-->
     <div class="pageNumBox">
       <pageNum
-        :currentPage="pageNo"
-        :pageSize="pageSize"
+        :current-page="pageNo"
+        :page-size="pageSize"
         :total="totalNum"
         @sizeChange="sizeChangeFn"
         @currentChange="currentPageChange"
-      ></pageNum>
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { getConsulting, editConsulting } from "@/api/consultation";
-import pageNum from "@/components/pageNum";
+import { getConsulting, editConsulting } from '@/api/consultation'
+import pageNum from '@/components/pageNum'
 
 export default {
-  data() {
-    return {
-      wait: 0, //待办咨询
-      success: 0, //	回访成功
-      count: 0, //	总数
-      listData: [],
-      pageNo: 1, //当前页
-      pageSize: 5, // 每页的条数
-      totalNum: null, // 数据总条数
-      tabHeader: {
-        "background-color": "#F4F4F4",
-        color: "#666666",
-        "border-top": "1px solid #BBBBBB",
-        "border-bottom": "1px solid #BBBBBB",
-        "font-size": "16px",
-        "text-align": "center"
-      },
-      status: "-1",
-      keyword: ""
-    };
-  },
   components: {
     pageNum
   },
+  data() {
+    return {
+      wait: 0, // 待办咨询
+      success: 0, //	回访成功
+      count: 0, //	总数
+      listData: [],
+      pageNo: 1, // 当前页
+      pageSize: 5, // 每页的条数
+      totalNum: null, // 数据总条数
+      tabHeader: {
+        'background-color': '#F4F4F4',
+        color: '#666666',
+        'border-top': '1px solid #BBBBBB',
+        'border-bottom': '1px solid #BBBBBB',
+        'font-size': '16px',
+        'text-align': 'center'
+      },
+      status: '-1',
+      keyword: ''
+    }
+  },
+  created() {
+    this.getConsultingList()
+  },
   methods: {
     getConsultingList() {
-      let status = this.status === "-1" ? "" : this.status;
-      let data = {
+      const status = this.status === '-1' ? '' : this.status
+      const data = {
         keyword: this.keyword,
         pageNum: this.pageNo,
         pageSize: this.pageSize,
         status
-      };
+      }
       getConsulting(data).then(res => {
-        debugger;
+        debugger
         if (res.data.code) {
-          return res.data.message && this.$wran(res.data.message);
+          return res.data.message && this.$wran(res.data.message)
         }
-        this.wait = res.data.data.wait;
-        this.success = res.data.data.success;
-        this.count = res.data.data.count;
-        this.totalNum = res.data.data.pageView.total;
-        this.listData = res.data.data.pageView.records;
-      });
+        this.wait = res.data.data.wait
+        this.success = res.data.data.success
+        this.count = res.data.data.count
+        this.totalNum = res.data.data.pageView.total
+        this.listData = res.data.data.pageView.records
+      })
     },
-    //分页改变 每页数量
+    // 分页改变 每页数量
     sizeChangeFn(pageSize) {
-      this.pageSize = pageSize;
-      this.getConsultingList();
+      this.pageSize = pageSize
+      this.getConsultingList()
     },
 
-    //分页改变 页面
+    // 分页改变 页面
     currentPageChange(pageNo) {
-      this.pageNo = pageNo;
-      this.getConsultingList();
+      this.pageNo = pageNo
+      this.getConsultingList()
     },
     changeTheme(val) {
-      console.log(val);
-      console.log(this.status);
-      this.getConsultingList();
+      console.log(val)
+      console.log(this.status)
+      this.getConsultingList()
     },
     editState(uuid, status) {
-      debugger;
+      debugger
       editConsulting(uuid, status).then(res => {
-        debugger;
+        debugger
         if (res.data.code) {
-          return res.data.message && this.$wran(res.data.message);
+          return res.data.message && this.$wran(res.data.message)
         }
-        this.getConsultingList();
-      });
+        this.getConsultingList()
+      })
     }
-  },
-  created() {
-    this.getConsultingList();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
