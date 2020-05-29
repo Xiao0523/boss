@@ -15,8 +15,8 @@
       </el-form-item>
       <el-form-item label="状态">
         <el-radio-group v-model="form.status">
-          <el-radio label="0">开启</el-radio>
-          <el-radio label="1">关闭</el-radio>
+          <el-radio :label="0">开启</el-radio>
+          <el-radio :label="1">关闭</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="教师头像图片">

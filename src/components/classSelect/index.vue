@@ -18,7 +18,6 @@
     <el-select
       v-model="classId"
       placeholder="请输入选择课程"
-      @change="editClass"
     >
       <el-option
         v-for="item in classList"
@@ -108,10 +107,11 @@ export default {
         this.teacherId = ''
       }
       this.classFirstFlag = false
-      if (this.classList.length && this.teacherShow) {
+      if (this.classList.length) {
         for (const item of this.classList) {
           if (this.classId === item.id) {
             this.curriculumName = item.name
+            this.editClass()
             return
           }
         }

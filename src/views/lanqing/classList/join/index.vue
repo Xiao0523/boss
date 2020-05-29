@@ -33,8 +33,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-import { addList, getTypeList, editList, getListDetail } from '@/api/merchant'
+import { addList, editList, getListDetail } from '@/api/merchant'
 import advImgCropper from '@/components/common/vue-cropper/advImgCropper'
 import PreviewImgDialog from '@/components/common/dialog'
 export default {

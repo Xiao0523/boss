@@ -11,7 +11,7 @@
         <el-input v-model="form.description" />
       </el-form-item>
       <el-form-item label="课程">
-        <classSelect :default-store="form.storeName" :default-class="form.curriculumName" :is-add="isAdd" @classCb="saveClass"/>
+        <classSelect :default-obj="listObj" :is-add="isAdd" @classCb="saveClass"/>
       </el-form-item>
       <el-form-item label="排序">
         <el-input v-model="form.orderIndex" />
@@ -76,10 +76,13 @@ export default {
         orderIndex: '',
         bannerDescription: '',
         curriculumId: '',
-        trainingTalentShowId: ''
+        trainingTalentShowId: '',
+        curriculumName: '',
+        description: ''
       },
       selectStr: '',
-      isAdd: true
+      isAdd: true,
+      listObj: {}
     }
   },
   watch: {
@@ -98,7 +101,8 @@ export default {
   },
   methods: {
     saveClass(val) {
-      this.form.curriculumId = val
+      this.form.curriculumId = val.curriculumId
+      this.form.curriculumName = val.curriculumName
     },
     handleSuccess(res, file) {
       this.form.pic = res.data
@@ -121,7 +125,7 @@ export default {
         }
         if (!res.data.data) return
         this.$success('提交成功！')
-        this.$router.push({ name: 'RecommendedBit' })
+        this.$router.push({ name: 'RecommendedBitList' })
       })
     },
     getView(id) {
@@ -142,6 +146,12 @@ export default {
           }
         }
         this.time = [new Date(data.beginTime), new Date(data.endTime)]
+        this.listObj = {
+          storeId: this.form.storeId,
+          storeName: this.form.storeName,
+          classId: this.form.curriculumId,
+          curriculumName: this.form.curriculumName
+        }
       })
     }
   }
