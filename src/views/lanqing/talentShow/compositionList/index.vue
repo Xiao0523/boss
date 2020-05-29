@@ -12,7 +12,7 @@
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
       <el-table-column align="center" prop="id" label="作品编号" />
       <el-table-column align="center" prop="talentShowId" label="才艺秀编号" />
-      <el-table-column align="center" prop="talentShowId" label="参赛者昵称" />
+      <el-table-column align="center" prop="nickName" label="参赛者昵称" />
       <el-table-column align="center" prop="votes" label="票数" />
       <el-table-column align="center" prop="nickName" label="作品类型">
         <template slot-scope="scope">

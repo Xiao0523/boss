@@ -6,8 +6,7 @@
           v-for="item in options"
           :value="item.label"
           :key="item.label"
-        >
-        </el-option>
+        />
       </el-select>
     </el-row>
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
@@ -44,8 +43,8 @@
       />
     </div>
     <el-dialog
-      title="审核"
       :visible.sync="diglogFlag"
+      title="审核"
       width="30%"
       center
     >
@@ -60,11 +59,19 @@
 <script>
 import { getComplaintList, getComplaintStatus } from '@/api/complaint'
 import pageNum from '@/components/pageNum'
-import {fmtDate} from '@/utils/date'
+import { fmtDate } from '@/utils/date'
 export default {
   name: 'Tuition',
   components: {
     pageNum
+  },
+  filters: {
+    timeStr(val) {
+      return fmtDate(val)
+    },
+    statusStr(val) {
+      return val == 0 ? '待审核' : val == 1 ? '投诉成功' : '投诉驳回'
+    }
   },
   data() {
     return {
@@ -102,17 +109,9 @@ export default {
   created() {
     this.fetchList()
   },
-  filters: {
-    timeStr(val) {
-      return fmtDate(val)
-    },
-    statusStr(val) {
-      return val == 0 ? '待审核' : val == 1 ? '投诉成功' : '投诉驳回'
-    }
-  },
   methods: {
     selectChange() {
-      for(let item of this.options) {
+      for (const item of this.options) {
         if (item.label === this.selectVal) {
           this.status = item.value
           this.fetchList()
