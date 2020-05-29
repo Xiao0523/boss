@@ -162,17 +162,17 @@ export default {
             orderIndex: 0,
             price: '',
             ranks: [''],
-            amount: null,
+            amount: '',
             type: 1
           }
         ],
         prizes4Rank: [
           {
-            amount: null,
+            amount: '',
             cover: '',
             level: '',
             name: '',
-            orderIndex: null,
+            orderIndex: '',
             price: '',
             type: 0
           }
