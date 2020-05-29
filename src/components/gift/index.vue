@@ -22,10 +22,10 @@
         <el-input v-model="list.price" class="inputs" type="text" placeholder="奖品原价" @blur="backLog"/>
       </div>
       <div class="input-box">
-        <el-input v-model="list.amount" class="inputs" type="text" placeholder="获奖个数" @blur="backLog"/>
+        <el-input v-model.number="list.amount" class="inputs" type="text" placeholder="获奖个数" @blur="backLog"/>
       </div>
       <div class="input-box">
-        <el-input v-model="list.orderIndex" class="inputs" type="text" placeholder="排序" @blur="backLog"/>
+        <el-input v-model.number="list.orderIndex" class="inputs" type="text" placeholder="排序" @blur="backLog"/>
       </div>
     </div>
     <div class="close" @click="del">

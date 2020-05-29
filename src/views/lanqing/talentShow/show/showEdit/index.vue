@@ -99,7 +99,7 @@
             <el-input v-model="form.prizes4Luck[0].price" class="inputs" type="text" placeholder="奖品原价" />
           </div>
           <div class="input-box">
-            <el-input v-model="form.prizes4Luck[0].amount" class="inputs" type="text" placeholder="获奖个数" />
+            <el-input v-model.number="form.prizes4Luck[0].amount" class="inputs" type="text" placeholder="获奖个数" />
           </div>
         </div>
       </el-form-item>
@@ -232,11 +232,11 @@ export default {
     addList(val) {
       if (val && val === 'vote') {
         this.form.prizes4Rank.push({
-          amount: null,
+          amount: '',
           cover: '',
           level: '',
           name: '',
-          orderIndex: null,
+          orderIndex: '',
           price: '',
           type: 0
         })
