@@ -7,6 +7,9 @@
       <el-form-item v-if="form.type == 1" label="奖学金币数量">
         <el-input v-model="form.scholarshipIcon" max="127" maxlength="3" @blur="ifScholar"/>
       </el-form-item>
+      <el-form-item label="排序">
+        <el-input v-model="form.index"/>
+      </el-form-item>
       <el-form-item v-if="form.type == 0" label="图片地址">
         <el-input v-model="form.logUrl"/>
       </el-form-item>
@@ -50,7 +53,8 @@ export default {
         scholarshipIcon: 0,
         type: '0',
         status: 0,
-        id: ''
+        id: '',
+        index: 0
       },
       visible: false,
       isSonAdd: false,
