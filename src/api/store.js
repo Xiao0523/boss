@@ -60,6 +60,10 @@ function getCommentDetail({ id, storeId }) {
   return request.get('training/store/comment/' + id + '/' + storeId)
 }
 
+function editWeight(data) {
+  return request.post('training/weight', data)
+}
+
 export {
   getStoreList,
   getStoreAudit,
@@ -75,5 +79,6 @@ export {
   getCommentList,
   getCommentOpen,
   getCommentClose,
-  getCommentDetail
+  getCommentDetail,
+  editWeight
 }

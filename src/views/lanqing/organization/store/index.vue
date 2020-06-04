@@ -53,13 +53,13 @@
     <el-table :data="list" :header-cell-style="tabHeader" class="table-box" border>
       <el-table-column align="center" min-width="10%" prop="phone" label="注册手机号" />
       <el-table-column align="center" min-width="20%" prop="name" label="店铺名称" />
-      <el-table-column align="center" min-width="10%" prop="statusString" label="店铺状态" />
-      <el-table-column align="center" min-width="15%" label="提交时间">
+      <el-table-column align="center" min-width="7%" prop="statusString" label="店铺状态" />
+      <el-table-column align="center" min-width="12%" label="提交时间">
         <template slot-scope="scope">
           {{ scope.row.submitTime | timeStr }}
         </template>
       </el-table-column>
-      <el-table-column align="center" min-width="15%" label="审核完成时间">
+      <el-table-column align="center" min-width="12%" label="审核完成时间">
         <template slot-scope="scope">
           {{ scope.row.lastAuthTime | timeStr }}
         </template>
@@ -67,9 +67,10 @@
       <el-table-column align="center" min-width="5%" prop="score" label="评分" />
       <el-table-column align="center" min-width="5%" prop="weight" label="权重" />
       <el-table-column align="center" min-width="5%" prop="orderNum" label="订单数"/>
-      <el-table-column align="center" min-width="15%" label="操作">
+      <el-table-column align="center" min-width="24%" label="操作">
         <template slot-scope="scope">
           <el-button type="danger" size="mini" @click="comment(scope.row.storeId)">评论</el-button>
+          <el-button type="danger" size="mini" @click="weights(scope.row.storeId, scope.row.weight)">权重</el-button>
           <router-link :to="{name: 'StoreDetail', query: { id: scope.row.storeId }}"><el-button type="danger" size="mini">查看</el-button></router-link>
           <el-button :disabled="scope.row.status !== 2 && scope.row.status !== 4" type="danger" size="mini" @click="audit(scope.row)">审核</el-button>
         </template>
@@ -99,11 +100,26 @@
         <el-button @click="auditFn('2')">驳回</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      :visible.sync="weightFlag"
+      title="权重"
+      width="30%"
+      center
+    >
+      <span class="diglog-textarea">
+        <el-input id="" v-model="weight" placeholder="最大值为99999.99, 小数点后面两位"/>
+        <span class="weight-tip">最大值为99999.99, 小数点后面两位</span>
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editWeights">确定</el-button>
+        <el-button @click="weightFlag = false">取消</el-button>
+      </span>
+    </el-dialog>
     <comment :type="0" :store-id="storeId" :show-flag="showFlag" @editFlags="editFlag" />
   </div>
 </template>
 <script>
-import { getStoreList, getStoreAudit, getStoreInfo } from '@/api/store'
+import { getStoreList, getStoreAudit, getStoreInfo, editWeight } from '@/api/store'
 import pageNum from '@/components/pageNum'
 import comment from '@/components/comment'
 import { fmtDate } from '@/utils/date'
@@ -130,6 +146,7 @@ export default {
         score: ''
       },
       diglogFlag: false,
+      weightFlag: false,
       type: [
         {
           label: '全部',
@@ -198,7 +215,8 @@ export default {
       unSuccStr: '',
       infoObj: [],
       storeId: '',
-      showFlag: false
+      showFlag: false,
+      weight: ''
     }
   },
   mounted() {
@@ -209,6 +227,22 @@ export default {
     comment(id) {
       this.storeId = id
       this.showFlag = true
+    },
+    weights(id, weight) {
+      this.storeId = id
+      this.weight = weight
+      this.weightFlag = true
+    },
+    editWeights() {
+      const getObj = {
+        storeId: this.storeId,
+        weight: this.weight
+      }
+      editWeight(getObj).then(res => {
+        if (res.data.code) return res.data.message && this.$wran(res.data.message)
+        this.$success('权重修改成功！')
+        this.weightFlag = false
+      })
     },
     // 审核
     audit(obj) {
@@ -326,6 +360,11 @@ export default {
 .el-date-editor /deep/ .el-range-separator {
   width: initial;
 }
+/deep/ {
+  .el-button+.el-button {
+    margin: 0
+  }
+}
 
 .diglog-textarea {
   display: block;
@@ -341,5 +380,9 @@ export default {
     line-height: 30px;
     height: 120px;
   }
+}
+.weight-tip {
+  line-height: px;
+  color: #ccc;
 }
 </style>
