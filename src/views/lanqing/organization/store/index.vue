@@ -242,6 +242,7 @@ export default {
         if (res.data.code) return res.data.message && this.$wran(res.data.message)
         this.$success('权重修改成功！')
         this.weightFlag = false
+        this.fetchList()
       })
     },
     // 审核
@@ -382,7 +383,7 @@ export default {
   }
 }
 .weight-tip {
-  line-height: px;
+  line-height: 50px;
   color: #ccc;
 }
 </style>
