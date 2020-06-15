@@ -47,12 +47,13 @@
     </el-row>
     <el-table :data="listData" :header-cell-style="tabHeader" border style="width: 100%">
       <el-table-column fixed prop="no" align="center" label="序号" tyle="width: 5%"/>
-      <el-table-column label="咨询时间" tyle="width: 15%" align="center">
+      <el-table-column label="咨询时间" tyle="width: 15%" align="center" sortable>
         <template slot-scope="scope">{{ scope.row.createTime | formatDate }}</template>
       </el-table-column>
       <el-table-column prop="name" label="姓名" tyle="width: 10%" align="center"/>
-      <el-table-column prop="way" label="联系方式" tyle="width: 10%" align="center"/>
-      <el-table-column prop="detail" label="内容描述" tyle="width: 30%"/>
+      <el-table-column prop="way" label="联系方式" tyle="width: 10%" align="center" sortable/>
+      <!-- <el-table-column prop="detail" label="内容描述" tyle="width: 30%"/> -->
+      <el-table-column prop="source" label="板块号" tyle="width: 30%"/>
       <el-table-column prop="statusDescription" label="咨询状态" tyle="width: 10%" align="center">
         <template slot-scope="scope">
           <i v-if="scope.row.status === 0" class="el-icon-chat-dot-round"/>
@@ -118,7 +119,7 @@ export default {
       count: 0, //	总数
       listData: [],
       pageNo: 1, // 当前页
-      pageSize: 5, // 每页的条数
+      pageSize: 10, // 每页的条数
       totalNum: null, // 数据总条数
       tabHeader: {
         'background-color': '#F4F4F4',
